@@ -1,0 +1,38 @@
+name: Ennustaja
+
+on:
+  schedule:
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+
+jobs:
+  calculate_audience:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4
+
+    - name: Run AnalysoiOttelut.py script
+      run: python scripts/AnalysoiOttelut.py
+
+    - name: Verify script run
+      run: cat AnalysoidutOttelut.md
+
+    - name: Commit and push if changes
+      run: |
+        git config --global user.email "you@example.com"
+        git config --global user.name "Your Name"
+        git add AnalysoidutOttelut.md
+        git commit -m "Update analyzed matches" || echo "No changes to commit"
+        git push
