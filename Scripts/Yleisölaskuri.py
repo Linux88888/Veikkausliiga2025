@@ -7,7 +7,7 @@ url = "https://www.veikkausliiga.com/tilastot/2025/veikkausliiga/ottelut/"
 url_championship = "https://www.veikkausliiga.com/tilastot/2025/veikkausliiga/ottelut/?group=2&team=#stats-wrapper"
 url_challenger = "https://www.veikkausliiga.com/tilastot/2025/veikkausliiga/ottelut/?group=3&team=#stats-wrapper"
 
-teams = ["HJK", "KuPS", "FC Inter", "SJK", "FC Lahti", "Ilves", "FC Haka", "VPS", "AC Oulu", "Gnistan", "IFK Mariehamn", "EIF"]
+teams = ["HJK", "KuPS", "FC Inter", "SJK", "FF Jaro", "Ilves", "FC Haka", "VPS", "AC Oulu", "Gnistan", "IFK Mariehamn", "KTP"]
 
 team_data = {
     team: {
