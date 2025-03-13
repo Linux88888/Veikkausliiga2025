@@ -24,7 +24,7 @@ jobs:
         pip install requests beautifulsoup4
 
     - name: Run AnalysoiOttelut.py script
-      run: python scripts/AnalysoiOttelut.py
+      run: python Scripts/AnalysoiOttelut.py
 
     - name: Verify script run
       run: cat AnalysoidutOttelut.md
