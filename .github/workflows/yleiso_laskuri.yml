@@ -1,0 +1,37 @@
+name: Päivittäinen Yleisölaskuri
+
+on:
+  schedule:
+    # Asetetaan suoritusajankohta joka päivä klo 20:00 UTC
+    - cron: '0 20 * * *'
+  workflow_dispatch:
+
+jobs:
+  calculate_audience:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'  
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4
+
+    - name: Run Yleisölaskuri.py script
+      run: python scripts/Yleisölaskuri.py  
+
+    - name: Commit and push if changes
+      run: |
+        git config --global user.email "you@example.com"
+        git config --global user.name "Your Name"
+        git add Yleisö2024.md  # Oletetaan, että skripti päivittää tämän tiedoston
+        git diff --cached --quiet || git commit -m "Update audience data"  # Vain commit jos on muutoksia
+        git pull --rebase origin main  # Hakee uusimmat muutokset ja yhdistää ne paikallisesti
+        git push
