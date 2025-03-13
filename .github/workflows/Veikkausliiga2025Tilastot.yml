@@ -1,0 +1,37 @@
+name: Run Python Script Daily at 22:00 UTC
+
+on:
+  schedule:
+    - cron: '0 20 * * *'  # Suorittaa workflow'n joka päivä kello 22:00 UTC
+  workflow_dispatch:  # Mahdollistaa manuaalisen suorituksen GitHubin käyttöliittymästä
+
+jobs:
+  execute-python-script:
+    runs-on: ubuntu-latest  # Käyttää viimeisintä Ubuntu-virtuaaliympäristöä
+
+    steps:
+    - uses: actions/checkout@v3  # Hakee repositorion koodin
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'  # Asettaa Python-version
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests beautifulsoup4
+
+    - name: Run the script
+      run: python scripts/fetch_stats.py
+
+    - name: List files
+      run: ls -la
+
+    - name: Commit results
+      run: |
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git add Tilastot.md
+            git commit -m "Update Tilastot.md"
+            git push
