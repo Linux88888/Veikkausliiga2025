@@ -23,10 +23,10 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests beautifulsoup4
 
-    - name: Run AnalysoiOttelut.py script
+    - name: Run AnalysoiOttelut.py Script
       run: python Scripts/AnalysoiOttelut.py
 
-    - name: Verify script run
+    - name: Verify Script run
       run: cat AnalysoidutOttelut.md
 
     - name: Commit and push if changes
