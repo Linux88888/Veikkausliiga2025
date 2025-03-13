@@ -25,7 +25,7 @@ jobs:
         pip install requests beautifulsoup4
 
     - name: Run Yleisölaskuri.py script
-      run: python scripts/Yleisölaskuri.py  
+      run: python Scripts/Yleisölaskuri.py  
 
     - name: Commit and push if changes
       run: |
