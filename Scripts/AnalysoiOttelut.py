@@ -17,7 +17,7 @@ tulevat_ottelut_url = 'https://raw.githubusercontent.com/Linux88888/Veikkausliig
 yleiso_url = 'https://raw.githubusercontent.com/Linux88888/Veikkausliiga2025/main/Yleis%C3%B62025.md'
 
 # Joukkueiden lista
-teams = ["HJK", "KuPS", "FC Inter", "SJK", "FC Lahti", "Ilves", "FC Haka", "VPS", "AC Oulu", "Gnistan", "IFK Mariehamn", "EIF"]
+teams = ["HJK", "KuPS", "FC Inter", "SJK", "FF Jaro", "Ilves", "FC Haka", "VPS", "AC Oulu", "Gnistan", "IFK Mariehamn", "KTP"]
 
 # Hakee ja parsii datan
 tulevat_ottelut_data = fetch_and_parse_github_markdown(tulevat_ottelut_url)
