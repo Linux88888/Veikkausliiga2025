@@ -23,179 +23,68 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests beautifulsoup4
 
-    - name: Fix script
+    - name: Create safe divide script
       run: |
-        # Varmuuskopio alkuperäisestä
-        cp Scripts/Yleisölaskuri.py Scripts/Yleisölaskuri.py.backup || echo "Ei voitu kopioida - tiedostoa ei ehkä ole"
-        
-        # Lisää turvallinen jakamisfunktio skriptin alkuun
-        cat > Scripts/Yleisölaskuri.py << 'EOF'
+        echo "import os, re, requests, datetime" > Scripts/safe_divide.py
+        echo "from bs4 import BeautifulSoup" >> Scripts/safe_divide.py
+        echo "" >> Scripts/safe_divide.py
+        echo "def safe_divide(a, b, default=0):" >> Scripts/safe_divide.py
+        echo "    return a / b if b > 0 else default" >> Scripts/safe_divide.py
+
+    - name: Verify script exists
+      run: |
+        if [ ! -f "Scripts/Yleisölaskuri.py" ]; then
+          echo "ERROR: Yleisölaskuri.py not found!"
+          find . -name "*.py" | sort
+          exit 1
+        else
+          echo "Found Yleisölaskuri.py"
+          wc -l Scripts/Yleisölaskuri.py
+        fi
+
+    - name: Create wrapper script
+      run: |
+        cat > Scripts/run_safe.py << 'EOF'
 import os
-import re
-import requests
-from bs4 import BeautifulSoup
-import datetime
+import sys
+import importlib.util
 
-# Turvallinen jakamisfunktio
-def safe_divide(a, b, default=0):
-    """Turvallinen jakaminen joka ei aiheuta nollalla jakamisen virhettä"""
-    return a / b if b > 0 else default
+# Import safe_divide function
+spec = importlib.util.spec_from_file_location("safe_divide", "Scripts/safe_divide.py")
+safe_divide_module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(safe_divide_module)
+safe_divide = safe_divide_module.safe_divide
 
-# URL-osoite Veikkausliigan tilastoihin
-url = "https://www.veikkausliiga.com/tilastot/2024/veikkausliiga/ottelut/"
+# Monkey patch division for the main script
+import builtins
+original_truediv = float.__truediv__
 
-# Päivitetyt joukkueet 2024 kauden mukaan
-teams = ["HJK", "KuPS", "FC Inter", "SJK", "FC Lahti", "Ilves", "FC Haka", "VPS", "AC Oulu", "Gnistan", "IFK Mariehamn", "EIF"]
+def safe_truediv(self, other):
+    if other == 0:
+        print(f"WARNING: Division by zero prevented: {self} / 0")
+        return 0
+    return original_truediv(self, other)
 
-team_data = {
-    team: {
-        "Home": {"audiences": [], "goals_scored": [], "goals_conceded": [], "over_2_5": 0},
-        "Away": {"audiences": [], "goals_scored": [], "goals_conceded": [], "over_2_5": 0}
-    } for team in teams
-}
+float.__truediv__ = safe_truediv
 
-# Alusta päämuuttujat
-total_audiences = []
-total_goals = 0
-total_over_2_5_games = 0
-
+# Import and run the original script
 try:
-    # Haetaan data Veikkausliigan sivulta
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    }
-    
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()  # Tarkistetaan, että pyyntö onnistui
-    
-    soup = BeautifulSoup(response.text, "html.parser")
-    table_rows = soup.find_all("tr")
-    
-    for row in table_rows:
-        cells = row.find_all("td")
-        if cells and len(cells) > 6:
-            # Haetaan ottelun tiedot
-            match_teams = cells[3].get_text(strip=True) if len(cells) > 3 else ""
-            result_text = cells[5].get_text(strip=True) if len(cells) > 5 else ""
-            audience_text = cells[6].get_text(strip=True) if len(cells) > 6 else ""
-            
-            # Tarkistetaan, että tekstit on saatu
-            if not all([match_teams, result_text, audience_text]):
-                continue
-                
-            # Haetaan tulos ja yleisömäärä
-            result_match = re.search(r"(\d+)\s*[—-]\s*(\d+)", result_text)
-            audience_match = re.search(r"(\d+)", audience_text)
-            
-            if not (result_match and audience_match):
-                continue
-                
-            audience_number = int(audience_match.group(1))
-            home_goals, away_goals = map(int, result_match.groups())
-            
-            # Lasketaan tilastot
-            total_goals += home_goals + away_goals
-            total_audiences.append(audience_number)
-            if home_goals + away_goals > 2.5:
-                total_over_2_5_games += 1
-            
-            # Erotellaan kotijoukkue ja vierasjoukkue
-            if " - " in match_teams:
-                home_team, away_team = [team.strip() for team in match_teams.split(" - ")]
-                
-                # Tallennetaan kotijoukkueen tiedot
-                if home_team in teams:
-                    team_data[home_team]["Home"]["audiences"].append(audience_number)
-                    team_data[home_team]["Home"]["goals_scored"].append(home_goals)
-                    team_data[home_team]["Home"]["goals_conceded"].append(away_goals)
-                    if home_goals + away_goals > 2.5:
-                        team_data[home_team]["Home"]["over_2_5"] += 1
-                
-                # Tallennetaan vierasjoukkueen tiedot
-                if away_team in teams:
-                    team_data[away_team]["Away"]["audiences"].append(audience_number)
-                    team_data[away_team]["Away"]["goals_scored"].append(away_goals)
-                    team_data[away_team]["Away"]["goals_conceded"].append(home_goals)
-                    if home_goals + away_goals > 2.5:
-                        team_data[away_team]["Away"]["over_2_5"] += 1
-    
-    # Tulostetaan tarkistuksia
-    print(f"Yleisömäärät: {total_audiences}")
-    print(f"Tehdyt maalit: {total_goals}")
-    print(f"Yli 2.5 maalia peleissä: {total_over_2_5_games}")
-    
-    # Lasketaan yhteenvetotilastot - TURVALLISESTI
-    total_games = len(total_audiences)
-    total_average_audience = safe_divide(sum(total_audiences), total_games)
-    total_average_goals = safe_divide(total_goals, total_games)
-    total_over_2_5_percent = safe_divide(total_over_2_5_games * 100, total_games)
-    
-    # Asetetaan tiedoston sijainti
-    file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Yleisö2024.md")
-    
-    # Kirjoitetaan tulokset Markdown-tiedostoon
-    with open(file_path, "w", encoding="utf-8") as file:
-        file.write("# Veikkausliiga 2024 - Yleisötilastot\n\n")
-        file.write(f"Päivitetty: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
-        
-        file.write("## Kokonaistilastot\n\n")
-        file.write(f"- **Kokonaisyleisömäärä:** {sum(total_audiences):,} katsojaa\n")
-        file.write(f"- **Keskimääräinen yleisö:** {total_average_audience:.0f} katsojaa/ottelu\n")
-        file.write(f"- **Otteluita pelattu:** {total_games}\n")
-        file.write(f"- **Maaleja yhteensä:** {total_goals}\n")
-        file.write(f"- **Maaleja per ottelu:** {total_average_goals:.2f}\n")
-        file.write(f"- **Yli 2.5 maalia otteluissa:** {total_over_2_5_percent:.1f}%\n")
-        
-        file.write("\n## Joukkuekohtaiset tilastot\n\n")
-        
-        # Joukkuekohtaiset tiedot
-        for team in teams:
-            home_audiences = team_data[team]["Home"]["audiences"]
-            home_goals_scored = team_data[team]["Home"]["goals_scored"]
-            home_goals_conceded = team_data[team]["Home"]["goals_conceded"]
-            
-            home_games = len(home_audiences)
-            total_home_audience = sum(home_audiences) if home_audiences else 0
-            total_home_goals_scored = sum(home_goals_scored) if home_goals_scored else 0
-            total_home_goals_conceded = sum(home_goals_conceded) if home_goals_conceded else 0
-            total_home_over_2_5 = team_data[team]["Home"]["over_2_5"]
-            
-            away_audiences = team_data[team]["Away"]["audiences"]
-            away_goals_scored = team_data[team]["Away"]["goals_scored"]
-            away_goals_conceded = team_data[team]["Away"]["goals_conceded"]
-            
-            away_games = len(away_audiences)
-            total_away_audience = sum(away_audiences) if away_audiences else 0
-            total_away_goals_scored = sum(away_goals_scored) if away_goals_scored else 0
-            total_away_goals_conceded = sum(away_goals_conceded) if away_goals_conceded else 0
-            total_away_over_2_5 = team_data[team]["Away"]["over_2_5"]
-            
-            file.write(f"### {team}\n")
-            
-            file.write("#### Kotipelit\n")
-            file.write(f"- **Kokonaisyleisömäärä:** {total_home_audience:,}\n")
-            file.write(f"- **Keskiarvoyleisömäärä per peli:** {safe_divide(total_home_audience, home_games):.2f} ({home_games} peliä)\n")
-            file.write(f"- **Tehdyt maalit:** {total_home_goals_scored}\n")
-            file.write(f"- **Päästetyt maalit:** {total_home_goals_conceded}\n")
-            file.write(f"- **Yli 2.5 maalia kotipeleissä:** {total_home_over_2_5}\n\n")
-            
-            file.write("#### Vieraspelit\n")
-            file.write(f"- **Kokonaisyleisömäärä:** {total_away_audience:,}\n")
-            file.write(f"- **Keskiarvoyleisömäärä per peli:** {safe_divide(total_away_audience, away_games):.2f} ({away_games} peliä)\n")
-            file.write(f"- **Tehdyt maalit:** {total_away_goals_scored}\n")
-            file.write(f"- **Päästetyt maalit:** {total_away_goals_conceded}\n")
-            file.write(f"- **Yli 2.5 maalia vieraspeleissä:** {total_away_over_2_5}\n\n")
-        
-        file.write("\n---\n*Tiedot päivitetään automaattisesti päivittäin. Viimeisin päivitys: Linux88888 (2024-04-06).*\n")
-    
-    print(f"Tilastot päivitetty onnistuneesti tiedostoon: {file_path}")
-        
+    print("Running with safe division...")
+    exec(open("Scripts/Yleisölaskuri.py").read())
+    print("Script completed successfully")
 except Exception as e:
-    print(f"Virhe skriptissä: {str(e)}")
+    print(f"ERROR: {str(e)}")
+    sys.exit(1)
 EOF
 
-    - name: Run Yleisölaskuri.py script
-      run: python Scripts/Yleisölaskuri.py
+    - name: Update script for 2024 data
+      run: |
+        sed -i 's/2025/2024/g' Scripts/Yleisölaskuri.py
+        sed -i 's/Yleisö2025.md/Yleisö2024.md/g' Scripts/Yleisölaskuri.py
+        grep -n "teams =" Scripts/Yleisölaskuri.py || echo "Teams line not found"
+
+    - name: Run wrapped script
+      run: python Scripts/run_safe.py
 
     - name: Commit and push if changes
       run: |
