@@ -1,198 +1,86 @@
-# Veikkausliiga 2025 - Yleisötilastot
+# Veikkausliiga 2025 - Ottelutilastot
 
-Päivitetty: 2025-04-06 12:29:50
+*Päivitetty 06.04.2025 16:28*
 
-## Kokonaistilastot
+## Yleiset tilastot
+- Pelatut ottelut: 0
+- Yhteensä katsojia: 0
+- Keskiyleisö: 0
+- Maalit yhteensä: 0 (keskiarvo 0.00/ottelu)
+- Yli 2.5 maalin otteluita: 0 (0.0%)
 
-- **Kokonaisyleisömäärä:** 0 katsojaa
-- **Keskimääräinen yleisö:** 0 katsojaa/ottelu
-- **Otteluita pelattu:** 0
-- **Maaleja yhteensä:** 0
-- **Maaleja per ottelu:** 0.00
-- **Yli 2.5 maalia otteluissa:** 0.0%
-
-## Joukkuekohtaiset tilastot
-
+## Joukkueet
 ### Ilves
 #### Kotipelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia kotipeleissä:** 0
-
+- Ei kotipelejä vielä
 #### Vieraspelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia vieraspeleissä:** 0
+- Ei vieraspelejä vielä
 
 ### HJK
 #### Kotipelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia kotipeleissä:** 0
-
+- Ei kotipelejä vielä
 #### Vieraspelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia vieraspeleissä:** 0
+- Ei vieraspelejä vielä
 
 ### FC Inter
 #### Kotipelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia kotipeleissä:** 0
-
+- Ei kotipelejä vielä
 #### Vieraspelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia vieraspeleissä:** 0
+- Ei vieraspelejä vielä
 
 ### KuPS
 #### Kotipelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia kotipeleissä:** 0
-
+- Ei kotipelejä vielä
 #### Vieraspelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia vieraspeleissä:** 0
+- Ei vieraspelejä vielä
 
 ### IFK Mariehamn
 #### Kotipelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia kotipeleissä:** 0
-
+- Ei kotipelejä vielä
 #### Vieraspelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia vieraspeleissä:** 0
+- Ei vieraspelejä vielä
 
 ### FF Jaro
 #### Kotipelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia kotipeleissä:** 0
-
+- Ei kotipelejä vielä
 #### Vieraspelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia vieraspeleissä:** 0
+- Ei vieraspelejä vielä
 
 ### KTP
 #### Kotipelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia kotipeleissä:** 0
-
+- Ei kotipelejä vielä
 #### Vieraspelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia vieraspeleissä:** 0
+- Ei vieraspelejä vielä
 
 ### SJK
 #### Kotipelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia kotipeleissä:** 0
-
+- Ei kotipelejä vielä
 #### Vieraspelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia vieraspeleissä:** 0
+- Ei vieraspelejä vielä
 
 ### VPS
 #### Kotipelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia kotipeleissä:** 0
-
+- Ei kotipelejä vielä
 #### Vieraspelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia vieraspeleissä:** 0
+- Ei vieraspelejä vielä
 
 ### AC Oulu
 #### Kotipelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia kotipeleissä:** 0
-
+- Ei kotipelejä vielä
 #### Vieraspelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia vieraspeleissä:** 0
+- Ei vieraspelejä vielä
 
 ### FC Haka
 #### Kotipelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia kotipeleissä:** 0
-
+- Ei kotipelejä vielä
 #### Vieraspelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia vieraspeleissä:** 0
+- Ei vieraspelejä vielä
 
 ### IF Gnistan
 #### Kotipelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia kotipeleissä:** 0
-
+- Ei kotipelejä vielä
 #### Vieraspelit
-- **Kokonaisyleisömäärä:** 0
-- **Keskiarvoyleisömäärä per peli:** 0.00 (0 peliä)
-- **Tehdyt maalit:** 0
-- **Päästetyt maalit:** 0
-- **Yli 2.5 maalia vieraspeleissä:** 0
+- Ei vieraspelejä vielä
 
 
----
-*Tiedot päivitetään automaattisesti päivittäin. Viimeisin päivitys: Linux88888 (2025-04-06 12:12:17).*
+*Lähde: Veikkausliiga.com - Tiedot haettu automaattisesti*
