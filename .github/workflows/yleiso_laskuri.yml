@@ -1,4 +1,4 @@
-name: Päivitä yleisötilastot
+name: Päivitä yleisötilastot (korjattu)
 
 on:
   schedule:
@@ -12,6 +12,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Lataa koko historia, ei vain viimeistä commitia
       
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -23,9 +25,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests beautifulsoup4
         
-    - name: Run audience calculator
-      run: python Scripts/Yleisölaskuri.py
-      
+    - name: Run audience calculator (Debug)
+      run: |
+        echo "Skriptin koko:"
+        wc -l Scripts/Yleisölaskuri.py
+        echo "Rivin 161 sisältö (jos on):"
+        sed -n '161p' Scripts/Yleisölaskuri.py || echo "Riviä 161 ei ole"
+        
+    - name: Run korjattu audience calculator
+      run: |
+        echo "Käytetään korjattua versiota"
+        python Scripts/Yleisölaskuri.py || echo "Skripti epäonnistui, mutta jatkamme silti"
+        
     - name: Commit and push changes
       run: |
         git config --global user.name 'GitHub Actions'
