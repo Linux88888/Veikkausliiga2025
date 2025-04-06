@@ -1,29 +1,77 @@
-name: Korjaa nollalla jako ja päivitä yleisötilastot
+name: Diagnostiikka ja Korjaus
 
 on:
   workflow_dispatch:  # Manuaalinen käynnistys
 
 jobs:
-  fix-and-run:
+  diagnose-and-fix:
     runs-on: ubuntu-latest
     
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
       
-    - name: Fix division by zero in line 161
+    - name: Show repository structure
       run: |
-        # Näytetään rivin 161 sisältö
-        echo "Rivin 161 sisältö ennen korjausta:"
-        sed -n '161p' Scripts/Yleisölaskuri.py
+        echo "Repositorion rakenne:"
+        find . -name "*.py" | sort
         
-        # Korjataan vain virheellinen rivi
-        sed -i '161s/.*file\.write(f"#### Keskiarvoyleisömäärä per peli: {total_home_audience \/ home_games:.2f} ({home_games} peliä)\\n").*/        if home_games > 0:\n            file.write(f"#### Keskiarvoyleisömäärä per peli: {total_home_audience \/ home_games:.2f} ({home_games} peliä)\\n")\n        else:\n            file.write("#### Keskiarvoyleisömäärä per peli: 0.00 (0 peliä)\\n")/' Scripts/Yleisölaskuri.py
+    - name: Analyze Scripts directory
+      run: |
+        echo "Scripts-hakemiston sisältö:"
+        ls -la Scripts/
+        echo "Yleisölaskuri.py tiedoston koko:"
+        cat Scripts/Yleisölaskuri.py | wc -l
         
-        # Tarkistetaan korjauksen onnistuminen
-        echo "Rivit 160-165 korjauksen jälkeen:"
-        sed -n '160,165p' Scripts/Yleisölaskuri.py
-      
+    - name: Check for line 161
+      run: |
+        echo "Rivi 161 (jos on):"
+        sed -n '161p' Scripts/Yleisölaskuri.py || echo "Riviä 161 ei ole!"
+        echo "Rivit 160-165 (jos on):"
+        sed -n '160,165p' Scripts/Yleisölaskuri.py || echo "Rivejä 160-165 ei ole!"
+        
+    - name: Create safe version script
+      run: |
+        mkdir -p FixedScripts
+        cp Scripts/Yleisölaskuri.py FixedScripts/Yleisölaskuri_safe.py
+        
+        # Korjaa kaikki mahdolliset nollalla jako -ongelmat
+        cat > fix_division.py << 'EOF'
+import re
+import sys
+
+def add_safe_check(line, variable):
+    if f"/ {variable}" in line or f"/{variable}" in line:
+        indentation = re.match(r'^(\s*)', line).group(1)
+        return f"{indentation}if {variable} > 0:\n{line}{indentation}else:\n{indentation}    file.write(\"#### Keskiarvoyleisömäärä per peli: 0.00 (0 peliä)\\n\")\n"
+    return line
+
+with open('FixedScripts/Yleisölaskuri_safe.py', 'r') as file:
+    lines = file.readlines()
+
+fixed_lines = []
+i = 0
+while i < len(lines):
+    line = lines[i]
+    if "file.write" in line and "Keskiarvoyleisömäärä per peli" in line:
+        if "home_games" in line:
+            fixed_lines.append(add_safe_check(line, "home_games"))
+        elif "away_games" in line:
+            fixed_lines.append(add_safe_check(line, "away_games"))
+        else:
+            fixed_lines.append(line)
+    else:
+        fixed_lines.append(line)
+    i += 1
+
+with open('FixedScripts/Yleisölaskuri_safe.py', 'w') as file:
+    file.writelines(fixed_lines)
+EOF
+        python fix_division.py
+        
+        echo "Korjatun skriptin koko:"
+        cat FixedScripts/Yleisölaskuri_safe.py | wc -l
+        
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -34,12 +82,21 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests beautifulsoup4
         
-    - name: Run audience calculator
-      run: python Scripts/Yleisölaskuri.py
-      
-    - name: Commit and push changes
+    - name: Run safe version script
       run: |
+        echo "Suoritetaan korjattu versio:"
+        python FixedScripts/Yleisölaskuri_safe.py
+        
+    - name: Show results and commit changes
+      run: |
+        echo "Päivitetty tiedosto luotu!"
+        ls -la *.md || echo "Ei .md tiedostoja"
+        
         git config --global user.name 'GitHub Actions'
         git config --global user.email 'actions@github.com'
-        git add Scripts/Yleisölaskuri.py Yleisö2025.md
-        git diff --quiet && git diff --staged --quiet || (git commit -m "Korjattu nollalla jako" && git push)
+        
+        # Korvaa alkuperäinen skripti korjatulla versiolla
+        cp FixedScripts/Yleisölaskuri_safe.py Scripts/Yleisölaskuri.py
+        
+        git add Scripts/Yleisölaskuri.py Yleisö*.md
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Korjattu Yleisölaskuri.py nollalla jaon varalta" && git push)
