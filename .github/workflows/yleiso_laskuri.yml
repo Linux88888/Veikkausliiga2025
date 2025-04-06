@@ -13,21 +13,18 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0  # Varmistetaan koko historian lataus
-      
+        fetch-depth: 0
+    
     - name: Fix script
       run: |
-        # Poistetaan vanha tiedosto ja luodaan uusi
-        rm -f Scripts/Yleisölaskuri.py
-        
-        # Ladataan korjattu versio
-        curl -o Scripts/Yleisölaskuri.py https://raw.githubusercontent.com/Linux88888/Veikkausliiga2025/main/Scripts/FixedYleisolaskuri.py || {
-          echo "Korjatun version lataus epäonnistui, käytetään varatiedostoa"
-          # Tässä voisit lisätä varakoodin, mutta jätän sen pois tilanpuutteen vuoksi
+        # Ladataan uusin versio skriptistä
+        curl -o Scripts/Yleisölaskuri.py https://raw.githubusercontent.com/OMAKAUKKELISI/Veikkausliiga2025/main/Scripts/Yleisolaskuri.py || {
+          echo "Korjatun version lataus epäonnistui"
+          exit 1
         }
         
-        # Varmistetaan tiedoston olemassaolo ja toimivuus
-        python -m py_compile Scripts/Yleisölaskuri.py
+        # Varmistetaan tiedoston olemassaolo
+        ls -la Scripts/Yleisölaskuri.py
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -47,5 +44,5 @@ jobs:
         git config --global user.email "actions@github.com"
         git config --global user.name "GitHub Actions"
         git add Yleisö2025.md
-        git diff --cached --quiet || git commit -m "Päivitetty yleisötilastot $(date +'%Y-%m-%d')"
+        git diff --cached --quiet || git commit -m "Automaattinen päivitys: $(date +'%Y-%m-%d %H:%M')"
         git push
