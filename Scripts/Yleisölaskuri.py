@@ -3,6 +3,9 @@ from bs4 import BeautifulSoup
 import datetime
 import os
 
+def safe_divide(a, b, default=0):
+    return a / b if b != 0 else default
+
 def get_matches():
     url = "https://www.veikkausliiga.com/tilastot/2025/veikkausliiga/ottelut/"
     response = requests.get(url)
@@ -12,72 +15,102 @@ def get_matches():
 def parse_matches(soup):
     matches = []
     table = soup.find('table', {'id': 'games'})
-    
     if not table:
         return matches
-    
-    current_date = None
+
     for row in table.find('tbody').find_all('tr'):
-        # Päivämäärän käsittely
-        date_cell = row.find('td', {'class': 'desktop-only'})
-        if date_cell and date_cell.text.strip():
-            current_date = " ".join(date_cell.text.strip().split()[1:])  # Esim. "La 5.4.2025" -> "5.4.2025"
-        
         cells = row.find_all('td')
-        if len(cells) < 8:  # Tarkista solmujen määrä
+        if len(cells) < 8:
             continue
-        
+
         try:
-            # Oikeat solmuindeksit:
-            time = cells[2].text.strip() if len(cells) > 2 else "?"
-            teams = cells[4].text.strip().split(' - ')  # Oikea indeksi 4
-            result = cells[6].text.strip().replace('—', '-').replace(' ', '')
-            audience = cells[7].text.strip()  # Oikea indeksi 7
+            home_team = cells[4].text.strip().split(' - ')[0]
+            away_team = cells[4].text.strip().split(' - ')[1]
+            result = cells[6].text.strip()
+            audience = int(cells[7].text.strip()) if cells[7].text.strip().isdigit() else 0
             
-            if len(teams) == 2 and '-' in result:
-                home_goals, away_goals = result.split('-')
+            if '-' in result:
+                home_goals, away_goals = map(int, result.split('-'))
                 matches.append({
-                    'date': current_date,
-                    'time': time,
-                    'home': teams[0].strip(),
-                    'away': teams[1].strip(),
-                    'result': f"{home_goals}-{away_goals}",
-                    'audience': int(audience) if audience.isdigit() else 0
+                    'home_team': home_team,
+                    'away_team': away_team,
+                    'home_goals': home_goals,
+                    'away_goals': away_goals,
+                    'audience': audience
                 })
-        except Exception as e:
-            print(f"Virhe rivin käsittelyssä: {str(e)}")
-    
+        except:
+            pass
+            
     return matches
 
-def save_to_md(matches):
-    filename = "Yleisö2025.md"
+def generate_team_stats(matches):
+    teams = {}
+    for match in matches:
+        # Kotijoukkueen tilastot
+        if match['home_team'] not in teams:
+            teams[match['home_team']] = {
+                'home': {'goals_scored': [], 'goals_conceded': [], 'audiences': [], 'over_2_5': 0},
+                'away': {'goals_scored': [], 'goals_conceded': [], 'audiences': [], 'over_2_5': 0}
+            }
+        teams[match['home_team']]['home']['goals_scored'].append(match['home_goals'])
+        teams[match['home_team']]['home']['goals_conceded'].append(match['away_goals'])
+        teams[match['home_team']]['home']['audiences'].append(match['audience'])
+        if (match['home_goals'] + match['away_goals']) > 2.5:
+            teams[match['home_team']]['home']['over_2_5'] += 1
+
+        # Vierasjoukkueen tilastot
+        if match['away_team'] not in teams:
+            teams[match['away_team']] = {
+                'home': {'goals_scored': [], 'goals_conceded': [], 'audiences': [], 'over_2_5': 0},
+                'away': {'goals_scored': [], 'goals_conceded': [], 'audiences': [], 'over_2_5': 0}
+            }
+        teams[match['away_team']]['away']['goals_scored'].append(match['away_goals'])
+        teams[match['away_team']]['away']['goals_conceded'].append(match['home_goals'])
+        teams[match['away_team']]['away']['audiences'].append(match['audience'])
+        if (match['home_goals'] + match['away_goals']) > 2.5:
+            teams[match['away_team']]['away']['over_2_5'] += 1
+
+    return teams
+
+def save_to_md(teams):
+    filename = "Joukkueittaiset_tilastot_2025.md"
     try:
         with open(filename, "w", encoding="utf-8") as f:
-            f.write("# Veikkausliigan yleisötilastot 2025\n\n")
+            f.write(f"# Veikkausliigan joukkueittaiset tilastot 2025\n\n")
             f.write(f"*Päivitetty: {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')}*\n\n")
             
-            if not matches:
-                f.write("Ei pelattuja otteluita vielä.")
-                return
+            for team, stats in teams.items():
+                f.write(f"## {team}\n")
+                
+                # Kotipelit
+                home = stats['home']
+                f.write("### Kotipelit\n")
+                f.write(f"- Otteluita: {len(home['goals_scored'])}\n")
+                f.write(f"- Tehdyt maalit: {sum(home['goals_scored'])}\n")
+                f.write(f"- Päästetyt maalit: {sum(home['goals_conceded'])}\n")
+                f.write(f"- Yli 2.5 maalia: {home['over_2_5']} ({safe_divide(home['over_2_5']*100, len(home['goals_scored']), 0):.1f}%)\n")
+                f.write(f"- Yleisöä keskimäärin: {safe_divide(sum(home['audiences']), len(home['audiences']), 0):.0f}\n")
+                f.write(f- Yli 2000 katsojaa: {len([a for a in home['audiences'] if a > 2000])} kpl\n\n")
+
+                # Vieraspelit
+                away = stats['away']
+                f.write("### Vieraspelit\n")
+                f.write(f"- Otteluita: {len(away['goals_scored'])}\n")
+                f.write(f"- Tehdyt maalit: {sum(away['goals_scored'])}\n")
+                f.write(f"- Päästetyt maalit: {sum(away['goals_conceded'])}\n")
+                f.write(f"- Yli 2.5 maalia: {away['over_2_5']} ({safe_divide(away['over_2_5']*100, len(away['goals_scored']), 0):.1f}%)\n")
+                f.write(f"- Yleisöä keskimäärin: {safe_divide(sum(away['audiences']), len(away['audiences']), 0):.0f}\n")
+                f.write(f- Yli 2000 katsojaa: {len([a for a in away['audiences'] if a > 2000])} kpl\n\n")
+
+            print(f"✅ Tiedosto {filename} luotu onnistuneesti!")
             
-            f.write("| Päivä | Aika | Kotijoukkue | Vierasjoukkue | Tulos | Yleisöä |\n")
-            f.write("|-------|------|-------------|---------------|-------|---------|\n")
-            
-            for match in matches:
-                f.write(f"| {match['date']} | {match['time']} | {match['home']} | {match['away']} | {match['result']} | {match['audience']} |\n")
-            
-            total = sum(m['audience'] for m in matches)
-            f.write(f"\n**Yhteensä katsojia:** {total}\n")
-        
-        print(f"✅ Tiedosto {filename} päivitetty onnistuneesti!")
-        print(f"📂 Sijainti: {os.path.abspath(filename)}")
-    
     except Exception as e:
         print(f"❌ Virhe: {str(e)}")
 
 if __name__ == "__main__":
     try:
         matches = get_matches()
-        save_to_md(matches)
+        team_stats = generate_team_stats(matches)
+        save_to_md(team_stats)
     except Exception as e:
         print(f"❌ Päävirhe: {str(e)}")
