@@ -1,115 +1,109 @@
+import os
 import requests
 from bs4 import BeautifulSoup
 import re
-import os
 import datetime
 
-def get_match_data():
-    """Hakee ottelutiedot Veikkausliigan verkkosivuilta"""
-    # Veikkausliigan tulossivun URL
+def hae_veikkausliiga_data():
     url = "https://www.veikkausliiga.com/tulokset"
     
     try:
         response = requests.get(url)
-        response.raise_for_status()  # Varmistetaan, että pyyntö onnistui
-        
-        soup = BeautifulSoup(response.text, 'html.parser')
-        
-        # Etsi ottelutiedot
-        matches = soup.find_all('div', class_='match-item')
-        
-        audiences = []
-        goals = 0
-        over_2_5_games = 0
-        
-        for match in matches:
-            # Etsi yleisömäärä
-            audience_element = match.find('div', class_='audience')
-            if audience_element and audience_element.text.strip():
-                audience_text = audience_element.text.strip()
-                # Poista kaikki paitsi numerot
-                audience_numbers = re.sub(r'[^0-9]', '', audience_text)
-                if audience_numbers:
-                    audience = int(audience_numbers)
-                    audiences.append(audience)
-            
-            # Etsi maalimäärät
-            score_element = match.find('div', class_='score')
-            if score_element and score_element.text.strip():
-                score_text = score_element.text.strip()
-                # Etsi kaikki numerot
-                score_match = re.search(r'(\d+)\s*-\s*(\d+)', score_text)
-                if score_match:
-                    home_goals = int(score_match.group(1))
-                    away_goals = int(score_match.group(2))
-                    match_goals = home_goals + away_goals
-                    goals += match_goals
-                    
-                    if match_goals > 2.5:
-                        over_2_5_games += 1
-        
-        # Varmista, että on otteluita ennen jakamista
-        total_games = len(audiences)
-        if total_games == 0:
-            print("Ei löytynyt otteluita yleisömäärillä.")
-            return None
-            
-        average_audience = sum(audiences) / total_games
-        average_goals = goals / total_games
-        over_2_5_percent = (over_2_5_games / total_games) * 100
-        
-        return {
-            'total_audience': sum(audiences),
-            'average_audience': average_audience,
-            'total_goals': goals,
-            'average_goals': average_goals,
-            'over_2_5_percent': over_2_5_percent,
-            'total_games': total_games,
-            'timestamp': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        }
-        
+        response.raise_for_status()
+        return response.text
     except Exception as e:
-        print(f"Virhe haettaessa ottelutietoja: {str(e)}")
+        print(f"Virhe haettaessa dataa: {str(e)}")
         return None
 
-def update_audience_file():
-    """Päivittää Yleisö2025.md tiedoston uusimmilla tiedoilla"""
-    data = get_match_data()
+def parseYleisömäärät(html_content):
+    if not html_content:
+        return [], 0, 0
     
-    if not data:
-        print("Ei voitu päivittää tiedostoa, koska tietoja ei saatu.")
-        return False
+    soup = BeautifulSoup(html_content, 'html.parser')
+    yleisomäärät = []
+    maalit = 0
+    yli_2_5 = 0
     
-    try:
-        # Valmistellaan Markdown-sisältö
-        markdown_content = f"""# Veikkausliiga 2025 - Yleisötilastot
-
-Päivitetty: {data['timestamp']}
-
-## Tilastot
-
-- **Kokonaisyleisömäärä:** {data['total_audience']:,} katsojaa
-- **Keskimääräinen yleisö:** {data['average_audience']:.0f} katsojaa/ottelu
-- **Otteluita pelattu:** {data['total_games']}
-- **Maaleja yhteensä:** {data['total_goals']}
-- **Maaleja per ottelu:** {data['average_goals']:.2f}
-- **Yli 2.5 maalia otteluissa:** {data['over_2_5_percent']:.1f}%
-
----
-*Tiedot päivitetään automaattisesti päivittäin.*
-"""
-        
-        # Kirjoitetaan tiedostoon
-        file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Yleisö2025.md")
-        with open(file_path, 'w', encoding='utf-8') as file:
-            file.write(markdown_content)
+    # Etsi ottelutiedot soup-objektista
+    ottelut = soup.find_all('div', class_='match-item')
+    
+    for ottelu in ottelut:
+        try:
+            # Etsi yleisömäärätiedot
+            yleiso_elem = ottelu.find('div', class_='audience')
+            if yleiso_elem and yleiso_elem.text.strip():
+                yleiso_teksti = yleiso_elem.text.strip()
+                yleiso_numero = re.sub(r'[^0-9]', '', yleiso_teksti)
+                if yleiso_numero:
+                    yleisomäärät.append(int(yleiso_numero))
             
-        print(f"Tiedosto päivitetty onnistuneesti: {file_path}")
-        return True
+            # Etsi maalitiedot
+            tulos_elem = ottelu.find('div', class_='score')
+            if tulos_elem and tulos_elem.text.strip():
+                tulos_teksti = tulos_elem.text.strip()
+                tulos_match = re.search(r'(\d+)\s*-\s*(\d+)', tulos_teksti)
+                if tulos_match:
+                    koti_maalit = int(tulos_match.group(1))
+                    vieras_maalit = int(tulos_match.group(2))
+                    ottelu_maalit = koti_maalit + vieras_maalit
+                    maalit += ottelu_maalit
+                    
+                    if ottelu_maalit > 2.5:
+                        yli_2_5 += 1
+        except Exception as e:
+            print(f"Virhe ottelun käsittelyssä: {str(e)}")
+            continue
+    
+    print(f"Yleisömäärät: {yleisomäärät}")
+    print(f"Tehdyt maalit: {maalit}")
+    print(f"Yli 2.5 maalia peleissä: {yli_2_5}")
+    
+    return yleisomäärät, maalit, yli_2_5
+
+def paivitaYleiso2025MD(yleisomäärät, maalit, yli_2_5):
+    try:
+        home_games = len(yleisomäärät)
+        total_home_audience = sum(yleisomäärät) if yleisomäärät else 0
         
+        # Luodaan aikaleima
+        aikaleima = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
+        # Varmistetaan, että tiedoston sijainti on oikea
+        tiedosto_polku = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Yleisö2025.md")
+        
+        with open(tiedosto_polku, "w", encoding="utf-8") as file:
+            file.write("# Veikkausliiga 2025 - Yleisötilastot\n\n")
+            file.write(f"Päivitetty: {aikaleima}\n\n")
+            file.write("## Tilastot\n\n")
+            
+            # Tarkistetaan, onko otteluita ennen kuin lasketaan keskiarvoja
+            if home_games > 0:
+                file.write(f"- **Kokonaisyleisömäärä:** {total_home_audience:,} katsojaa\n")
+                file.write(f"- **Keskimääräinen yleisö:** {total_home_audience / home_games:.0f} katsojaa/ottelu\n")
+                file.write(f"- **Otteluita pelattu:** {home_games}\n")
+                file.write(f"- **Maaleja yhteensä:** {maalit}\n")
+                file.write(f"- **Maaleja per ottelu:** {maalit / home_games:.2f}\n")
+                file.write(f"- **Yli 2.5 maalia otteluissa:** {(yli_2_5 / home_games * 100):.1f}%\n")
+            else:
+                file.write("- **Kokonaisyleisömäärä:** 0 katsojaa\n")
+                file.write("- **Keskimääräinen yleisö:** 0 katsojaa/ottelu\n")
+                file.write("- **Otteluita pelattu:** 0\n")
+                file.write("- **Maaleja yhteensä:** 0\n")
+                file.write("- **Maaleja per ottelu:** 0.00\n")
+                file.write("- **Yli 2.5 maalia otteluissa:** 0.0%\n")
+            
+            file.write("\n---\n*Tiedot päivitetään automaattisesti päivittäin.*\n")
+        
+        print(f"Tiedosto päivitetty onnistuneesti: {tiedosto_polku}")
+        return True
     except Exception as e:
         print(f"Virhe päivitettäessä tiedostoa: {str(e)}")
         return False
 
+def main():
+    html_content = hae_veikkausliiga_data()
+    yleisomäärät, maalit, yli_2_5 = parseYleisömäärät(html_content)
+    paivitaYleiso2025MD(yleisomäärät, maalit, yli_2_5)
+
 if __name__ == "__main__":
-    update_audience_file()
+    main()
