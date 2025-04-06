@@ -1,95 +1,36 @@
-name: Veikkausliiga 2025 Yleisölaskuri
+name: Korjaa nollalla jako
 
 on:
-  schedule:
-    - cron: '0 20 * * *'  # Suoritetaan joka päivä klo 20:00 UTC
-  workflow_dispatch:  # Mahdollistaa manuaalisen käynnistyksen
+  workflow_dispatch:
 
 jobs:
-  calculate_audience:
+  fix-division:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      
+      - name: Fix division by zero
+        run: |
+          sed -i 's|total_home_audience / home_games|total_home_audience / home_games if home_games > 0 else 0|g' Scripts/Yleisölaskuri.py
+          sed -i 's|total_away_audience / away_games|total_away_audience / away_games if away_games > 0 else 0|g' Scripts/Yleisölaskuri.py
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install requests beautifulsoup4
-
-    - name: Create safe divide script
-      run: |
-        echo "import os, re, requests, datetime" > Scripts/safe_divide.py
-        echo "from bs4 import BeautifulSoup" >> Scripts/safe_divide.py
-        echo "" >> Scripts/safe_divide.py
-        echo "def safe_divide(a, b, default=0):" >> Scripts/safe_divide.py
-        echo "    return a / b if b > 0 else default" >> Scripts/safe_divide.py
-
-    - name: Verify script exists
-      run: |
-        if [ ! -f "Scripts/Yleisölaskuri.py" ]; then
-          echo "ERROR: Yleisölaskuri.py not found!"
-          find . -name "*.py" | sort
-          exit 1
-        else
-          echo "Found Yleisölaskuri.py"
-          wc -l Scripts/Yleisölaskuri.py
-        fi
-
-    - name: Create wrapper script
-      run: |
-        cat > Scripts/run_safe.py << 'EOF'
-import os
-import sys
-import importlib.util
-
-# Import safe_divide function
-spec = importlib.util.spec_from_file_location("safe_divide", "Scripts/safe_divide.py")
-safe_divide_module = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(safe_divide_module)
-safe_divide = safe_divide_module.safe_divide
-
-# Monkey patch division for the main script
-import builtins
-original_truediv = float.__truediv__
-
-def safe_truediv(self, other):
-    if other == 0:
-        print(f"WARNING: Division by zero prevented: {self} / 0")
-        return 0
-    return original_truediv(self, other)
-
-float.__truediv__ = safe_truediv
-
-# Import and run the original script
-try:
-    print("Running with safe division...")
-    exec(open("Scripts/Yleisölaskuri.py").read())
-    print("Script completed successfully")
-except Exception as e:
-    print(f"ERROR: {str(e)}")
-    sys.exit(1)
-EOF
-
-    - name: Update script for 2024 data
-      run: |
-        sed -i 's/2025/2024/g' Scripts/Yleisölaskuri.py
-        sed -i 's/Yleisö2025.md/Yleisö2024.md/g' Scripts/Yleisölaskuri.py
-        grep -n "teams =" Scripts/Yleisölaskuri.py || echo "Teams line not found"
-
-    - name: Run wrapped script
-      run: python Scripts/run_safe.py
-
-    - name: Commit and push if changes
-      run: |
-        git config --global user.email "actions@github.com"
-        git config --global user.name "GitHub Actions"
-        git add Yleisö2024.md
-        git diff --cached --quiet || git commit -m "Päivitetty yleisötilastot $(date +'%Y-%m-%d')"
-        git push
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4
+          
+      - name: Run script
+        run: python Scripts/Yleisölaskuri.py
+        
+      - name: Commit changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add Scripts/Yleisölaskuri.py Yleisö*.md
+          git commit -m "Korjattu nollalla jakaminen" || echo "No changes to commit"
+          git push || echo "Nothing to push"
