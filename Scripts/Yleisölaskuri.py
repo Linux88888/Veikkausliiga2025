@@ -5,7 +5,8 @@ from bs4 import BeautifulSoup
 import datetime
 
 url = "https://www.veikkausliiga.com/tilastot/2024/veikkausliiga/ottelut/"
-teams = ["Ilves", "HJK", "FC Inter", "KuPS", "IFK Mariehamn", "FF Jaro", "KTP", "SJK", "VPS", "AC Oulu", "FC Haka", "IF Gnistan"]
+
+teams = ["HJK", "KuPS", "FC Inter", "SJK", "FC Lahti", "Ilves", "FC Haka", "VPS", "AC Oulu", "Gnistan", "IFK Mariehamn", "EIF"]
 
 team_data = {
     team: {
