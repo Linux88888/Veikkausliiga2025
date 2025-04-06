@@ -117,49 +117,27 @@ try:
         
         # Joukkuekohtaiset tiedot
         for team in teams:
-            home_audiences = team_data[team]["Home"]["audiences"]
-            home_goals_scored = team_data[team]["Home"]["goals_scored"]
-            home_goals_conceded = team_data[team]["Home"]["goals_conceded"]
+            home = team_data[team]["Home"]
+            away = team_data[team]["Away"]
             
-            home_games = len(home_audiences)
-            total_home_audience = sum(home_audiences) if home_audiences else 0
-            total_home_goals_scored = sum(home_goals_scored) if home_goals_scored else 0
-            total_home_goals_conceded = sum(home_goals_conceded) if home_goals_conceded else 0
-            total_home_over_2_5 = team_data[team]["Home"]["over_2_5"]
-            
-            away_audiences = team_data[team]["Away"]["audiences"]
-            away_goals_scored = team_data[team]["Away"]["goals_scored"]
-            away_goals_conceded = team_data[team]["Away"]["goals_conceded"]
-            
-            away_games = len(away_audiences)
-            total_away_audience = sum(away_audiences) if away_audiences else 0
-            total_away_goals_scored = sum(away_goals_scored) if away_goals_scored else 0
-            total_away_goals_conceded = sum(away_goals_conceded) if away_goals_conceded else 0
-            total_away_over_2_5 = team_data[team]["Away"]["over_2_5"]
+            home_games = len(home["audiences"])
+            away_games = len(away["audiences"])
             
             file.write(f"### {team}\n")
             
             file.write("#### Kotipelit\n")
-            file.write(f"- **Kokonaisyleisömäärä:** {total_home_audience:,}\n")
-            
-            # Käytetään safe_divide-funktiota nollalla jakamisen estämiseksi
-            avg_home_audience = safe_divide(total_home_audience, home_games)
-            file.write(f"- **Keskiarvoyleisömäärä per peli:** {avg_home_audience:.2f} ({home_games} peliä)\n")
-            
-            file.write(f"- **Tehdyt maalit:** {total_home_goals_scored}\n")
-            file.write(f"- **Päästetyt maalit:** {total_home_goals_conceded}\n")
-            file.write(f"- **Yli 2.5 maalia kotipeleissä:** {total_home_over_2_5}\n\n")
+            file.write(f"- **Kokonaisyleisömäärä:** {sum(home['audiences']):,}\n")
+            file.write(f"- **Keskiarvoyleisömäärä per peli:** {safe_divide(sum(home['audiences']), home_games):.2f} ({home_games} peliä)\n")
+            file.write(f"- **Tehdyt maalit:** {sum(home['goals_scored'])}\n")
+            file.write(f"- **Päästetyt maalit:** {sum(home['goals_conceded'])}\n")
+            file.write(f"- **Yli 2.5 maalia kotipeleissä:** {home['over_2_5']}\n\n")
             
             file.write("#### Vieraspelit\n")
-            file.write(f"- **Kokonaisyleisömäärä:** {total_away_audience:,}\n")
-            
-            # Käytetään safe_divide-funktiota nollalla jakamisen estämiseksi
-            avg_away_audience = safe_divide(total_away_audience, away_games)
-            file.write(f"- **Keskiarvoyleisömäärä per peli:** {avg_away_audience:.2f} ({away_games} peliä)\n")
-            
-            file.write(f"- **Tehdyt maalit:** {total_away_goals_scored}\n")
-            file.write(f"- **Päästetyt maalit:** {total_away_goals_conceded}\n")
-            file.write(f"- **Yli 2.5 maalia vieraspeleissä:** {total_away_over_2_5}\n\n")
+            file.write(f"- **Kokonaisyleisömäärä:** {sum(away['audiences']):,}\n")
+            file.write(f"- **Keskiarvoyleisömäärä per peli:** {safe_divide(sum(away['audiences']), away_games):.2f} ({away_games} peliä)\n")
+            file.write(f"- **Tehdyt maalit:** {sum(away['goals_scored'])}\n")
+            file.write(f"- **Päästetyt maalit:** {sum(away['goals_conceded'])}\n")
+            file.write(f"- **Yli 2.5 maalia vieraspeleissä:** {away['over_2_5']}\n\n")
         
         file.write("\n---\n*Tiedot päivitetään automaattisesti päivittäin. Viimeisin päivitys: Linux88888 (2025-04-06 12:12:17).*\n")
     
