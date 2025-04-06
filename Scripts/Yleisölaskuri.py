@@ -92,7 +92,7 @@ def generate_team_stats(matches, all_teams):
     return stats
 
 def save_to_md(stats):
-    filename = "yleisö.md"
+    filename = "yleisö2025.md"
     try:
         with open(filename, "w", encoding="utf-8") as f:
             f.write("# Veikkausliigan tilastot 2025\n\n")
