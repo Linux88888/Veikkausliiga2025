@@ -18,47 +18,50 @@ def parse_matches(soup):
     
     current_date = None
     for row in table.find('tbody').find_all('tr'):
+        # Päivämäärän käsittely
         date_cell = row.find('td', {'class': 'desktop-only'})
         if date_cell and date_cell.text.strip():
-            current_date = " ".join(date_cell.text.strip().split()[1:])
+            current_date = " ".join(date_cell.text.strip().split()[1:])  # Esim. "La 5.4.2025" -> "5.4.2025"
         
         cells = row.find_all('td')
-        if len(cells) < 7:
+        if len(cells) < 8:  # Tarkista solmujen määrä
             continue
-            
+        
         try:
+            # Oikeat solmuindeksit:
             time = cells[2].text.strip() if len(cells) > 2 else "?"
-            teams = cells[3].text.strip().split(' - ')
-            result = cells[5].text.strip().replace('—', '-')
-            audience = cells[6].text.strip()
+            teams = cells[4].text.strip().split(' - ')  # Oikea indeksi 4
+            result = cells[6].text.strip().replace('—', '-').replace(' ', '')
+            audience = cells[7].text.strip()  # Oikea indeksi 7
             
-            if len(teams) == 2:
+            if len(teams) == 2 and '-' in result:
+                home_goals, away_goals = result.split('-')
                 matches.append({
                     'date': current_date,
                     'time': time,
-                    'home': teams[0],
-                    'away': teams[1],
-                    'result': result,
+                    'home': teams[0].strip(),
+                    'away': teams[1].strip(),
+                    'result': f"{home_goals}-{away_goals}",
                     'audience': int(audience) if audience.isdigit() else 0
                 })
         except Exception as e:
-            print(f"Virhe ottelussa: {str(e)}")
+            print(f"Virhe rivin käsittelyssä: {str(e)}")
     
     return matches
 
-def save_to_md(matches, filename="Yleisö2025.md"):
+def save_to_md(matches):
+    filename = "Yleisö2025.md"
     try:
         with open(filename, "w", encoding="utf-8") as f:
             f.write("# Veikkausliigan yleisötilastot 2025\n\n")
             f.write(f"*Päivitetty: {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')}*\n\n")
             
             if not matches:
-                f.write("Ei ottelutietoja saatavilla.")
+                f.write("Ei pelattuja otteluita vielä.")
                 return
             
-            f.write("## Ottelut ja yleisömäärät\n")
-            f.write("| Päivämäärä | Kellonaika | Kotijoukkue | Vierasjoukkue | Tulos | Yleisöä |\n")
-            f.write("|------------|------------|-------------|---------------|-------|---------|\n")
+            f.write("| Päivä | Aika | Kotijoukkue | Vierasjoukkue | Tulos | Yleisöä |\n")
+            f.write("|-------|------|-------------|---------------|-------|---------|\n")
             
             for match in matches:
                 f.write(f"| {match['date']} | {match['time']} | {match['home']} | {match['away']} | {match['result']} | {match['audience']} |\n")
@@ -66,18 +69,15 @@ def save_to_md(matches, filename="Yleisö2025.md"):
             total = sum(m['audience'] for m in matches)
             f.write(f"\n**Yhteensä katsojia:** {total}\n")
         
-        print(f"\n✅ Tiedosto {filename} päivitetty onnistuneesti!")
-        print(f"📁 Tiedoston sijainti: {os.path.abspath(filename)}")
+        print(f"✅ Tiedosto {filename} päivitetty onnistuneesti!")
+        print(f"📂 Sijainti: {os.path.abspath(filename)}")
     
     except Exception as e:
-        print(f"❌ Virhe tiedoston kirjoituksessa: {str(e)}")
+        print(f"❌ Virhe: {str(e)}")
 
 if __name__ == "__main__":
     try:
         matches = get_matches()
         save_to_md(matches)
-        print("\nViimeisimmät ottelut:")
-        for m in matches[:3]:  # Näytä vain 3 ensimmäistä testiksi
-            print(f"{m['date']} {m['home']} vs {m['away']}")
     except Exception as e:
-        print(f"❌ Pääohjelman virhe: {str(e)}")
+        print(f"❌ Päävirhe: {str(e)}")
