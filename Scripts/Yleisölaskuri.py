@@ -4,139 +4,166 @@ import requests
 from bs4 import BeautifulSoup
 import datetime
 
-url = "https://www.veikkausliiga.com/tilastot/2024/veikkausliiga/ottelut/"
+# URL-osoite Veikkausliigan tilastoihin
+url = "https://www.veikkausliiga.com/tilastot/2025/veikkausliiga/ottelut/"
 
-teams = ["HJK", "KuPS", "FC Inter", "SJK", "FC Lahti", "Ilves", "FC Haka", "VPS", "AC Oulu", "Gnistan", "IFK Mariehamn", "EIF"]
+# Päivitetyt joukkueet 2025 kauden mukaan
+teams = ["Ilves", "HJK", "FC Inter", "KuPS", "IFK Mariehamn", "FF Jaro", "KTP", "SJK", "VPS", "AC Oulu", "FC Haka", "IF Gnistan"]
+
+# Turvallinen jakamisfunktio
+def safe_divide(a, b, default=0):
+    return a / b if b > 0 else default
 
 team_data = {
     team: {
-        'Home': {'audiences': [], 'goals_scored': [], 'goals_conceded': [], 'over_2_5': 0},
-        'Away': {'audiences': [], 'goals_scored': [], 'goals_conceded': [], 'over_2_5': 0}
+        "Home": {"audiences": [], "goals_scored": [], "goals_conceded": [], "over_2_5": 0},
+        "Away": {"audiences": [], "goals_scored": [], "goals_conceded": [], "over_2_5": 0}
     } for team in teams
 }
 
+# Alusta päämuuttujat
 total_audiences = []
 total_goals = 0
 total_over_2_5_games = 0
 
 try:
+    # Haetaan data Veikkausliigan sivulta
     headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        "Accept-Language": "fi-FI,fi;q=0.9"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
     }
     
-    # 1. Varmistetaan, että sivusto vastaa
-    response = requests.get(url, headers=headers, timeout=15)
-    response.raise_for_status()
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()  # Tarkistetaan, että pyyntö onnistui
     
-    # 2. Etsitään oikea taulukko uudella tavalla
-    soup = BeautifulSoup(response.text, 'html.parser')
-    table = soup.find('table', {'class': 'table-stats'})  # Muuttunut luokan nimi!
+    soup = BeautifulSoup(response.text, "html.parser")
+    table_rows = soup.find_all("tr")
     
-    if not table:
-        raise ValueError("Taulukkoa ei löytynyt sivustolta!")
-    
-    rows = table.find_all('tr', {'class': 'match-row'})  # Oikea rivien CSS-luokka
-    
-    print(f"Löytyi {len(rows)} otteluriviä")  # Debug-tuloste
-
-    for row in rows:
-        # 3. Etsitään oikeat sarakkeet
-        date_cell = row.find('td', {'class': 'date'})
-        teams_cell = row.find('td', {'class': 'teams'})
-        result_cell = row.find('td', {'class': 'score'})
-        audience_cell = row.find('td', {'class': 'attendance'})
-        
-        if not all([date_cell, teams_cell, result_cell, audience_cell]):
-            continue
-        
-        # 4. Parsitaan yleisömäärä
-        audience_text = audience_cell.get_text(strip=True)
-        audience_match = re.search(r'\d+', audience_text.replace(' ', ''))
-        if not audience_match:
-            continue
+    for row in table_rows:
+        cells = row.find_all("td")
+        if cells and len(cells) > 6:
+            # Haetaan ottelun tiedot
+            match_teams = cells[3].get_text(strip=True) if len(cells) > 3 else ""
+            result_text = cells[5].get_text(strip=True) if len(cells) > 5 else ""
+            audience_text = cells[6].get_text(strip=True) if len(cells) > 6 else ""
             
-        audience = int(audience_match.group())
-        total_audiences.append(audience)
-        
-        # 5. Parsitaan tulos
-        result_match = re.search(r'(\d+)\s*-\s*(\d+)', result_cell.get_text())
-        if not result_match:
-            continue
-            
-        home_goals, away_goals = map(int, result_match.groups())
-        total_goals += home_goals + away_goals
-        
-        # 6. Erotellaan joukkueet
-        home_team = teams_cell.find('span', {'class': 'home-team'}).get_text(strip=True)
-        away_team = teams_cell.find('span', {'class': 'away-team'}).get_text(strip=True)
-        
-        # 7. Täytetään joukkueiden tiedot
-        if home_team in teams:
-            team_data[home_team]['Home']['audiences'].append(audience)
-            team_data[home_team]['Home']['goals_scored'].append(home_goals)
-            team_data[home_team]['Home']['goals_conceded'].append(away_goals)
-            if (home_goals + away_goals) > 2.5:
-                team_data[home_team]['Home']['over_2_5'] += 1
+            # Tarkistetaan, että tekstit on saatu
+            if not all([match_teams, result_text, audience_text]):
+                continue
                 
-        if away_team in teams:
-            team_data[away_team]['Away']['audiences'].append(audience)
-            team_data[away_team]['Away']['goals_scored'].append(away_goals)
-            team_data[away_team]['Away']['goals_conceded'].append(home_goals)
-            if (home_goals + away_goals) > 2.5:
-                team_data[away_team]['Away']['over_2_5'] += 1
-
-    # 8. Kirjoitetaan raportti TURVALLISESTI
-    file_path = os.path.join(os.path.dirname(__file__), '..', 'Yleisö2025.md')
+            # Haetaan tulos ja yleisömäärä
+            result_match = re.search(r"(\d+)\s*[—-]\s*(\d+)", result_text)
+            audience_match = re.search(r"(\d+)", audience_text)
+            
+            if not (result_match and audience_match):
+                continue
+                
+            audience_number = int(audience_match.group(1))
+            home_goals, away_goals = map(int, result_match.groups())
+            
+            # Lasketaan tilastot
+            total_goals += home_goals + away_goals
+            total_audiences.append(audience_number)
+            if home_goals + away_goals > 2.5:
+                total_over_2_5_games += 1
+            
+            # Erotellaan kotijoukkue ja vierasjoukkue
+            if " - " in match_teams:
+                home_team, away_team = [team.strip() for team in match_teams.split(" - ")]
+                
+                # Tallennetaan kotijoukkueen tiedot
+                if home_team in teams:
+                    team_data[home_team]["Home"]["audiences"].append(audience_number)
+                    team_data[home_team]["Home"]["goals_scored"].append(home_goals)
+                    team_data[home_team]["Home"]["goals_conceded"].append(away_goals)
+                    if home_goals + away_goals > 2.5:
+                        team_data[home_team]["Home"]["over_2_5"] += 1
+                
+                # Tallennetaan vierasjoukkueen tiedot
+                if away_team in teams:
+                    team_data[away_team]["Away"]["audiences"].append(audience_number)
+                    team_data[away_team]["Away"]["goals_scored"].append(away_goals)
+                    team_data[away_team]["Away"]["goals_conceded"].append(home_goals)
+                    if home_goals + away_goals > 2.5:
+                        team_data[away_team]["Away"]["over_2_5"] += 1
     
-    with open(file_path, 'w', encoding='utf-8') as f:
-        f.write(f"# Veikkausliiga 2025 Yleisötilastot\n\n")
-        f.write(f"*Päivitetty: {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')}*\n\n")
+    # Tulostetaan tarkistuksia
+    print(f"Yleisömäärät: {total_audiences}")
+    print(f"Tehdyt maalit: {total_goals}")
+    print(f"Yli 2.5 maalia peleissä: {total_over_2_5_games}")
+    
+    # Lasketaan yhteenvetotilastot
+    total_games = len(total_audiences)
+    total_average_audience = safe_divide(sum(total_audiences), total_games)
+    total_average_goals = safe_divide(total_goals, total_games)
+    total_over_2_5_percent = safe_divide(total_over_2_5_games * 100, total_games)
+    
+    # Asetetaan tiedoston sijainti
+    file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "Yleisö2025.md")
+    
+    # Kirjoitetaan tulokset Markdown-tiedostoon
+    with open(file_path, "w", encoding="utf-8") as file:
+        file.write("# Veikkausliiga 2025 - Yleisötilastot\n\n")
+        file.write(f"Päivitetty: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
         
-        # Yleistilastot
-        total_games = len(total_audiences)
-        f.write("## Yleiset tilastot\n")
-        f.write(f"- Pelattuja otteluita: {total_games}\n")
+        file.write("## Kokonaistilastot\n\n")
+        file.write(f"- **Kokonaisyleisömäärä:** {sum(total_audiences):,} katsojaa\n")
+        file.write(f"- **Keskimääräinen yleisö:** {total_average_audience:.0f} katsojaa/ottelu\n")
+        file.write(f"- **Otteluita pelattu:** {total_games}\n")
+        file.write(f"- **Maaleja yhteensä:** {total_goals}\n")
+        file.write(f"- **Maaleja per ottelu:** {total_average_goals:.2f}\n")
+        file.write(f"- **Yli 2.5 maalia otteluissa:** {total_over_2_5_percent:.1f}%\n")
         
-        if total_games > 0:
-            f.write(f"- Keskiyleisö: {sum(total_audiences)/total_games:.0f}\n")
-            f.write(f"- Maalit per ottelu: {total_goals/total_games:.1f}\n")
-            f.write(f"- Yli 2.5 maalia: {total_over_2_5_games/total_games:.1%}\n")
-        else:
-            f.write("- Ei pelattuja otteluita\n")
+        file.write("\n## Joukkuekohtaiset tilastot\n\n")
         
-        # Joukkueet
-        f.write("\n## Joukkuekohtaiset tilastot\n")
+        # Joukkuekohtaiset tiedot
         for team in teams:
-            home = team_data[team]['Home']
-            away = team_data[team]['Away']
+            home_audiences = team_data[team]["Home"]["audiences"]
+            home_goals_scored = team_data[team]["Home"]["goals_scored"]
+            home_goals_conceded = team_data[team]["Home"]["goals_conceded"]
             
-            f.write(f"\n### {team}\n")
+            home_games = len(home_audiences)
+            total_home_audience = sum(home_audiences) if home_audiences else 0
+            total_home_goals_scored = sum(home_goals_scored) if home_goals_scored else 0
+            total_home_goals_conceded = sum(home_goals_conceded) if home_goals_conceded else 0
+            total_home_over_2_5 = team_data[team]["Home"]["over_2_5"]
             
-            # Kotipelit
-            f.write("#### Kotipelit\n")
-            home_games = len(home['audiences'])
-            if home_games > 0:
-                f.write(f"- Keskiyleisö: {sum(home['audiences'])/home_games:.0f}\n")
-                f.write(f"- Maalit: {sum(home['goals_scored'])}-{sum(home['goals_conceded']}\n")
-                f.write(f"- Yli 2.5 maalia: {home['over_2_5']} ({home['over_2_5']/home_games:.1%})\n")
-            else:
-                f.write("- Ei kotipelejä\n")
+            away_audiences = team_data[team]["Away"]["audiences"]
+            away_goals_scored = team_data[team]["Away"]["goals_scored"]
+            away_goals_conceded = team_data[team]["Away"]["goals_conceded"]
             
-            # Vieraspelit
-            f.write("#### Vieraspelit\n")
-            away_games = len(away['audiences'])
-            if away_games > 0:
-                f.write(f"- Keskiyleisö: {sum(away['audiences'])/away_games:.0f}\n")
-                f.write(f"- Maalit: {sum(away['goals_scored'])}-{sum(away['goals_conceded']}\n")
-                f.write(f"- Yli 2.5 maalia: {away['over_2_5']} ({away['over_2_5']/away_games:.1%})\n")
-            else:
-                f.write("- Ei vieraspelejä\n")
-
+            away_games = len(away_audiences)
+            total_away_audience = sum(away_audiences) if away_audiences else 0
+            total_away_goals_scored = sum(away_goals_scored) if away_goals_scored else 0
+            total_away_goals_conceded = sum(away_goals_conceded) if away_goals_conceded else 0
+            total_away_over_2_5 = team_data[team]["Away"]["over_2_5"]
+            
+            file.write(f"### {team}\n")
+            
+            file.write("#### Kotipelit\n")
+            file.write(f"- **Kokonaisyleisömäärä:** {total_home_audience:,}\n")
+            
+            # Käytetään safe_divide-funktiota nollalla jakamisen estämiseksi
+            avg_home_audience = safe_divide(total_home_audience, home_games)
+            file.write(f"- **Keskiarvoyleisömäärä per peli:** {avg_home_audience:.2f} ({home_games} peliä)\n")
+            
+            file.write(f"- **Tehdyt maalit:** {total_home_goals_scored}\n")
+            file.write(f"- **Päästetyt maalit:** {total_home_goals_conceded}\n")
+            file.write(f"- **Yli 2.5 maalia kotipeleissä:** {total_home_over_2_5}\n\n")
+            
+            file.write("#### Vieraspelit\n")
+            file.write(f"- **Kokonaisyleisömäärä:** {total_away_audience:,}\n")
+            
+            # Käytetään safe_divide-funktiota nollalla jakamisen estämiseksi
+            avg_away_audience = safe_divide(total_away_audience, away_games)
+            file.write(f"- **Keskiarvoyleisömäärä per peli:** {avg_away_audience:.2f} ({away_games} peliä)\n")
+            
+            file.write(f"- **Tehdyt maalit:** {total_away_goals_scored}\n")
+            file.write(f"- **Päästetyt maalit:** {total_away_goals_conceded}\n")
+            file.write(f"- **Yli 2.5 maalia vieraspeleissä:** {total_away_over_2_5}\n\n")
+        
+        file.write("\n---\n*Tiedot päivitetään automaattisesti päivittäin. Viimeisin päivitys: Linux88888 (2025-04-06 12:12:17).*\n")
+    
+    print(f"Tilastot päivitetty onnistuneesti tiedostoon: {file_path}")
+        
 except Exception as e:
-    print(f"KRIILLINEN VIRHE: {str(e)}")
-    # Kirjoitetaan tyhjä raportti virhetilanteessa
-    with open('Yleisö2025.md', 'w') as f:
-        f.write("# Tilastojen päivitys epäonnistui\n")
-        f.write(f"Virhe: {str(e)}")
-    raise
+    print(f"Virhe skriptissä: {str(e)}")
