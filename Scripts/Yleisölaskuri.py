@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 import datetime
 
-url = "https://www.veikkausliiga.com/tilastot/2025/veikkausliiga/ottelut/"
+url = "https://www.veikkausliiga.com/tilastot/2024/veikkausliiga/ottelut/"
 teams = ["Ilves", "HJK", "FC Inter", "KuPS", "IFK Mariehamn", "FF Jaro", "KTP", "SJK", "VPS", "AC Oulu", "FC Haka", "IF Gnistan"]
 
 team_data = {
