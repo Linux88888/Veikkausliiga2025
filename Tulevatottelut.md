@@ -1,7 +1,9 @@
 7 - Pe 11.4.2025 - 18:00 - 11.4.2025
         
-        18:00 - KTP - VPS - Seuranta - - - -
-8 -  - 20:00 - 20:00 - SJK - HJK - Seuranta - - - -
+        18:00 - KTP - VPS - Ennakko
+Seuranta - - - -
+8 -  - 20:00 - 20:00 - SJK - HJK - Ennakko
+Seuranta - - - -
 9 - La 12.4.2025 - 14:30 - 12.4.2025
         
         14:30 - Ilves - FF Jaro - Seuranta - - - -
