@@ -1,12 +1,14 @@
-7 - Pe 11.4.2025 - 18:00 - 11.4.2025
-        
-        18:00 - KTP - VPS - Ennakko
-Seuranta - - - -
-8 -  - 20:00 - 20:00 - SJK - HJK - Ennakko
-Seuranta - - - -
 9 - La 12.4.2025 - 14:30 - 12.4.2025
         
-        14:30 - Ilves - FF Jaro - Seuranta - - - -
-10 -  - 15:00 - 15:00 - FC Haka - IFK Mariehamn - Seuranta - - - -
-11 -  - 17:00 - 17:00 - FC Inter - IF Gnistan - Seuranta - - - -
-12 -  - 19:23 - 19:23 - KuPS - AC Oulu - Seuranta - - - -
+        14:30 - Ilves - FF Jaro - Ennakko
+Seuranta - - - -
+10 -  - 15:00 - 15:00 - FC Haka - IFK Mariehamn - Ennakko
+Seuranta - - - -
+11 -  - 17:00 - 17:00 - FC Inter - IF Gnistan - Ennakko
+Seuranta - - - -
+12 -  - 19:23 - 19:23 - KuPS - AC Oulu - Ennakko
+Seuranta - - - -
+13 - La 19.4.2025 - 15:00 - 19.4.2025
+        
+        15:00 - VPS - FC Inter - Seuranta - - - -
+14 -  - 17:00 - 17:00 - FC Haka - AC Oulu - Seuranta - - - -
