@@ -1,14 +1,14 @@
 # Veikkausliiga 2025 - Tilastot
 
-*Päivitetty: 06.04.2025 19:18*
+*Päivitetty: 13.04.2025 08:04*
 
 ## Liigatilastot
-- Pelatut ottelut: 6
-- Yhteensä maaleja: 22
-- Maaleja per ottelu: 3.7
-- Yli 2.5 maalin otteluita: 3 (50.0%)
-- Yleisöä yhteensä: 19,840 katsojaa
-- Keskimääräinen yleisömäärä: 3307
+- Pelatut ottelut: 12
+- Yhteensä maaleja: 35
+- Maaleja per ottelu: 2.9
+- Yli 2.5 maalin otteluita: 6 (50.0%)
+- Yleisöä yhteensä: 36,275 katsojaa
+- Keskimääräinen yleisömäärä: 3023
 - Suurin yleisömäärä: 7,651
 
 ## Joukkuekohtaiset tilastot
@@ -22,21 +22,21 @@
 - Yli 2000 katsojaa: 0
 
 #### Vieraspelit
-- Otteluita: 1
+- Otteluita: 2
 - Tehdyt maalit: 3
-- Päästetyt maalit: 4
-- Yli 2.5 maalia: 1 (100.0%)
-- Keskiverto yleisö: 2248
+- Päästetyt maalit: 5
+- Yli 2.5 maalia: 1 (50.0%)
+- Keskiverto yleisö: 2016
 - Yli 2000 katsojaa: 1
 
 ### FC Haka
 #### Kotipelit
-- Otteluita: 1
+- Otteluita: 2
 - Tehdyt maalit: 3
-- Päästetyt maalit: 2
-- Yli 2.5 maalia: 1 (100.0%)
-- Keskiverto yleisö: 2635
-- Yli 2000 katsojaa: 1
+- Päästetyt maalit: 3
+- Yli 2.5 maalia: 1 (50.0%)
+- Keskiverto yleisö: 2558
+- Yli 2000 katsojaa: 2
 
 #### Vieraspelit
 - Otteluita: 0
@@ -48,12 +48,12 @@
 
 ### FC Inter
 #### Kotipelit
-- Otteluita: 1
-- Tehdyt maalit: 1
+- Otteluita: 2
+- Tehdyt maalit: 4
 - Päästetyt maalit: 1
-- Yli 2.5 maalia: 0 (0.0%)
-- Keskiverto yleisö: 3837
-- Yli 2000 katsojaa: 1
+- Yli 2.5 maalia: 1 (50.0%)
+- Keskiverto yleisö: 3152
+- Yli 2000 katsojaa: 2
 
 #### Vieraspelit
 - Otteluita: 0
@@ -73,12 +73,12 @@
 - Yli 2000 katsojaa: 0
 
 #### Vieraspelit
-- Otteluita: 1
-- Tehdyt maalit: 2
-- Päästetyt maalit: 0
-- Yli 2.5 maalia: 0 (0.0%)
-- Keskiverto yleisö: 1224
-- Yli 2000 katsojaa: 0
+- Otteluita: 2
+- Tehdyt maalit: 3
+- Päästetyt maalit: 2
+- Yli 2.5 maalia: 1 (50.0%)
+- Keskiverto yleisö: 2563
+- Yli 2000 katsojaa: 1
 
 ### HJK
 #### Kotipelit
@@ -90,12 +90,12 @@
 - Yli 2000 katsojaa: 0
 
 #### Vieraspelit
-- Otteluita: 1
+- Otteluita: 2
 - Tehdyt maalit: 2
-- Päästetyt maalit: 3
-- Yli 2.5 maalia: 1 (100.0%)
-- Keskiverto yleisö: 7651
-- Yli 2000 katsojaa: 1
+- Päästetyt maalit: 4
+- Yli 2.5 maalia: 1 (50.0%)
+- Keskiverto yleisö: 5850
+- Yli 2000 katsojaa: 2
 
 ### IF Gnistan
 #### Kotipelit
@@ -107,12 +107,12 @@
 - Yli 2000 katsojaa: 0
 
 #### Vieraspelit
-- Otteluita: 1
+- Otteluita: 2
 - Tehdyt maalit: 2
-- Päästetyt maalit: 3
-- Yli 2.5 maalia: 1 (100.0%)
-- Keskiverto yleisö: 2635
-- Yli 2000 katsojaa: 1
+- Päästetyt maalit: 6
+- Yli 2.5 maalia: 2 (100.0%)
+- Keskiverto yleisö: 2550
+- Yli 2000 katsojaa: 2
 
 ### IFK Mariehamn
 #### Kotipelit
@@ -124,21 +124,21 @@
 - Yli 2000 katsojaa: 0
 
 #### Vieraspelit
-- Otteluita: 0
-- Tehdyt maalit: 0
+- Otteluita: 1
+- Tehdyt maalit: 1
 - Päästetyt maalit: 0
 - Yli 2.5 maalia: 0 (0.0%)
-- Keskiverto yleisö: 0
-- Yli 2000 katsojaa: 0
+- Keskiverto yleisö: 2480
+- Yli 2000 katsojaa: 1
 
 ### Ilves
 #### Kotipelit
-- Otteluita: 1
-- Tehdyt maalit: 3
-- Päästetyt maalit: 2
-- Yli 2.5 maalia: 1 (100.0%)
-- Keskiverto yleisö: 7651
-- Yli 2000 katsojaa: 1
+- Otteluita: 2
+- Tehdyt maalit: 5
+- Päästetyt maalit: 3
+- Yli 2.5 maalia: 2 (100.0%)
+- Keskiverto yleisö: 5776
+- Yli 2000 katsojaa: 2
 
 #### Vieraspelit
 - Otteluita: 0
@@ -150,11 +150,11 @@
 
 ### KTP
 #### Kotipelit
-- Otteluita: 1
-- Tehdyt maalit: 0
-- Päästetyt maalit: 1
-- Yli 2.5 maalia: 0 (0.0%)
-- Keskiverto yleisö: 2245
+- Otteluita: 2
+- Tehdyt maalit: 2
+- Päästetyt maalit: 3
+- Yli 2.5 maalia: 1 (50.0%)
+- Keskiverto yleisö: 2000
 - Yli 2000 katsojaa: 1
 
 #### Vieraspelit
@@ -167,11 +167,11 @@
 
 ### KuPS
 #### Kotipelit
-- Otteluita: 0
-- Tehdyt maalit: 0
+- Otteluita: 1
+- Tehdyt maalit: 1
 - Päästetyt maalit: 0
 - Yli 2.5 maalia: 0 (0.0%)
-- Keskiverto yleisö: 0
+- Keskiverto yleisö: 1784
 - Yli 2000 katsojaa: 0
 
 #### Vieraspelit
@@ -184,12 +184,12 @@
 
 ### SJK
 #### Kotipelit
-- Otteluita: 0
-- Tehdyt maalit: 0
+- Otteluita: 1
+- Tehdyt maalit: 1
 - Päästetyt maalit: 0
 - Yli 2.5 maalia: 0 (0.0%)
-- Keskiverto yleisö: 0
-- Yli 2000 katsojaa: 0
+- Keskiverto yleisö: 4048
+- Yli 2000 katsojaa: 1
 
 #### Vieraspelit
 - Otteluita: 1
@@ -209,10 +209,10 @@
 - Yli 2000 katsojaa: 1
 
 #### Vieraspelit
-- Otteluita: 0
-- Tehdyt maalit: 0
-- Päästetyt maalit: 0
-- Yli 2.5 maalia: 0 (0.0%)
-- Keskiverto yleisö: 0
+- Otteluita: 1
+- Tehdyt maalit: 2
+- Päästetyt maalit: 2
+- Yli 2.5 maalia: 1 (100.0%)
+- Keskiverto yleisö: 1755
 - Yli 2000 katsojaa: 0
 
