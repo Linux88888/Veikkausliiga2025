@@ -1,16 +1,29 @@
 import requests
 from bs4 import BeautifulSoup
+import os
+import datetime
+
+# Print current working directory for debugging
+print(f"Current working directory: {os.getcwd()}")
+print(f"Directory contents: {os.listdir('.')}")
 
 # Funktio, joka hakee ja parsii markdown-tiedoston GitHubista
 def fetch_and_parse_github_markdown(url):
-    response = requests.get(url)
-    response.raise_for_status()
-    soup = BeautifulSoup(response.text, 'html.parser')
-    pre_tag = soup.find('pre')
-    if pre_tag:
-        return pre_tag.text
-    else:
-        return soup.get_text()
+    print(f"Fetching data from URL: {url}")
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, 'html.parser')
+        pre_tag = soup.find('pre')
+        if pre_tag:
+            print(f"Successfully parsed data from {url} (found pre tag)")
+            return pre_tag.text
+        else:
+            print(f"Successfully parsed data from {url} (using get_text)")
+            return soup.get_text()
+    except Exception as e:
+        print(f"Error fetching data from {url}: {e}")
+        return ""
 
 # URL-osoitteet
 tulevat_ottelut_url = 'https://raw.githubusercontent.com/Linux88888/Veikkausliiga2025/main/Tulevatottelut.md'
@@ -20,10 +33,13 @@ yleiso_url = 'https://raw.githubusercontent.com/Linux88888/Veikkausliiga2025/mai
 teams = ["HJK", "KuPS", "FC Inter", "SJK", "FF Jaro", "Ilves", "FC Haka", "VPS", "AC Oulu", "Gnistan", "IFK Mariehamn", "KTP"]
 
 # Hakee ja parsii datan
+print("Fetching data from GitHub...")
 tulevat_ottelut_data = fetch_and_parse_github_markdown(tulevat_ottelut_url)
 yleiso_data = fetch_and_parse_github_markdown(yleiso_url)
 
 # Tulostetaan haettu data debuggausta varten
+print(f"Tulevat ottelut data length: {len(tulevat_ottelut_data)}")
+print(f"Yleisö data length: {len(yleiso_data)}")
 print("Tulevat ottelut data:\n", tulevat_ottelut_data[:500], "\n")
 print("Yleisö data:\n", yleiso_data[:500], "\n")
 
@@ -111,8 +127,14 @@ def simple_analyze_matches(ottelut, teams_data):
 
 # Tulostaa analysoidut tulokset markdown-tiedostoon
 def save_results_to_markdown(ottelut, results, filename):
-    with open(filename, 'w', encoding='utf-8') as file:
+    filepath = os.path.join(os.getcwd(), filename)
+    print(f"Tallentaa tulokset tiedostoon: {filepath}")
+    
+    with open(filepath, 'w', encoding='utf-8') as file:
         file.write("# Analysoidut Ottelut\n\n")
+        
+        # Lisää päivitysaika tiedoston alkuun (näkyy tiedostossa)
+        file.write(f"Päivitetty: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
         
         # Tulostetaan ottelut
         file.write("## Tulevat Ottelut\n")
@@ -129,7 +151,17 @@ def save_results_to_markdown(ottelut, results, filename):
             file.write(f"- Kotiotteluiden yli 2.5 maalia pelissä: {tulos['koti_yli_2_5']}\n")
             file.write(f"- Vierasotteluiden yli 2.5 maalia pelissä: {tulos['vieras_yli_2_5']}\n")
             file.write("\n")
+    
     print(f"Tulokset tallennettu tiedostoon {filename}")
+    
+    # Tarkista että tiedosto on olemassa
+    if os.path.exists(filepath):
+        print(f"Tiedosto luotiin onnistuneesti: {filepath}")
+        with open(filepath, 'r', encoding='utf-8') as file:
+            content = file.read()
+            print(f"Tiedoston sisältö (ensimmäiset 200 merkkiä): {content[:200]}")
+    else:
+        print(f"VIRHE: Tiedostoa ei löydy: {filepath}")
 
 # Analysoi ottelut ja tallenna tulokset
 analysoidut_tulokset = simple_analyze_matches(ottelut, teams_data)
