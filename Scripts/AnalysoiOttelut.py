@@ -7,7 +7,7 @@ import numpy as np
 from collections import defaultdict
 
 # Nykyinen päivämäärä ja aika
-CURRENT_DATE = "2025-04-16 19:38:56"
+CURRENT_DATE = "2025-04-16 19:46:35"
 CURRENT_USER = "Linux88888"
 
 # Print current working directory for debugging
@@ -316,64 +316,87 @@ def calculate_home_advantage():
     
     return home_boost, away_penalty
 
-# KORJATTU: Sarjataulukon ennustaminen
+# KORJATTU: Täysin uudistettu sarjataulukon ennustaminen
 def predict_final_standings(teams, remaining_matches, teams_data):
-    """Ennustaa sarjan loppusijoitukset olemassa olevan datan perusteella"""
-    # Veikkausliiga: 12 joukkuetta, jokainen pelaa 22 ottelua kaudessa
-    total_matches = 22
+    """Ennustaa sarjan loppusijoitukset simuloimalla KAIKKI sarjan ottelut"""
     
-    # Arvioi paljonko otteluita on pelattu (tässä tapauksessa noin 2 kierrosta)
-    played_round_estimate = 2
+    # Luo kaikki sarjan ottelut - jokainen joukkue pelaa jokaista vastaan kotona ja vieraissa
+    all_matches = []
+    for home_team in teams:
+        for away_team in teams:
+            if home_team != away_team:
+                all_matches.append({
+                    'koti': home_team,
+                    'vieras': away_team
+                })
     
-    # Arvioi nykyiset pisteet joukkueittain
-    current_points = {}
+    # Poista tunnetut tulevat ottelut simuloitavista (ettei simuloida kahteen kertaan)
+    known_pairs = [(match['koti'], match['vieras']) for match in remaining_matches]
+    unknown_matches = []
     
-    for team in teams:
-        # Käytetään joukkueen oletettua vahvuutta pisteiden arviointiin
-        position = teams_data.get(team, {}).get('position', 6)
-        expected_points_per_match = max(0.8, min(2.0, 2.2 - position * 0.1))
-        
-        # Arvioidut pisteet tältä ja aiemmilta kierroksilta
-        current_points[team] = round(expected_points_per_match * played_round_estimate)
-        
-        # Korjaus: tarkista että pisteet ovat järkevän suuruiset
-        if current_points[team] < 1:
-            current_points[team] = 1
+    for match in all_matches:
+        pair = (match['koti'], match['vieras'])
+        if pair not in known_pairs:
+            unknown_matches.append(match)
     
-    # Simuloi kaikki jäljellä olevat kauden ottelut
+    # Veikkausliigan pistejärjestelmä: 3p voitosta, 1p tasapelistä
     simulations = 500
-    final_points = {team: [current_points[team]] * simulations for team in teams}
+    final_points = {team: [0] * simulations for team in teams}  # Aloita nollasta
     
-    # Simuloi tulevat ottelut (mukaan lukien repositoryssä luetteloidut)
+    # Simuloi kaikki sarjan ottelut joka kierroksella
     for sim in range(simulations):
+        
+        # 1. Simuloi tunnetut tulevat ottelut
         for match in remaining_matches:
             home_team = match['koti']
             away_team = match['vieras']
             
-            # Käytä vahvuutta perustuen oletettuun sarjasijoitukseen
+            # Joukkueiden vahvuudet
+            home_pos = teams_data.get(home_team, {}).get('position', 6)
+            away_pos = teams_data.get(away_team, {}).get('position', 6)
+            
+            # Vahvuuskertoimet sijoituksen perusteella (1-12)
+            home_strength = 10.0 - min(12, home_pos)
+            away_strength = 10.0 - min(12, away_pos)
+            
+            # Kotietu
+            home_strength *= 1.15
+            
+            # Voittotodennäköisyydet
+            total_strength = home_strength + away_strength
+            home_win_prob = min(0.7, home_strength / total_strength * 0.85)
+            away_win_prob = min(0.5, away_strength / total_strength * 0.7)
+            draw_prob = 1.0 - home_win_prob - away_win_prob
+            
+            # Arvo ottelun tulos
+            rand = np.random.random()
+            if rand < home_win_prob:
+                final_points[home_team][sim] += 3  # Kotivoitto
+            elif rand < home_win_prob + draw_prob:
+                final_points[home_team][sim] += 1  # Tasapeli
+                final_points[away_team][sim] += 1
+            else:
+                final_points[away_team][sim] += 3  # Vierasvoitto
+                
+        # 2. Simuloi loput sarjan ottelut (joita ei ole vielä tiedossa)
+        for match in unknown_matches:
+            home_team = match['koti']
+            away_team = match['vieras']
+            
+            # Sama simulointilogiikka kuin yllä
             home_pos = teams_data.get(home_team, {}).get('position', 6)
             away_pos = teams_data.get(away_team, {}).get('position', 6)
             
             home_strength = 10.0 - min(12, home_pos)
             away_strength = 10.0 - min(12, away_pos)
-            
-            # Kotiedun huomiointi
             home_strength *= 1.15
             
-            # Arvo tulos
             total_strength = home_strength + away_strength
-            home_win_prob = home_strength / total_strength * 0.85
-            away_win_prob = away_strength / total_strength * 0.7
+            home_win_prob = min(0.7, home_strength / total_strength * 0.85)
+            away_win_prob = min(0.5, away_strength / total_strength * 0.7)
             draw_prob = 1.0 - home_win_prob - away_win_prob
             
-            # Rajoita arvot realistisiksi
-            if home_win_prob > 0.7: home_win_prob = 0.7
-            if away_win_prob > 0.5: away_win_prob = 0.5
-            if home_win_prob < 0.2: home_win_prob = 0.2
-            if away_win_prob < 0.1: away_win_prob = 0.1
-            draw_prob = 1.0 - home_win_prob - away_win_prob
-            
-            # Arvo tulos ja päivitä pisteet
+            # Arvo ottelun tulos
             rand = np.random.random()
             if rand < home_win_prob:
                 final_points[home_team][sim] += 3
@@ -382,54 +405,14 @@ def predict_final_standings(teams, remaining_matches, teams_data):
                 final_points[away_team][sim] += 1
             else:
                 final_points[away_team][sim] += 3
-        
-        # KORJAUS: Simuloi myös ne jäljellä olevat ottelut, jotka eivät ole 
-        # tiedossa tulevissa otteluissa
-        matches_to_simulate = total_matches - played_round_estimate - len(remaining_matches)
-        
-        if matches_to_simulate > 0:
-            for _ in range(matches_to_simulate):
-                # Arvo satunnainen koti- ja vierasjoukkue
-                all_teams = list(teams)
-                np.random.shuffle(all_teams)
-                home_team = all_teams[0]
-                away_team = all_teams[1]
-                
-                # Käytä samaa logiikkaa kuin ylempänä
-                home_pos = teams_data.get(home_team, {}).get('position', 6)
-                away_pos = teams_data.get(away_team, {}).get('position', 6)
-                
-                home_strength = 10.0 - min(12, home_pos)
-                away_strength = 10.0 - min(12, away_pos)
-                home_strength *= 1.15
-                
-                total_strength = home_strength + away_strength
-                home_win_prob = home_strength / total_strength * 0.85
-                away_win_prob = away_strength / total_strength * 0.7
-                draw_prob = 1.0 - home_win_prob - away_win_prob
-                
-                # Rajoita arvot
-                if home_win_prob > 0.7: home_win_prob = 0.7
-                if away_win_prob > 0.5: away_win_prob = 0.5
-                if home_win_prob < 0.2: home_win_prob = 0.2
-                if away_win_prob < 0.1: away_win_prob = 0.1
-                draw_prob = 1.0 - home_win_prob - away_win_prob
-                
-                # Arvo tulos
-                rand = np.random.random()
-                if rand < home_win_prob:
-                    final_points[home_team][sim] += 3
-                elif rand < home_win_prob + draw_prob:
-                    final_points[home_team][sim] += 1
-                    final_points[away_team][sim] += 1
-                else:
-                    final_points[away_team][sim] += 3
     
-    # Laske lopputulokset
+    # Laske keskimääräiset loppupisteet
     avg_points = {team: sum(points)/simulations for team, points in final_points.items()}
+    
+    # Järjestä joukkueet pisteiden mukaan
     standings = sorted(avg_points.items(), key=lambda x: x[1], reverse=True)
     
-    # Laske mestaruustodennäköisyydet
+    # Laske mestaruus- ja muut todennäköisyydet
     championship_odds = {}
     top_4_odds = {}
     relegation_odds = {}
@@ -440,6 +423,7 @@ def predict_final_standings(teams, remaining_matches, teams_data):
         relegation = 0
         
         for sim in range(simulations):
+            # Järjestä joukkueet tämän simulaation pisteiden mukaan
             sim_standings = {}
             for t in teams:
                 sim_standings[t] = final_points[t][sim]
@@ -598,7 +582,7 @@ def save_advanced_results_to_markdown(ottelut, results, teams_data, filename):
             # Ennusta sarjataulukko
             if len(teams) > 8:  # Jos on tarpeeksi joukkueita
                 file.write("## Kauden 2025 Sarjataulukkoennuste\n\n")
-                file.write("**HUOMIO**: Sarjataulukkoennuste huomioi joukkueiden oletetun vahvuuden.\n\n")
+                file.write("**HUOMIO**: Sarjataulukkoennuste perustuu kaikkien sarjan otteluiden simulointiin ja huomioi joukkueiden oletetun vahvuuden.\n\n")
                 
                 # Ennusta lopputaulukko
                 standings_prediction = predict_final_standings(teams, ottelut, teams_data)
