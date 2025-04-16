@@ -3,10 +3,6 @@ import re
 import os
 import datetime
 
-# Print current working directory for debugging
-print(f"Current working directory: {os.getcwd()}")
-print(f"Directory contents: {os.listdir('.')}")
-
 # Funktio, joka hakee ja parsii markdown-tiedoston GitHubista
 def fetch_and_parse_github_markdown(url):
     print(f"Fetching data from URL: {url}")
@@ -31,44 +27,67 @@ print("Fetching data from GitHub...")
 tulevat_ottelut_data = fetch_and_parse_github_markdown(tulevat_ottelut_url)
 yleiso_data = fetch_and_parse_github_markdown(yleiso_url)
 
-# Päivitetty funktio, joka parsii tulevat ottelut datan
+# Täysin uudistettu funktio, joka parsii tulevat ottelut datan
 def parse_tulevat_ottelut(data):
     ottelut = []
     lines = data.splitlines()
     
     current_date = None
-    current_id = None
     
     for i, line in enumerate(lines):
         line = line.strip()
         
-        # Etsi ottelupäivä ja ID
-        if " - " in line and re.search(r'\d+ -', line):
-            match = re.search(r'(\d+) - ([^-]+)- (\d+:\d+) - (\d+\.\d+\.\d+)', line)
-            if match:
-                current_id = match.group(1).strip()
-                current_date = match.group(4).strip()
-                print(f"Found date: {current_date}, ID: {current_id}")
-        
-        # Etsi ottelun tiedot
-        if "Seuranta" in line and " - " in line:
-            match = re.search(r'(\d+:\d+) - ([^-]+) - ([^-]+) -', line)
-            if match:
-                aika = match.group(1).strip()
-                koti = match.group(2).strip()
-                vieras = match.group(3).strip()
+        # Etsi päivämäärä
+        date_match = re.search(r'(\d+\.\d+\.\d{4})', line)
+        if date_match:
+            current_date = date_match.group(1)
+            print(f"Found date: {current_date}")
+            
+        # Etsi Seuranta-sanalla merkityt ottelurivit
+        if "Seuranta" in line:
+            # Tarkista eri formaatit
+            if " - " in line:
+                parts = line.split(" - ")
                 
-                ottelu = {
-                    'id': current_id if current_id else '',
-                    'paiva': current_date if current_date else '',
-                    'aika': aika,
-                    'koti': koti,
-                    'vieras': vieras,
-                }
-                print(f"Lisätty ottelu: {ottelu}")
-                ottelut.append(ottelu)
+                # Formaatti 1: "15:00 - VPS - FC Inter - Seuranta"
+                if len(parts) >= 4 and is_time_format(parts[0]):
+                    aika = parts[0].strip()
+                    koti = parts[1].strip()
+                    vieras = parts[2].strip()
+                    
+                # Formaatti 2: "14 - - 17:00 - 17:00 - FC Haka - AC Oulu - Seuranta"
+                elif len(parts) >= 6 and is_time_format(parts[3]):
+                    aika = parts[3].strip()
+                    koti = parts[4].strip()
+                    vieras = parts[5].strip()
+                else:
+                    continue
+                
+                # Tarkista, että löydetyt joukkueet ovat valideja
+                if is_valid_team(koti) and is_valid_team(vieras):
+                    ottelu = {
+                        'paiva': current_date,
+                        'aika': aika,
+                        'koti': koti,
+                        'vieras': vieras,
+                    }
+                    print(f"Lisätty ottelu: {ottelu}")
+                    ottelut.append(ottelu)
+                else:
+                    print(f"Ei kelvollinen joukkue: {koti} vs {vieras}")
     
     return ottelut
+
+# Apufunktio ajan formaatin tarkistamiseen
+def is_time_format(s):
+    return re.match(r'\d{1,2}:\d{2}', s) is not None
+
+# Apufunktio joukkueen validoinnille
+def is_valid_team(team_name):
+    for team in teams:
+        if team in team_name:
+            return True
+    return False
 
 # Parannettu funktio, joka parsii joukkueiden tilastot
 def parse_yleiso_data(data):
@@ -83,6 +102,7 @@ def parse_yleiso_data(data):
         
         # Etsi joukkueen nimeä
         if line.startswith('### '):
+            found_team = False
             team_name = line.replace('### ', '').strip()
             # Normalisoi joukkueen nimi
             for team in teams:
@@ -90,21 +110,26 @@ def parse_yleiso_data(data):
                     current_team = team
                     teams_data[current_team] = {}
                     print(f"Löytyi joukkue: {current_team}")
+                    found_team = True
                     break
+            if not found_team:
+                current_team = None
             kotipelit_mode = False
             vieraspelit_mode = False
         
         # Tunnista osiota
-        elif line.startswith('#### Kotipelit'):
+        elif current_team and line.startswith('#### Kotipelit'):
             kotipelit_mode = True
             vieraspelit_mode = False
+            print(f"Kotipelit-osio: {current_team}")
         
-        elif line.startswith('#### Vieraspelit'):
+        elif current_team and line.startswith('#### Vieraspelit'):
             kotipelit_mode = False
             vieraspelit_mode = True
+            print(f"Vieraspelit-osio: {current_team}")
         
         # Kerää tilastoja
-        elif current_team and '- ' in line:
+        elif current_team and line.startswith('- '):
             if kotipelit_mode:
                 if "Tehdyt maalit:" in line:
                     value = extract_number(line)
@@ -112,9 +137,9 @@ def parse_yleiso_data(data):
                     print(f"{current_team} koti_maaleja: {value}")
                     
                 elif "Yli 2.5 maalia:" in line:
-                    match = re.search(r'(\d+)\s*\((\d+\.\d+)%\)', line)
+                    match = re.search(r'Yli 2.5 maalia:\s*(\d+)\s*\(([^)]+)\)', line)
                     if match:
-                        value = f"{match.group(1)} ({match.group(2)}%)"
+                        value = f"{match.group(1)} ({match.group(2)})"
                         teams_data[current_team]['koti_yli_2_5'] = value
                         print(f"{current_team} koti_yli_2_5: {value}")
                     
@@ -125,9 +150,9 @@ def parse_yleiso_data(data):
                     print(f"{current_team} vieras_maaleja: {value}")
                     
                 elif "Yli 2.5 maalia:" in line:
-                    match = re.search(r'(\d+)\s*\((\d+\.\d+)%\)', line)
+                    match = re.search(r'Yli 2.5 maalia:\s*(\d+)\s*\(([^)]+)\)', line)
                     if match:
-                        value = f"{match.group(1)} ({match.group(2)}%)"
+                        value = f"{match.group(1)} ({match.group(2)})"
                         teams_data[current_team]['vieras_yli_2_5'] = value
                         print(f"{current_team} vieras_yli_2_5: {value}")
     
@@ -140,6 +165,26 @@ def extract_number(text):
         return float(match.group(1))
     return 0
 
+# Apufunktio joukkueen nimen täsmäämiseen
+def find_matching_team(team_name, teams_data):
+    # Täsmällinen osuma
+    if team_name in teams_data:
+        return team_name
+    
+    # Osittainen osuma
+    for team in teams_data.keys():
+        if team in team_name or team_name in team:
+            return team
+    
+    # Erikoistapaukset
+    if "Gnistan" in team_name:
+        if "IF Gnistan" in teams_data:
+            return "IF Gnistan"
+        elif "Gnistan" in teams_data:
+            return "Gnistan"
+    
+    return None
+
 # Parsii datat
 ottelut = parse_tulevat_ottelut(tulevat_ottelut_data)
 teams_data = parse_yleiso_data(yleiso_data)
@@ -151,16 +196,6 @@ for ottelu in ottelut:
 print("\n\nJOUKKUETIEDOT:")
 for team, data in teams_data.items():
     print(f"{team}: {data}")
-
-# Apufunktio joukkueen nimen täsmäämiseen
-def find_matching_team(team_name, teams_data):
-    if team_name in teams_data:
-        return team_name
-    
-    for team in teams_data.keys():
-        if team in team_name or team_name in team:
-            return team
-    return None
 
 # Yksinkertainen analysointifunktio
 def simple_analyze_matches(ottelut, teams_data):
@@ -211,8 +246,8 @@ def save_results_to_markdown(ottelut, results, filename):
         else:
             for ottelu in ottelut:
                 paiva_info = f"{ottelu['paiva']}" if ottelu['paiva'] else ""
-                aika_info = f"klo {ottelu['aika']}" if ottelu['aika'] else ""
-                file.write(f"- {ottelu['koti']} vs {ottelu['vieras']} ({paiva_info} {aika_info})\n")
+                aika_info = f"{ottelu['aika']}" if ottelu['aika'] else ""
+                file.write(f"- {ottelu['koti']} vs {ottelu['vieras']} ({paiva_info} klo {aika_info})\n")
         
         file.write("\n## Ennusteet\n")
         if not results:
