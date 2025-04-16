@@ -9,7 +9,7 @@ jobs:
   calculate_audience:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # This is important - add write permission
+      contents: write
 
     steps:
     - name: Checkout repository
@@ -25,16 +25,38 @@ jobs:
         python -m pip install --upgrade pip
         pip install requests beautifulsoup4
 
+    - name: List directory structure before running
+      run: |
+        echo "Repository contents:"
+        ls -la
+        echo "Scripts directory contents:"
+        ls -la Scripts/
+
     - name: Run AnalysoiOttelut.py Script
       run: python Scripts/AnalysoiOttelut.py
 
-    - name: Verify Script run
-      run: cat AnalysoidutOttelut.md
+    - name: List directory structure after running
+      run: |
+        echo "Repository contents after script run:"
+        ls -la
+        echo "Does AnalysoidutOttelut.md exist?"
+        if [ -f AnalysoidutOttelut.md ]; then echo "YES"; else echo "NO"; fi
+        
+    - name: Show file content if exists
+      run: |
+        if [ -f AnalysoidutOttelut.md ]; then
+          cat AnalysoidutOttelut.md
+        else
+          echo "File does not exist!"
+        fi
+        
+    - name: Check Git Status
+      run: git status
 
     - name: Commit and push if changes
       run: |
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
         git add AnalysoidutOttelut.md
-        git commit -m "Update analyzed matches" || echo "No changes to commit"
+        git diff --cached --exit-code || git commit -m "Update analyzed matches [$(date)]"
         git push
