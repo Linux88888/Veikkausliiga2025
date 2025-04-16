@@ -14,6 +14,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Fetch all history to ensure we can push
 
     - name: Set up Python
       uses: actions/setup-python@v4
@@ -53,10 +55,10 @@ jobs:
     - name: Check Git Status
       run: git status
 
-    - name: Commit and push if changes
+    - name: Commit and push changes
       run: |
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
         git add AnalysoidutOttelut.md
-        git diff --cached --exit-code || git commit -m "Update analyzed matches [$(date)]"
-        git push
+        git commit -m "Update analyzed matches [$(date)]"
+        git push origin main
