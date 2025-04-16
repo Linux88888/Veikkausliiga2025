@@ -3,13 +3,17 @@ import re
 import os
 import datetime
 import math
-import random
 import numpy as np
 from collections import defaultdict
+
+# Nykyinen päivämäärä ja aika
+CURRENT_DATE = "2025-04-16 19:28:46"
+CURRENT_USER = "Linux88888"
 
 # Print current working directory for debugging
 print(f"Current working directory: {os.getcwd()}")
 print(f"Directory contents: {os.listdir('.')}")
+print(f"Analyzing data as of {CURRENT_DATE} by {CURRENT_USER}")
 
 # Funktio, joka hakee ja parsii markdown-tiedoston GitHubista
 def fetch_and_parse_github_markdown(url):
@@ -26,60 +30,29 @@ def fetch_and_parse_github_markdown(url):
 tulevat_ottelut_url = 'https://raw.githubusercontent.com/Linux88888/Veikkausliiga2025/main/Tulevatottelut.md'
 yleiso_url = 'https://raw.githubusercontent.com/Linux88888/Veikkausliiga2025/main/Yleis%C3%B62025.md'
 
-# KORJAUS 1: Joukkueiden lista korjattu - IF Gnistan & Gnistan sama joukkue
+# Joukkueiden lista
 teams = ["HJK", "KuPS", "FC Inter", "SJK", "FF Jaro", "Ilves", "FC Haka", "VPS", "AC Oulu", 
          "IF Gnistan", "IFK Mariehamn", "KTP"]
 
-# KORJAUS 2: Joukkueiden aliakset (eri kirjoitusasut)
+# Joukkueiden aliakset (eri kirjoitusasut)
 team_aliases = {
     "Gnistan": "IF Gnistan"
 }
 
-# KORJAUS 3: Realistiset oletus-arvot joukkueille
-# Perustuu karkeasti aiempien kausien tilastoihin
+# Oletusarvot joukkueille datapuutteissa
 team_default_values = {
-    "HJK": {"koti_maaleja": 1.8, "vieras_maaleja": 1.5, "koti_yli_2_5": "60 (60.0%)", "vieras_yli_2_5": "50 (50.0%)", "expected_position": 1},
-    "KuPS": {"koti_maaleja": 1.6, "vieras_maaleja": 1.3, "koti_yli_2_5": "55 (55.0%)", "vieras_yli_2_5": "45 (45.0%)", "expected_position": 2},
-    "FC Inter": {"koti_maaleja": 1.5, "vieras_maaleja": 1.2, "koti_yli_2_5": "50 (50.0%)", "vieras_yli_2_5": "40 (40.0%)", "expected_position": 3},
-    "SJK": {"koti_maaleja": 1.4, "vieras_maaleja": 1.1, "koti_yli_2_5": "45 (45.0%)", "vieras_yli_2_5": "35 (35.0%)", "expected_position": 4},
-    "Ilves": {"koti_maaleja": 1.3, "vieras_maaleja": 1.0, "koti_yli_2_5": "40 (40.0%)", "vieras_yli_2_5": "30 (30.0%)", "expected_position": 5},
-    "FC Haka": {"koti_maaleja": 1.2, "vieras_maaleja": 0.9, "koti_yli_2_5": "35 (35.0%)", "vieras_yli_2_5": "30 (30.0%)", "expected_position": 6},
-    "VPS": {"koti_maaleja": 1.2, "vieras_maaleja": 0.9, "koti_yli_2_5": "35 (35.0%)", "vieras_yli_2_5": "30 (30.0%)", "expected_position": 7},
-    "FF Jaro": {"koti_maaleja": 1.1, "vieras_maaleja": 0.8, "koti_yli_2_5": "30 (30.0%)", "vieras_yli_2_5": "25 (25.0%)", "expected_position": 8},
-    "AC Oulu": {"koti_maaleja": 1.1, "vieras_maaleja": 0.7, "koti_yli_2_5": "30 (30.0%)", "vieras_yli_2_5": "20 (20.0%)", "expected_position": 9},
-    "IF Gnistan": {"koti_maaleja": 1.0, "vieras_maaleja": 0.7, "koti_yli_2_5": "25 (25.0%)", "vieras_yli_2_5": "20 (20.0%)", "expected_position": 10},
-    "IFK Mariehamn": {"koti_maaleja": 1.0, "vieras_maaleja": 0.6, "koti_yli_2_5": "25 (25.0%)", "vieras_yli_2_5": "15 (15.0%)", "expected_position": 11},
-    "KTP": {"koti_maaleja": 0.9, "vieras_maaleja": 0.6, "koti_yli_2_5": "20 (20.0%)", "vieras_yli_2_5": "15 (15.0%)", "expected_position": 12}
-}
-
-# KORJAUS 4: Realistiset keskinäiset kohtaamiset
-realistic_h2h_data = {
-    ("HJK", "IF Gnistan"): {
-        "matches": [
-            {"home_team": "HJK", "away_team": "IF Gnistan", "home_goals": 3, "away_goals": 0, "winner": "HJK"},
-            {"home_team": "HJK", "away_team": "IF Gnistan", "home_goals": 2, "away_goals": 1, "winner": "HJK"},
-            {"home_team": "IF Gnistan", "away_team": "HJK", "home_goals": 0, "away_goals": 1, "winner": "HJK"}
-        ],
-        "home_win_ratio": 1.0,
-        "draw_ratio": 0.0,
-        "away_win_ratio": 0.0,
-        "avg_home_goals": 2.5,
-        "avg_away_goals": 0.5,
-        "matches_analyzed": 3
-    },
-    ("FC Inter", "VPS"): {
-        "matches": [
-            {"home_team": "FC Inter", "away_team": "VPS", "home_goals": 2, "away_goals": 0, "winner": "FC Inter"},
-            {"home_team": "VPS", "away_team": "FC Inter", "home_goals": 1, "away_goals": 1, "winner": None},
-            {"home_team": "FC Inter", "away_team": "VPS", "home_goals": 2, "away_goals": 1, "winner": "FC Inter"}
-        ],
-        "home_win_ratio": 0.67,
-        "draw_ratio": 0.33,
-        "away_win_ratio": 0.0,
-        "avg_home_goals": 1.67,
-        "avg_away_goals": 0.67,
-        "matches_analyzed": 3
-    }
+    "HJK": {"expected_position": 1},
+    "KuPS": {"expected_position": 2},
+    "FC Inter": {"expected_position": 3},
+    "SJK": {"expected_position": 4},
+    "Ilves": {"expected_position": 5},
+    "FC Haka": {"expected_position": 6},
+    "VPS": {"expected_position": 7},
+    "FF Jaro": {"expected_position": 8},
+    "AC Oulu": {"expected_position": 9},
+    "IF Gnistan": {"expected_position": 10},
+    "IFK Mariehamn": {"expected_position": 11},
+    "KTP": {"expected_position": 12}
 }
 
 # Hakee datan
@@ -87,7 +60,7 @@ print("Fetching data from GitHub...")
 tulevat_ottelut_data = fetch_and_parse_github_markdown(tulevat_ottelut_url)
 yleiso_data = fetch_and_parse_github_markdown(yleiso_url)
 
-# KORJAUS 5: Paranneltu joukkuenimen normalisointifunktio
+# Joukkuenimen normalisointifunktio
 def normalize_team_name(team_name):
     """Normalisoi joukkueen nimen viralliseen muotoon"""
     # Tarkista suoraan aliakset
@@ -172,9 +145,11 @@ def parse_yleiso_data(data):
     kotipelit_mode = False
     vieraspelit_mode = False
     
-    # Alusta kaikki joukkueet oletusarvoilla
+    # Alusta kaikki joukkueet tyhjillä tiedoilla
     for team in teams:
-        teams_data[team] = team_default_values.get(team, {}).copy()
+        teams_data[team] = {}
+        # Aseta oletusasema
+        teams_data[team]['position'] = team_default_values.get(team, {}).get('expected_position', 6)
     
     lines = data.splitlines()
     for line in lines:
@@ -251,44 +226,12 @@ def parse_yleiso_data(data):
                         teams_data[current_team]['vieras_yli_2_5'] = value
                         print(f"{current_team} vieras_yli_2_5: {value}")
     
-    # Lisää joukkueille odotetut sarjasijoitukset ja generointi realistinen muotodata
-    generate_team_form_and_positions(teams_data)
+    # Aseta joukkueiden viimeisimmät muodot vain tiedoksi (ei muuta analytiikkaa)
+    for team in teams_data:
+        # Käytä "NAAAA" (Not Available) osoittamaan, että todellisia viimeisiä pelejä ei ole tiedossa
+        teams_data[team]['form'] = "NAAAA"  # Not Available
     
     return teams_data
-
-# KORJAUS 6: Realistiset sijoitukset ja muodot
-def generate_team_form_and_positions(teams_data):
-    """Generoi joukkueille realistiset muototiedot ja sarjataulukon sijoitukset"""
-    
-    # Aseta odotetut sarjasijoitukset
-    for team, data in teams_data.items():
-        position = team_default_values.get(team, {}).get('expected_position', random.randint(1, len(teams)))
-        teams_data[team]['position'] = position
-    
-    # Generoi realistiset muodot sarjasijoituksen perusteella
-    for team in teams_data:
-        position = teams_data[team]['position']
-        
-        # Paremman sijoituksen joukkueilla parempi muotokerroin
-        win_prob_base = max(0.2, min(0.8, 1.0 - (position / 15.0)))
-        
-        # Lisää satunnaisuutta mutta pidä realistisena
-        win_prob = win_prob_base + random.uniform(-0.1, 0.1)
-        draw_prob = 0.3 - (win_prob_base * 0.1)  # Heikommilla joukkueilla enemmän tasapelejä
-        
-        # Generoi viimeisten 5 ottelun tulokset (W, D, L)
-        form_results = []
-        for _ in range(5):
-            rand = random.random()
-            if rand < win_prob:
-                form_results.append('W')
-            elif rand < win_prob + draw_prob:
-                form_results.append('D')
-            else:
-                form_results.append('L')
-        
-        teams_data[team]['form'] = ''.join(form_results)
-        teams_data[team]['form_factor'] = calculate_form_factor(form_results)
 
 # Apufunktio numeroiden poimintaan
 def extract_number(text):
@@ -297,151 +240,8 @@ def extract_number(text):
         return float(match.group(1))
     return 0
 
-# Laskee muotokertoimen
-def calculate_form_factor(form_results):
-    """Laskee joukkueen muotokertoimen viimeisten tulosten perusteella"""
-    weights = [1.0, 0.8, 0.6, 0.4, 0.2]  # Uudemmat ottelut painotetumpia
-    
-    weighted_sum = 0
-    for i, result in enumerate(form_results[:5]):  # Käytä enintään 5 viimeisintä ottelua
-        if result == 'W':
-            weighted_sum += 3 * weights[i]
-        elif result == 'D':
-            weighted_sum += 1 * weights[i]
-    
-    max_points = sum(3 * w for w in weights[:len(form_results)])
-    return weighted_sum / max_points if max_points > 0 else 0.5
-
-# KORJAUS 7: Realistiset keskinäiset ottelut
-def get_head_to_head(home_team, away_team):
-    """Hae joukkueiden keskinäiset ottelut"""
-    # Tarkista onko ennalta määriteltyjä keskinäisiä otteluita
-    key = (home_team, away_team)
-    reverse_key = (away_team, home_team)
-    
-    if key in realistic_h2h_data:
-        return realistic_h2h_data[key]
-    elif reverse_key in realistic_h2h_data:
-        # Käännä tilastot vastaamaan nykyistä ottelua
-        data = realistic_h2h_data[reverse_key].copy()
-        
-        # Vaihda voittosuhteet
-        data['home_win_ratio'] = realistic_h2h_data[reverse_key]['away_win_ratio']
-        data['away_win_ratio'] = realistic_h2h_data[reverse_key]['home_win_ratio']
-        
-        # Vaihda keskimääräiset maalit
-        data['avg_home_goals'] = realistic_h2h_data[reverse_key]['avg_away_goals']
-        data['avg_away_goals'] = realistic_h2h_data[reverse_key]['avg_home_goals']
-        
-        # Käännä myös ottelut
-        reversed_matches = []
-        for match in realistic_h2h_data[reverse_key]['matches']:
-            rev_match = {
-                'home_team': match['away_team'],
-                'away_team': match['home_team'],
-                'home_goals': match['away_goals'],
-                'away_goals': match['home_goals'],
-                'winner': match['winner'] if match['winner'] is None else (home_team if match['winner'] == home_team else away_team)
-            }
-            reversed_matches.append(rev_match)
-            
-        data['matches'] = reversed_matches
-        return data
-    
-    # Jos ei löydy, simuloidaan järkevät keskinäiset ottelut sijoitusten perusteella
-    return simulate_realistic_h2h(home_team, away_team)
-
-# KORJAUS 8: Realistisempi keskinäisten otteluiden simulointi
-def simulate_realistic_h2h(home_team, away_team, teams_data=None):
-    """Simuloi realistisemmat keskinäiset ottelut joukkueiden välille"""
-    matches = []
-    
-    # Käytä oletussijoituksia, jos joukkueiden tietoja ei ole saatavilla
-    home_pos = team_default_values.get(home_team, {}).get('expected_position', 6)
-    away_pos = team_default_values.get(away_team, {}).get('expected_position', 6)
-    
-    if teams_data:
-        if home_team in teams_data and 'position' in teams_data[home_team]:
-            home_pos = teams_data[home_team]['position']
-        if away_team in teams_data and 'position' in teams_data[away_team]:
-            away_pos = teams_data[away_team]['position']
-    
-    # Suhteellinen vahvuus sijoituksen perusteella
-    strength_diff = (away_pos - home_pos) / 12.0
-    
-    # Perusasetelma: kotiedulla parempi joukkue voittaa useammin
-    home_win_prob = 0.45 + (strength_diff * 0.2) + 0.15  # Kotietu +15%
-    away_win_prob = 0.45 - (strength_diff * 0.2)
-    draw_prob = 1.0 - home_win_prob - away_win_prob
-    
-    # Varmistetaan että todennäköisyydet ovat järkeviä
-    if home_win_prob < 0.2: home_win_prob = 0.2
-    if away_win_prob < 0.1: away_win_prob = 0.1
-    if home_win_prob > 0.8: home_win_prob = 0.8
-    if away_win_prob > 0.6: away_win_prob = 0.6
-    draw_prob = 1.0 - home_win_prob - away_win_prob
-    
-    # Simuloi 3 keskinäistä ottelua
-    home_wins = 0
-    away_wins = 0
-    draws = 0
-    home_goals_total = 0
-    away_goals_total = 0
-    
-    for _ in range(3):
-        # Ottelun tulos perustuen todennäköisyyksiin
-        rand = random.random()
-        
-        home_expected = 1.5 - (strength_diff * 0.5)
-        away_expected = 1.0 + (strength_diff * 0.5)
-        
-        if rand < home_win_prob:  # Kotivoitto
-            home_score = max(1, round(random.gauss(home_expected + 0.5, 0.5)))
-            away_score = max(0, round(random.gauss(away_expected - 0.5, 0.5)))
-            if home_score <= away_score:
-                home_score = away_score + 1  # Varmista voitto
-            winner = home_team
-            home_wins += 1
-            
-        elif rand < home_win_prob + draw_prob:  # Tasapeli
-            base_score = round(random.gauss(1.5, 0.5))
-            home_score = away_score = max(0, base_score)
-            winner = None
-            draws += 1
-            
-        else:  # Vierasvoitto
-            home_score = max(0, round(random.gauss(home_expected - 0.5, 0.5)))
-            away_score = max(1, round(random.gauss(away_expected + 0.5, 0.5)))
-            if away_score <= home_score:
-                away_score = home_score + 1  # Varmista voitto
-            winner = away_team
-            away_wins += 1
-            
-        home_goals_total += home_score
-        away_goals_total += away_score
-            
-        matches.append({
-            'home_team': home_team,
-            'away_team': away_team,
-            'home_goals': home_score,
-            'away_goals': away_score,
-            'winner': winner
-        })
-    
-    total_matches = len(matches)
-    
-    return {
-        'home_win_ratio': home_wins / total_matches,
-        'draw_ratio': draws / total_matches, 
-        'away_win_ratio': away_wins / total_matches,
-        'avg_home_goals': home_goals_total / total_matches,
-        'avg_away_goals': away_goals_total / total_matches,
-        'matches_analyzed': total_matches,
-        'matches': matches
-    }
-
-# KORJAUS 9: Realistisempi Monte Carlo -simulaatio
-def monte_carlo_simulation(home_goals_exp, away_goals_exp, home_form_factor, away_form_factor, simulations=10000):
+# Monte Carlo -simulaatio
+def monte_carlo_simulation(home_goals_exp, away_goals_exp, simulations=10000):
     """Suorittaa Monte Carlo -simulaation ottelutuloksille realistisella jakaumalla"""
     home_wins = 0
     away_wins = 0
@@ -454,10 +254,6 @@ def monte_carlo_simulation(home_goals_exp, away_goals_exp, home_form_factor, awa
     if away_goals_exp > 2.5: away_goals_exp = 2.5
     if home_goals_exp < 0.5: home_goals_exp = 0.5
     if away_goals_exp < 0.3: away_goals_exp = 0.3
-    
-    # Painota muodolla, mutta maltillisesti
-    home_goals_exp = home_goals_exp * (0.85 + 0.15 * home_form_factor)
-    away_goals_exp = away_goals_exp * (0.85 + 0.15 * away_form_factor)
     
     for _ in range(simulations):
         # Generoi satunnainen tulos Poisson-jakaumasta
@@ -491,66 +287,39 @@ def monte_carlo_simulation(home_goals_exp, away_goals_exp, home_form_factor, awa
         'yleisimmat_tulokset': most_common_scores
     }
 
-# KORJAUS 10: Realistisemmat Expected Goals (xG) arvot
+# Realistiset Expected Goals (xG) arvot
 def calculate_realistic_xg(home_team, away_team, teams_data):
-    """Laskee realistiset expected goals arvot joukkueille"""
+    """Laskee expected goals arvot joukkueille olemassa olevasta datasta"""
     
-    # Hae perusmaalimäärät
-    home_team_data = teams_data.get(home_team, team_default_values.get(home_team, {}))
-    away_team_data = teams_data.get(away_team, team_default_values.get(away_team, {}))
-    
-    home_avg_goals = home_team_data.get('koti_maaleja', team_default_values.get(home_team, {}).get('koti_maaleja', 1.2))
-    away_avg_goals = away_team_data.get('vieras_maaleja', team_default_values.get(away_team, {}).get('vieras_maaleja', 0.8))
-    
-    # Hae joukkueiden muototekijät ja sijoitukset
-    home_form = home_team_data.get('form_factor', 0.5)
-    away_form = away_team_data.get('form_factor', 0.5)
-    home_pos = home_team_data.get('position', team_default_values.get(home_team, {}).get('expected_position', 6))
-    away_pos = away_team_data.get('position', team_default_values.get(away_team, {}).get('expected_position', 6))
-    
-    # Sarjataulukon vaikutus
-    pos_diff_factor = 1.0 + min(0.2, max(-0.2, (away_pos - home_pos) * 0.03))
-    
-    # Painotettu xG perustuen perusmaalimäärään, muotoon ja sijoitukseen
-    home_xg = home_avg_goals * (0.9 + 0.1 * home_form) * pos_diff_factor
-    away_xg = away_avg_goals * (0.9 + 0.1 * away_form) / pos_diff_factor
-    
-    # Varmista että arvot ovat realistisia
-    if home_xg > 3.0: home_xg = 3.0
-    if away_xg > 2.5: away_xg = 2.5
-    
-    return home_xg, away_xg
-
-# KORJAUS 11: Maltillisempi kotietu
-def calculate_home_advantage(home_team, away_team, teams_data):
-    """Laskee realistisemman kotiedun perustuen joukkueiden tietoihin"""
-    home_win_ratio_hist = 0.45  # Veikkausliigassa kotivoittojen osuus on noin 45%
-    
+    # Käytä olemassa olevaa dataa
     home_team_data = teams_data.get(home_team, {})
     away_team_data = teams_data.get(away_team, {})
     
-    # Jos koti/vierasotteluiden määrä on tiedossa, käytä sitä painotuksessa
-    home_matches = home_team_data.get('koti_ottelut', 0)
-    away_matches = away_team_data.get('vieras_ottelut', 0)
+    # Käytä vain olemassa olevaa maalidataa
+    home_xg = home_team_data.get('koti_maaleja', 1.0)
+    away_xg = away_team_data.get('vieras_maaleja', 0.8)
     
-    # Maltillisempi kotietu
+    # Jos ei ole dataa, käytä maltillista oletusarvoa
+    if 'koti_maaleja' not in home_team_data:
+        home_xg = 1.0
+        
+    if 'vieras_maaleja' not in away_team_data:
+        away_xg = 0.8
+    
+    return home_xg, away_xg
+
+# Maltillinen kotietu
+def calculate_home_advantage():
+    """Laskee maltillisen kotiedun"""
     home_boost = 1.15  # 15% etu kotijoukkueelle
     away_penalty = 0.95  # 5% haitta vierasjoukkueelle
     
-    # Jos joukkue on pelannut paljon kotiotteluita, painota historiallista dataa enemmän
-    if home_matches > 3:
-        home_boost = 1.1  # Pienempi boost, koska tulos perustuu jo kotiotteluihin
-    
-    # Jos joukkue on pelannut paljon vierasotteluita, painota historiallista dataa enemmän
-    if away_matches > 3:
-        away_penalty = 0.97  # Pienempi penalty, koska tulos perustuu jo vierasotteluihin
-    
     return home_boost, away_penalty
 
-# KORJAUS 12: Kehittynyt sarjataulukon ennustaminen
+# Sarjataulukon ennustaminen
 def predict_final_standings(teams, remaining_matches, teams_data):
-    """Realistisempi sarjataulukon ennuste"""
-    # Laske nykyiset pisteet joukkueiden odotetun sijoituksen perusteella
+    """Ennustaa sarjan loppusijoitukset olemassa olevan datan perusteella"""
+    # Määritä pisteet joukkueiden todellisiin vahvuuksiin ja kerättyihin tietoihin perustuen
     current_points = {}
     matches_played = {}
     
@@ -558,20 +327,20 @@ def predict_final_standings(teams, remaining_matches, teams_data):
     total_matches = 22
     
     for team in teams:
-        team_data = teams_data.get(team, {})
-        position = team_data.get('position', team_default_values.get(team, {}).get('expected_position', 6))
-        
-        # Laske todennäköiset pisteet sijoituksen perusteella
-        # Suomessa viime vuosina kärkijoukkueilla tyypillisesti n. 1.7-2.0 pistettä/ottelu
-        expected_points_per_match = max(0.8, min(2.0, 2.2 - position * 0.1))
-        
-        # Oletetaan että noin puolet otteluista jo pelattu
-        played = min(total_matches, max(8, random.randint(8, 12)))
+        # Arvio pelattuja otteluita
+        home_matches = teams_data.get(team, {}).get('koti_ottelut', 0)
+        away_matches = teams_data.get(team, {}).get('vieras_ottelut', 0)
+        played = int(home_matches + away_matches)
         matches_played[team] = played
         
-        # Arvioidut pisteet tässä vaiheessa
-        current_points[team] = round(expected_points_per_match * played)
-            
+        # Arvio pisteitä oletetun sijoituksen perusteella
+        position = teams_data.get(team, {}).get('position', 6)
+        expected_points_per_match = max(0.8, min(2.0, 2.2 - position * 0.1))
+        
+        # Arvioidut pisteet tähän mennessä
+        current_points[team] = max(1, round(expected_points_per_match * played))
+    
+    # Simuloi loput kauden ottelut
     simulations = 500
     final_points = {team: [current_points[team]] * simulations for team in teams}
     
@@ -581,21 +350,21 @@ def predict_final_standings(teams, remaining_matches, teams_data):
             home_team = match['koti']
             away_team = match['vieras']
             
-            # Hae joukkueiden tiedot
-            home_data = teams_data.get(home_team, team_default_values.get(home_team, {}))
-            away_data = teams_data.get(away_team, team_default_values.get(away_team, {}))
+            # Käytä perusvoittotodennäköisyyksiä joukkueiden vahvuuksien perusteella
+            home_pos = teams_data.get(home_team, {}).get('position', 6)
+            away_pos = teams_data.get(away_team, {}).get('position', 6)
             
             # Joukkueiden vahvuudet
-            home_strength = 10.0 - min(12, home_data.get('position', 6))
-            away_strength = 10.0 - min(12, away_data.get('position', 6))
+            home_strength = 10.0 - min(12, home_pos)
+            away_strength = 10.0 - min(12, away_pos)
             
             # Kotiedun huomiointi
             home_strength *= 1.15
             
             # Todennäköisyydet
             total_strength = home_strength + away_strength
-            home_win_prob = home_strength / total_strength * 0.85  # 85% selittyy vahvuuksilla
-            away_win_prob = away_strength / total_strength * 0.7   # Vierasjoukkueilla hieman vaikeampaa
+            home_win_prob = home_strength / total_strength * 0.85
+            away_win_prob = away_strength / total_strength * 0.7
             draw_prob = 1.0 - home_win_prob - away_win_prob
             
             # Rajoita arvot realistisiksi
@@ -606,7 +375,7 @@ def predict_final_standings(teams, remaining_matches, teams_data):
             draw_prob = 1.0 - home_win_prob - away_win_prob
             
             # Arvo tulos
-            rand = random.random()
+            rand = np.random.random()
             if rand < home_win_prob:
                 final_points[home_team][sim] += 3
             elif rand < home_win_prob + draw_prob:
@@ -618,12 +387,9 @@ def predict_final_standings(teams, remaining_matches, teams_data):
     # Laske lopputulokset
     avg_points = {team: sum(points)/simulations for team, points in final_points.items()}
     
-    # Skaalaa pisteet realistisiksi (esim. Veikkausliigassa 22 ottelua)
+    # Skaalaa pisteet realistisiksi 
     matches_remaining = {team: total_matches - matches_played[team] for team in teams}
-    max_possible_points = {
-        team: current_points[team] + matches_remaining[team] * 3 
-        for team in teams
-    }
+    max_possible_points = {team: current_points[team] + matches_remaining[team] * 3 for team in teams}
     
     # Rajoita pisteet maksimiin
     for team in avg_points:
@@ -668,6 +434,27 @@ def predict_final_standings(teams, remaining_matches, teams_data):
         'relegation_odds': relegation_odds
     }
 
+# Poisson-todennäköisyys
+def poisson_probability(mean, k):
+    try:
+        return math.exp(-mean) * (mean ** k) / math.factorial(k)
+    except:
+        return 0
+
+# Todennäköisin tulos
+def calculate_most_likely_score(team_a_goals, team_b_goals):
+    highest_prob = 0
+    likely_score = (0, 0)
+    
+    for i in range(0, 6):
+        for j in range(0, 6):
+            prob = poisson_probability(team_a_goals, i) * poisson_probability(team_b_goals, j)
+            if prob > highest_prob:
+                highest_prob = prob
+                likely_score = (i, j)
+                
+    return f"{likely_score[0]}-{likely_score[1]}"
+
 # Kehittynyt analysointifunktio
 def advanced_analyze_matches(ottelut, teams_data):
     results = []
@@ -684,52 +471,31 @@ def advanced_analyze_matches(ottelut, teams_data):
         print(f"Ottelu: {koti} vs {vieras}")
         
         # Perustilastot
-        koti_maaleja = teams_data.get(koti, {}).get('koti_maaleja', team_default_values.get(koti, {}).get('koti_maaleja', 1.2))
-        vieras_maaleja = teams_data.get(vieras, {}).get('vieras_maaleja', team_default_values.get(vieras, {}).get('vieras_maaleja', 0.8))
-        koti_yli_2_5 = teams_data.get(koti, {}).get('koti_yli_2_5', team_default_values.get(koti, {}).get('koti_yli_2_5', '30 (30.0%)'))
-        vieras_yli_2_5 = teams_data.get(vieras, {}).get('vieras_yli_2_5', team_default_values.get(vieras, {}).get('vieras_yli_2_5', '20 (20.0%)'))
+        koti_maaleja = teams_data.get(koti, {}).get('koti_maaleja', 1.0)
+        vieras_maaleja = teams_data.get(vieras, {}).get('vieras_maaleja', 0.8)
+        koti_yli_2_5 = teams_data.get(koti, {}).get('koti_yli_2_5', '0 (0.0%)')
+        vieras_yli_2_5 = teams_data.get(vieras, {}).get('vieras_yli_2_5', '0 (0.0%)')
         
-        # 1. Joukkueiden muoto ja trendi
-        koti_form_factor = teams_data.get(koti, {}).get('form_factor', 0.5)
-        vieras_form_factor = teams_data.get(vieras, {}).get('form_factor', 0.5)
+        # Kotietu (maltillinen)
+        home_boost, away_penalty = calculate_home_advantage()
         
-        koti_form = teams_data.get(koti, {}).get('form', 'DDDDD')
-        vieras_form = teams_data.get(vieras, {}).get('form', 'DDDDD')
-        
-        # 2. Käsittele keskinäisiä otteluita
-        h2h_stats = get_head_to_head(koti, vieras)
-        
-        # 3. Kotietu korjattu realistisemmaksi
-        home_boost, away_penalty = calculate_home_advantage(koti, vieras, teams_data)
-        
-        # 4. Realistiset expected goals
+        # Expected goals
         home_xg, away_xg = calculate_realistic_xg(koti, vieras, teams_data)
         
-        # 5. Painotetut maaliennusteet
-        adjusted_home_goals = koti_maaleja * home_boost * (0.85 + 0.15 * koti_form_factor)
-        adjusted_away_goals = vieras_maaleja * away_penalty * (0.85 + 0.15 * vieras_form_factor)
+        # Painotetut maaliennusteet
+        adjusted_home_goals = koti_maaleja * home_boost
+        adjusted_away_goals = vieras_maaleja * away_penalty
         
-        # Keskinäiset kohtaamiset (jos niitä on)
-        if h2h_stats:
-            # Painota keskinäisiä kohtaamisia maltillisemmin
-            adjusted_home_goals = adjusted_home_goals * 0.9 + h2h_stats['avg_home_goals'] * 0.1
-            adjusted_away_goals = adjusted_away_goals * 0.9 + h2h_stats['avg_away_goals'] * 0.1
-            
-        # 6. Monte Carlo -simulaatio
-        monte_carlo_results = monte_carlo_simulation(
-            adjusted_home_goals, 
-            adjusted_away_goals,
-            koti_form_factor,
-            vieras_form_factor
-        )
+        # Monte Carlo -simulaatio
+        monte_carlo_results = monte_carlo_simulation(adjusted_home_goals, adjusted_away_goals)
         
-        # Nolladivisioiden välttäminen
+        # Varmista, että arvot eivät ole nollia
         if adjusted_home_goals < 0.3:
             adjusted_home_goals = 0.3
         if adjusted_away_goals < 0.2:
             adjusted_away_goals = 0.2
             
-        # Lopulliset analyysitulokset
+        # Analyysitulokset
         result = {
             'ottelu': f"{koti} vs {vieras}",
             'paiva': ottelu['paiva'],
@@ -738,8 +504,8 @@ def advanced_analyze_matches(ottelut, teams_data):
             'vieras_maaleja': vieras_maaleja,
             'koti_yli_2_5': koti_yli_2_5,
             'vieras_yli_2_5': vieras_yli_2_5,
-            'koti_form': koti_form,
-            'vieras_form': vieras_form,
+            'koti_form': teams_data.get(koti, {}).get('form', 'NAAAA'),
+            'vieras_form': teams_data.get(vieras, {}).get('form', 'NAAAA'),
             'koti_voitto_tod': round(monte_carlo_results['koti_voitto_tod'], 1),
             'vieras_voitto_tod': round(monte_carlo_results['vieras_voitto_tod'], 1),
             'tasapeli_tod': round(monte_carlo_results['tasapeli_tod'], 1),
@@ -749,34 +515,10 @@ def advanced_analyze_matches(ottelut, teams_data):
             'xg_koti': round(home_xg, 2),
             'xg_vieras': round(away_xg, 2),
         }
-        
-        # Lisää head-to-head tiedot jos niitä on
-        if h2h_stats:
-            result['h2h'] = h2h_stats
             
         results.append(result)
     
     return results
-
-# Matematiikkakirjaston apufunktiot
-def poisson_probability(mean, k):
-    try:
-        return math.exp(-mean) * (mean ** k) / math.factorial(k)
-    except:
-        return 0
-
-def calculate_most_likely_score(team_a_goals, team_b_goals):
-    highest_prob = 0
-    likely_score = (0, 0)
-    
-    for i in range(0, 6):
-        for j in range(0, 6):
-            prob = poisson_probability(team_a_goals, i) * poisson_probability(team_b_goals, j)
-            if prob > highest_prob:
-                highest_prob = prob
-                likely_score = (i, j)
-                
-    return f"{likely_score[0]}-{likely_score[1]}"
 
 # Funktio, joka generoi Markdown-kuvaajan
 def generate_bar_chart(label, value, max_value=25, bar_char='█'):
@@ -790,7 +532,9 @@ def save_advanced_results_to_markdown(ottelut, results, teams_data, filename):
     
     with open(filepath, 'w', encoding='utf-8') as file:
         file.write("# Analysoidut Ottelut\n\n")
-        file.write(f"Päivitetty: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+        file.write(f"Päivitetty: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+        file.write(f"Analysoitu: {CURRENT_USER} / {CURRENT_DATE}\n\n")
+        file.write("**HUOMIO**: Analyysi perustuu vain kahden pelatun kierroksen dataan, joten tuloksia tulee tulkita varoen.\n\n")
         
         # Tulostetaan ottelut
         file.write("## Tulevat Ottelut\n")
@@ -823,6 +567,7 @@ def save_advanced_results_to_markdown(ottelut, results, teams_data, filename):
             # Ennusta sarjataulukko
             if len(teams) > 8:  # Jos on tarpeeksi joukkueita
                 file.write("## Kauden 2025 Sarjataulukkoennuste\n\n")
+                file.write("**HUOMIO**: Sarjataulukkoennuste huomioi joukkueiden oletetun vahvuuden.\n\n")
                 
                 # Ennusta lopputaulukko
                 standings_prediction = predict_final_standings(teams, ottelut, teams_data)
@@ -858,8 +603,16 @@ def save_advanced_results_to_markdown(ottelut, results, teams_data, filename):
                 
                 # Perustilastot
                 file.write("#### Perustilastot\n")
-                file.write(f"- **Koti:** {koti_team} - Viimeisimmät ottelut: {tulos['koti_form']}\n")
-                file.write(f"- **Vieras:** {vieras_team} - Viimeisimmät ottelut: {tulos['vieras_form']}\n")
+                if tulos['koti_form'] == "NAAAA":
+                    file.write(f"- **Koti:** {koti_team} - Viimeisimmät ottelut: Ei tietoa\n")
+                else:
+                    file.write(f"- **Koti:** {koti_team} - Viimeisimmät ottelut: {tulos['koti_form']}\n")
+                    
+                if tulos['vieras_form'] == "NAAAA":
+                    file.write(f"- **Vieras:** {vieras_team} - Viimeisimmät ottelut: Ei tietoa\n")
+                else:
+                    file.write(f"- **Vieras:** {vieras_team} - Viimeisimmät ottelut: {tulos['vieras_form']}\n")
+                
                 file.write(f"- Kotijoukkueen keskimääräiset maalit kotona: **{tulos['koti_maaleja']}**\n")
                 file.write(f"- Vierasjoukkueen keskimääräiset maalit vieraissa: **{tulos['vieras_maaleja']}**\n")
                 
@@ -868,24 +621,6 @@ def save_advanced_results_to_markdown(ottelut, results, teams_data, filename):
                 file.write(f"- {koti_team}: **{tulos['xg_koti']}**\n")
                 file.write(f"- {vieras_team}: **{tulos['xg_vieras']}**\n")
                 
-                # Keskinäiset kohtaamiset
-                if 'h2h' in tulos:
-                    h2h = tulos['h2h']
-                    file.write("\n#### Keskinäiset kohtaamiset\n")
-                    file.write(f"- Keskinäisiä otteluita analysoitu: {h2h['matches_analyzed']}\n")
-                    file.write(f"- {koti_team} voittanut: {round(h2h['home_win_ratio']*100, 1)}%\n")
-                    file.write(f"- Tasapelit: {round(h2h['draw_ratio']*100, 1)}%\n")
-                    file.write(f"- {vieras_team} voittanut: {round(h2h['away_win_ratio']*100, 1)}%\n")
-                    file.write(f"- Keskimääräiset maalit {koti_team}: {round(h2h['avg_home_goals'], 1)}\n")
-                    file.write(f"- Keskimääräiset maalit {vieras_team}: {round(h2h['avg_away_goals'], 1)}\n\n")
-                    
-                    # Näytä keskinäiset ottelut
-                    file.write("**Edelliset kohtaamiset:**\n")
-                    for match in h2h['matches'][:3]:  # Näytä viimeisimmät 3
-                        result = f"{match['home_goals']}-{match['away_goals']}"
-                        winner = f" ({match['winner']} voitti)" if match['winner'] else " (Tasapeli)"
-                        file.write(f"- {match['home_team']} vs {match['away_team']}: **{result}**{winner}\n")
-                    
                 # Todennäköisyydet
                 file.write("\n#### Todennäköisyydet\n")
                 
@@ -905,21 +640,25 @@ def save_advanced_results_to_markdown(ottelut, results, teams_data, filename):
                     file.write(f"{score_str}: {round(prob, 1)}%\n")
                 file.write("```\n\n")
                 
-                # Älykkäät kommentit
+                # Analyysikeskuspuhe
                 file.write("#### Analyysikeskuspuhe\n")
+                
+                # Varoitushuomautus alkukaudesta
+                file.write("**Huom! Analyysi perustuu vain kahden kierroksen tilastoihin, joten tuloksiin kannattaa suhtautua varauksella.**\n\n")
+                
                 if tulos['koti_voitto_tod'] > 60:
-                    file.write(f"**Kotietu**: {koti_team} on vahva suosikki tässä ottelussa. Kotijoukkue on tehnyt keskimäärin {tulos['koti_maaleja']} maalia kotiotteluissaan.\n\n")
+                    file.write(f"**Kotietu**: {koti_team} vaikuttaa vahvalta tässä ottelussa. Kotijoukkue on tehnyt keskimäärin {tulos['koti_maaleja']} maalia kotiotteluissaan.\n\n")
                 elif tulos['vieras_voitto_tod'] > 55:
-                    file.write(f"**Vierasjoukkue suosikki**: {vieras_team} näyttää vahvalta vieraskentällä. Vierasjoukkue on onnistunut tekemään keskimäärin {tulos['vieras_maaleja']} maalia vieraskentällä.\n\n")
+                    file.write(f"**Vierasjoukkue vahvoilla**: {vieras_team} näyttää tilastojen valossa vahvalta. Vierasjoukkue on tehnyt keskimäärin {tulos['vieras_maaleja']} maalia vieraskentällä.\n\n")
                 elif tulos['tasapeli_tod'] > 30:
-                    file.write(f"**Tasaväkinen kohtaaminen**: Ottelu {koti_team} ja {vieras_team} välillä vaikuttaa erittäin tasaiselta. Kumpi tahansa joukkue voi viedä voiton, mutta tasapelin todennäköisyys on huomattavan korkea.\n\n")
+                    file.write(f"**Tasaväkinen kohtaaminen**: Ottelu {koti_team} ja {vieras_team} välillä vaikuttaa tasaiselta. Tasapelin todennäköisyys on melko korkea.\n\n")
                 else:
-                    file.write(f"**Tiukka ottelu**: {koti_team} ja {vieras_team} ovat melko tasaväkisiä joukkueita. Kotijoukkueen etu saattaa olla ratkaiseva.\n\n")
+                    file.write(f"**Tiukka ottelu**: {koti_team} ja {vieras_team} ovat melko tasaväkisiä joukkueita nykyisten tilastojen perusteella.\n\n")
                 
                 if tulos['yli_2_5_tod'] > 65:
-                    file.write(f"**Odotettavissa maalirikasta peliä**: Tilastojen valossa on todennäköistä, että ottelussa nähdään vähintään kolme maalia. Yli 2.5 maalin todennäköisyys on {round(tulos['yli_2_5_tod'], 1)}%.\n\n")
+                    file.write(f"**Maalirikasta peliä odotettavissa**: Tilastojen valossa on todennäköistä, että ottelussa nähdään vähintään kolme maalia. Yli 2.5 maalin todennäköisyys on {round(tulos['yli_2_5_tod'], 1)}%.\n\n")
                 elif tulos['yli_2_5_tod'] < 40:
-                    file.write(f"**Vähämaalinen ottelu**: Tämä ottelu saattaa päättyä melko vähämaalisena. Yli 2.5 maalin todennäköisyys on vain {round(tulos['yli_2_5_tod'], 1)}%.\n\n")
+                    file.write(f"**Todennäköisesti vähämaalinen**: Yli 2.5 maalin todennäköisyys on vain {round(tulos['yli_2_5_tod'], 1)}%.\n\n")
                 
                 file.write("---\n\n")
 
