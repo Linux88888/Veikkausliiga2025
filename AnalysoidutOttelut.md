@@ -1,6 +1,6 @@
 # Analysoidut Ottelut
 
-Päivitetty: 2025-04-16 14:51:58
+Päivitetty: 2025-04-16 15:27:19
 
 ## Tulevat Ottelut
 - VPS vs FC Inter (19.4.2025 klo 15:00)
@@ -14,36 +14,35 @@ Päivitetty: 2025-04-16 14:51:58
 ### Yhteenveto Ennusteista
 | Ottelu | Päivämäärä | Aika | 1 | X | 2 | Todennäköisin tulos | Yli 2.5 maalia | xG (Koti-Vieras) |
 |--------|-----------|------|---|---|---|-------------------|---------------|----------------|
-| VPS v FC Inter | 19.4.2025 | 15:00 | 96.3% | 3.2% | 0.5% | 3-0 | 75.3% | 3.56-0.2 |
-| FC Haka v AC Oulu | 19.4.2025 | 17:00 | 61.0% | 15.9% | 23.1% | 3-2 | 89.4% | 3.43-2.51 |
-| IFK Mariehamn v SJK | 19.4.2025 | 17:00 | 13.4% | 33.1% | 53.5% | 0-1 | 18.5% | 0.3-0.95 |
-| KTP v Ilves | 19.4.2025 | 17:00 | 79.8% | 16.3% | 3.9% | 1-0 | 38.1% | 1.93-0.2 |
-| KuPS v FF Jaro | 19.4.2025 | 19:00 | 24.0% | 20.2% | 55.8% | 1-2 | 69.4% | 0.81-2.68 |
-| HJK v IF Gnistan | 22.4.2025 | 19:00 | 5.8% | 31.5% | 62.7% | 0-1 | 16.0% | 0.3-1.96 |
+| VPS v FC Inter | 19.4.2025 | 15:00 | 88.3% | 9.3% | 2.3% | 3-0 | 59.3% | 3.0-0.0 |
+| FC Haka v AC Oulu | 19.4.2025 | 17:00 | 51.5% | 16.6% | 32.0% | 3-2 | 90.6% | 3.0-2.5 |
+| IFK Mariehamn v SJK | 19.4.2025 | 17:00 | 17.6% | 36.4% | 46.0% | 0-0 | 16.7% | 0.0-1.25 |
+| KTP v Ilves | 19.4.2025 | 17:00 | 72.9% | 21.4% | 5.8% | 1-0 | 31.5% | 1.47-0.0 |
+| KuPS v FF Jaro | 19.4.2025 | 19:00 | 19.2% | 19.2% | 61.6% | 1-2 | 69.9% | 1.18-2.45 |
+| HJK v IF Gnistan | 22.4.2025 | 19:00 | 11.3% | 26.0% | 62.7% | 0-1 | 29.9% | 0.0-1.57 |
 
 ## Kauden 2025 Sarjataulukkoennuste
 
 ### Ennustetut loppusijoitukset
 | Sija | Joukkue | Ennustetut pisteet | Mestaruus% | Top 4% | Putoamisvaara% |
 |------|---------|-------------------|-----------|--------|---------------|
-| 1 | FC Inter | 38.7 | 94.0% | 100.0% | 0.0% |
-| 2 | KuPS | 36.4 | 6.0% | 100.0% | 0.0% |
-| 3 | SJK | 33.8 | 0.0% | 100.0% | 0.0% |
-| 4 | Ilves | 31.3 | 0.0% | 97.0% | 0.0% |
-| 5 | FF Jaro | 28.5 | 0.0% | 3.0% | 0.0% |
-| 6 | VPS | 26.2 | 0.0% | 0.0% | 0.0% |
-| 7 | FC Haka | 23.8 | 0.0% | 0.0% | 0.0% |
-| 8 | KTP | 21.1 | 0.0% | 0.0% | 0.0% |
-| 9 | AC Oulu | 18.6 | 0.0% | 0.0% | 0.0% |
-| 10 | HJK | 16.4 | 0.0% | 0.0% | 0.0% |
-| 11 | IFK Mariehamn | 13.6 | 0.0% | 0.0% | 4.2% |
-| 12 | IF Gnistan | 11.1 | 0.0% | 0.0% | 95.8% |
-| 13 | Gnistan | 10.0 | 0.0% | 0.0% | 100.0% |
+| 1 | KuPS | 26.2 | 76.4% | 100.0% | 0.0% |
+| 2 | HJK | 24.3 | 23.6% | 100.0% | 0.0% |
+| 3 | FC Inter | 22.6 | 0.0% | 100.0% | 0.0% |
+| 4 | Ilves | 21.7 | 0.0% | 67.4% | 0.0% |
+| 5 | SJK | 19.9 | 0.0% | 30.4% | 0.0% |
+| 6 | VPS | 19.2 | 0.0% | 2.2% | 0.0% |
+| 7 | FC Haka | 15.3 | 0.0% | 0.0% | 0.0% |
+| 8 | FF Jaro | 13.6 | 0.0% | 0.0% | 0.0% |
+| 9 | IFK Mariehamn | 11.8 | 0.0% | 0.0% | 9.2% |
+| 10 | AC Oulu | 10.5 | 0.0% | 0.0% | 34.2% |
+| 11 | IF Gnistan | 10.5 | 0.0% | 0.0% | 76.8% |
+| 12 | KTP | 10.0 | 0.0% | 0.0% | 79.8% |
 
 #### Mestaruustodennäköisyydet
 ```
-FC Inter     ██████████████████████████████████████████████████████████████████████████████████████████████ 94.0%
-KuPS         ██████ 6.0%
+KuPS         ████████████████████████████████████████████████████████████████████████████ 76.4%
+HJK          ███████████████████████ 23.6%
 ```
 
 ## Yksityiskohtaiset Otteluanalyysit
@@ -51,108 +50,106 @@ KuPS         ██████ 6.0%
 ### VPS vs FC Inter - 19.4.2025 klo 15:00
 
 #### Perustilastot
-- **Koti:** VPS - Viimeisimmät ottelut: DWWWD
-- **Vieras:** FC Inter - Viimeisimmät ottelut: WWWWW
+- **Koti:** VPS - Viimeisimmät ottelut: WDLWW
+- **Vieras:** FC Inter - Viimeisimmät ottelut: WWDWW
 - Kotijoukkueen keskimääräiset maalit kotona: **4.0**
 - Vierasjoukkueen keskimääräiset maalit vieraissa: **0.0**
 
 #### Expected Goals (xG) -ennuste
-- VPS: **3.56**
-- FC Inter: **0.2**
+- VPS: **3.0**
+- FC Inter: **0.0**
 
 #### Keskinäiset kohtaamiset
-- Keskinäisiä otteluita analysoitu: 5
-- VPS voittanut: 60.0%
-- Tasapelit: 20.0%
-- FC Inter voittanut: 20.0%
-- Keskimääräiset maalit VPS: 1.4
-- Keskimääräiset maalit FC Inter: 0.8
+- Keskinäisiä otteluita analysoitu: 3
+- VPS voittanut: 0.0%
+- Tasapelit: 33.0%
+- FC Inter voittanut: 67.0%
+- Keskimääräiset maalit VPS: 0.7
+- Keskimääräiset maalit FC Inter: 1.7
 
 **Edelliset kohtaamiset:**
-- VPS vs FC Inter: **0-1** (FC Inter voitti)
-- VPS vs FC Inter: **3-1** (VPS voitti)
-- VPS vs FC Inter: **1-1** (Tasapeli)
+- VPS vs FC Inter: **0-2** (FC Inter voitti)
+- FC Inter vs VPS: **1-1** (Tasapeli)
+- VPS vs FC Inter: **1-2** (FC Inter voitti)
 
 #### Todennäköisyydet
 ```
-VPS voittaa: ████████████████████████████████████████████████████████████████████████████████████████████████ 96.3%
-Tasapeli: ███ 3.2%
-FC Inter voittaa:  0.5%
-Yli 2.5 maalia: ███████████████████████████████████████████████████████████████████████████ 75.3%
+VPS voittaa: ████████████████████████████████████████████████████████████████████████████████████████ 88.3%
+Tasapeli: █████████ 9.3%
+FC Inter voittaa: ██ 2.3%
+Yli 2.5 maalia: ███████████████████████████████████████████████████████████ 59.3%
 ```
 
 #### Todennäköisimmät lopputulokset
 ```
-3-0: 17.7%
-4-0: 16.7%
-2-0: 13.6%
+2-0: 18.0%
+3-0: 16.8%
+1-0: 12.7%
 ```
 
 #### Analyysikeskuspuhe
-**Selkeä kotietu**: VPS on vahva suosikki tässä ottelussa. Kotijoukkue on tehnyt keskimäärin 4.0 maalia kotiotteluissaan ja on ennusteen mukaan todennäköinen voittaja.
-
-**Odotettavissa runsasmaalinen ottelu**: Tilastojen valossa on todennäköistä, että ottelussa nähdään vähintään kolme maalia. Yli 2.5 maalin todennäköisyys on peräti 75.3%.
+**Kotietu**: VPS on vahva suosikki tässä ottelussa. Kotijoukkue on tehnyt keskimäärin 4.0 maalia kotiotteluissaan.
 
 ---
 
 ### FC Haka vs AC Oulu - 19.4.2025 klo 17:00
 
 #### Perustilastot
-- **Koti:** FC Haka - Viimeisimmät ottelut: DLWWW
-- **Vieras:** AC Oulu - Viimeisimmät ottelut: LDWWW
+- **Koti:** FC Haka - Viimeisimmät ottelut: WWWWW
+- **Vieras:** AC Oulu - Viimeisimmät ottelut: WDWDL
 - Kotijoukkueen keskimääräiset maalit kotona: **3.0**
 - Vierasjoukkueen keskimääräiset maalit vieraissa: **3.0**
 
 #### Expected Goals (xG) -ennuste
-- FC Haka: **3.43**
-- AC Oulu: **2.51**
+- FC Haka: **3.0**
+- AC Oulu: **2.5**
 
 #### Keskinäiset kohtaamiset
-- Keskinäisiä otteluita analysoitu: 5
-- FC Haka voittanut: 40.0%
-- Tasapelit: 40.0%
-- AC Oulu voittanut: 20.0%
-- Keskimääräiset maalit FC Haka: 1.8
-- Keskimääräiset maalit AC Oulu: 1.4
+- Keskinäisiä otteluita analysoitu: 3
+- FC Haka voittanut: 33.3%
+- Tasapelit: 0.0%
+- AC Oulu voittanut: 66.7%
+- Keskimääräiset maalit FC Haka: 1.3
+- Keskimääräiset maalit AC Oulu: 1.7
 
 **Edelliset kohtaamiset:**
-- FC Haka vs AC Oulu: **3-2** (FC Haka voitti)
-- FC Haka vs AC Oulu: **2-2** (Tasapeli)
-- FC Haka vs AC Oulu: **1-1** (Tasapeli)
+- FC Haka vs AC Oulu: **2-1** (FC Haka voitti)
+- FC Haka vs AC Oulu: **1-2** (AC Oulu voitti)
+- FC Haka vs AC Oulu: **1-2** (AC Oulu voitti)
 
 #### Todennäköisyydet
 ```
-FC Haka voittaa: █████████████████████████████████████████████████████████████ 61.0%
-Tasapeli: ███████████████ 15.9%
-AC Oulu voittaa: ███████████████████████ 23.1%
-Yli 2.5 maalia: █████████████████████████████████████████████████████████████████████████████████████████ 89.4%
+FC Haka voittaa: ███████████████████████████████████████████████████ 51.5%
+Tasapeli: ████████████████ 16.6%
+AC Oulu voittaa: ████████████████████████████████ 32.0%
+Yli 2.5 maalia: ██████████████████████████████████████████████████████████████████████████████████████████ 90.6%
 ```
 
 #### Todennäköisimmät lopputulokset
 ```
-3-1: 6.3%
-3-2: 6.1%
-2-2: 5.8%
+3-2: 5.9%
+2-2: 5.9%
+2-1: 5.5%
 ```
 
 #### Analyysikeskuspuhe
-**Selkeä kotietu**: FC Haka on vahva suosikki tässä ottelussa. Kotijoukkue on tehnyt keskimäärin 3.0 maalia kotiotteluissaan ja on ennusteen mukaan todennäköinen voittaja.
+**Tiukka ottelu**: FC Haka ja AC Oulu ovat melko tasaväkisiä joukkueita. Kotijoukkueen etu saattaa olla ratkaiseva.
 
-**Odotettavissa runsasmaalinen ottelu**: Tilastojen valossa on todennäköistä, että ottelussa nähdään vähintään kolme maalia. Yli 2.5 maalin todennäköisyys on peräti 89.4%.
+**Odotettavissa maalirikasta peliä**: Tilastojen valossa on todennäköistä, että ottelussa nähdään vähintään kolme maalia. Yli 2.5 maalin todennäköisyys on 90.6%.
 
 ---
 
 ### IFK Mariehamn vs SJK - 19.4.2025 klo 17:00
 
 #### Perustilastot
-- **Koti:** IFK Mariehamn - Viimeisimmät ottelut: LLWLL
-- **Vieras:** SJK - Viimeisimmät ottelut: DDWWW
+- **Koti:** IFK Mariehamn - Viimeisimmät ottelut: WDDLL
+- **Vieras:** SJK - Viimeisimmät ottelut: WWWWW
 - Kotijoukkueen keskimääräiset maalit kotona: **0.0**
 - Vierasjoukkueen keskimääräiset maalit vieraissa: **1.0**
 
 #### Expected Goals (xG) -ennuste
-- IFK Mariehamn: **0.3**
-- SJK: **0.95**
+- IFK Mariehamn: **0.0**
+- SJK: **1.25**
 
 #### Keskinäiset kohtaamiset
 - Keskinäisiä otteluita analysoitu: 3
@@ -160,169 +157,173 @@ Yli 2.5 maalia: █████████████████████�
 - Tasapelit: 0.0%
 - SJK voittanut: 33.3%
 - Keskimääräiset maalit IFK Mariehamn: 2.0
-- Keskimääräiset maalit SJK: 1.7
+- Keskimääräiset maalit SJK: 1.0
 
 **Edelliset kohtaamiset:**
 - IFK Mariehamn vs SJK: **2-1** (IFK Mariehamn voitti)
+- IFK Mariehamn vs SJK: **3-0** (IFK Mariehamn voitti)
 - IFK Mariehamn vs SJK: **1-2** (SJK voitti)
-- IFK Mariehamn vs SJK: **3-2** (IFK Mariehamn voitti)
 
 #### Todennäköisyydet
 ```
-IFK Mariehamn voittaa: █████████████ 13.4%
-Tasapeli: █████████████████████████████████ 33.1%
-SJK voittaa: █████████████████████████████████████████████████████ 53.5%
-Yli 2.5 maalia: ██████████████████ 18.5%
+IFK Mariehamn voittaa: █████████████████ 17.6%
+Tasapeli: ████████████████████████████████████ 36.4%
+SJK voittaa: ██████████████████████████████████████████████ 46.0%
+Yli 2.5 maalia: ████████████████ 16.7%
 ```
 
 #### Todennäköisimmät lopputulokset
 ```
-0-1: 25.5%
-0-0: 22.3%
-0-2: 13.2%
+0-0: 24.6%
+0-1: 23.3%
+1-0: 11.2%
 ```
 
 #### Analyysikeskuspuhe
 **Tasaväkinen kohtaaminen**: Ottelu IFK Mariehamn ja SJK välillä vaikuttaa erittäin tasaiselta. Kumpi tahansa joukkue voi viedä voiton, mutta tasapelin todennäköisyys on huomattavan korkea.
 
-**Vähämaalinen ottelu**: Tämä ottelu saattaa päättyä melko vähämaalisena. Yli 2.5 maalin todennäköisyys on vain 18.5%.
+**Vähämaalinen ottelu**: Tämä ottelu saattaa päättyä melko vähämaalisena. Yli 2.5 maalin todennäköisyys on vain 16.7%.
 
 ---
 
 ### KTP vs Ilves - 19.4.2025 klo 17:00
 
 #### Perustilastot
-- **Koti:** KTP - Viimeisimmät ottelut: LWWDL
-- **Vieras:** Ilves - Viimeisimmät ottelut: WWDWW
+- **Koti:** KTP - Viimeisimmät ottelut: DLDLL
+- **Vieras:** Ilves - Viimeisimmät ottelut: DWWWW
 - Kotijoukkueen keskimääräiset maalit kotona: **2.0**
 - Vierasjoukkueen keskimääräiset maalit vieraissa: **0.0**
 
 #### Expected Goals (xG) -ennuste
-- KTP: **1.93**
-- Ilves: **0.2**
+- KTP: **1.47**
+- Ilves: **0.0**
 
 #### Keskinäiset kohtaamiset
-- Keskinäisiä otteluita analysoitu: 4
-- KTP voittanut: 50.0%
-- Tasapelit: 25.0%
-- Ilves voittanut: 25.0%
-- Keskimääräiset maalit KTP: 1.8
-- Keskimääräiset maalit Ilves: 1.2
+- Keskinäisiä otteluita analysoitu: 3
+- KTP voittanut: 33.3%
+- Tasapelit: 0.0%
+- Ilves voittanut: 66.7%
+- Keskimääräiset maalit KTP: 1.0
+- Keskimääräiset maalit Ilves: 1.0
 
 **Edelliset kohtaamiset:**
-- KTP vs Ilves: **2-1** (KTP voitti)
-- KTP vs Ilves: **3-1** (KTP voitti)
-- KTP vs Ilves: **1-1** (Tasapeli)
+- KTP vs Ilves: **1-2** (Ilves voitti)
+- KTP vs Ilves: **2-0** (KTP voitti)
+- KTP vs Ilves: **0-1** (Ilves voitti)
 
 #### Todennäköisyydet
 ```
-KTP voittaa: ███████████████████████████████████████████████████████████████████████████████ 79.8%
-Tasapeli: ████████████████ 16.3%
-Ilves voittaa: ███ 3.9%
-Yli 2.5 maalia: ██████████████████████████████████████ 38.1%
+KTP voittaa: ████████████████████████████████████████████████████████████████████████ 72.9%
+Tasapeli: █████████████████████ 21.4%
+Ilves voittaa: █████ 5.8%
+Yli 2.5 maalia: ███████████████████████████████ 31.5%
 ```
 
 #### Todennäköisimmät lopputulokset
 ```
-2-0: 21.9%
-1-0: 21.3%
-3-0: 13.9%
+1-0: 23.4%
+2-0: 19.9%
+0-0: 13.7%
 ```
 
 #### Analyysikeskuspuhe
-**Selkeä kotietu**: KTP on vahva suosikki tässä ottelussa. Kotijoukkue on tehnyt keskimäärin 2.0 maalia kotiotteluissaan ja on ennusteen mukaan todennäköinen voittaja.
+**Kotietu**: KTP on vahva suosikki tässä ottelussa. Kotijoukkue on tehnyt keskimäärin 2.0 maalia kotiotteluissaan.
 
-**Vähämaalinen ottelu**: Tämä ottelu saattaa päättyä melko vähämaalisena. Yli 2.5 maalin todennäköisyys on vain 38.1%.
+**Vähämaalinen ottelu**: Tämä ottelu saattaa päättyä melko vähämaalisena. Yli 2.5 maalin todennäköisyys on vain 31.5%.
 
 ---
 
 ### KuPS vs FF Jaro - 19.4.2025 klo 19:00
 
 #### Perustilastot
-- **Koti:** KuPS - Viimeisimmät ottelut: DDWWW
-- **Vieras:** FF Jaro - Viimeisimmät ottelut: WWWWW
+- **Koti:** KuPS - Viimeisimmät ottelut: WWWWW
+- **Vieras:** FF Jaro - Viimeisimmät ottelut: DWWLW
 - Kotijoukkueen keskimääräiset maalit kotona: **1.0**
 - Vierasjoukkueen keskimääräiset maalit vieraissa: **3.0**
 
 #### Expected Goals (xG) -ennuste
-- KuPS: **0.81**
-- FF Jaro: **2.68**
+- KuPS: **1.18**
+- FF Jaro: **2.45**
 
 #### Keskinäiset kohtaamiset
-- Keskinäisiä otteluita analysoitu: 5
-- KuPS voittanut: 40.0%
-- Tasapelit: 40.0%
-- FF Jaro voittanut: 20.0%
-- Keskimääräiset maalit KuPS: 2.0
-- Keskimääräiset maalit FF Jaro: 1.2
+- Keskinäisiä otteluita analysoitu: 3
+- KuPS voittanut: 100.0%
+- Tasapelit: 0.0%
+- FF Jaro voittanut: 0.0%
+- Keskimääräiset maalit KuPS: 2.3
+- Keskimääräiset maalit FF Jaro: 1.3
 
 **Edelliset kohtaamiset:**
-- KuPS vs FF Jaro: **1-1** (Tasapeli)
-- KuPS vs FF Jaro: **1-1** (Tasapeli)
-- KuPS vs FF Jaro: **4-1** (KuPS voitti)
+- KuPS vs FF Jaro: **2-1** (KuPS voitti)
+- KuPS vs FF Jaro: **3-2** (KuPS voitti)
+- KuPS vs FF Jaro: **2-1** (KuPS voitti)
 
 #### Todennäköisyydet
 ```
-KuPS voittaa: ████████████████████████ 24.0%
-Tasapeli: ████████████████████ 20.2%
-FF Jaro voittaa: ███████████████████████████████████████████████████████ 55.8%
-Yli 2.5 maalia: █████████████████████████████████████████████████████████████████████ 69.4%
+KuPS voittaa: ███████████████████ 19.2%
+Tasapeli: ███████████████████ 19.2%
+FF Jaro voittaa: █████████████████████████████████████████████████████████████ 61.6%
+Yli 2.5 maalia: █████████████████████████████████████████████████████████████████████ 69.9%
 ```
 
 #### Todennäköisimmät lopputulokset
 ```
-1-2: 9.0%
-1-1: 8.5%
-0-2: 6.9%
+1-2: 9.2%
+1-1: 8.2%
+0-2: 7.8%
 ```
 
 #### Analyysikeskuspuhe
+**Vierasjoukkue suosikki**: FF Jaro näyttää vahvalta vieraskentällä. Vierasjoukkue on onnistunut tekemään keskimäärin 3.0 maalia vieraskentällä.
+
+**Odotettavissa maalirikasta peliä**: Tilastojen valossa on todennäköistä, että ottelussa nähdään vähintään kolme maalia. Yli 2.5 maalin todennäköisyys on 69.9%.
+
 ---
 
 ### HJK vs IF Gnistan - 22.4.2025 klo 19:00
 
 #### Perustilastot
-- **Koti:** HJK - Viimeisimmät ottelut: WDLDW
-- **Vieras:** IF Gnistan - Viimeisimmät ottelut: LLDLD
+- **Koti:** HJK - Viimeisimmät ottelut: DLWDW
+- **Vieras:** IF Gnistan - Viimeisimmät ottelut: DWLLD
 - Kotijoukkueen keskimääräiset maalit kotona: **0.0**
 - Vierasjoukkueen keskimääräiset maalit vieraissa: **2.0**
 
 #### Expected Goals (xG) -ennuste
-- HJK: **0.3**
-- IF Gnistan: **1.96**
+- HJK: **0.0**
+- IF Gnistan: **1.57**
 
 #### Keskinäiset kohtaamiset
 - Keskinäisiä otteluita analysoitu: 3
-- HJK voittanut: 33.3%
-- Tasapelit: 33.3%
-- IF Gnistan voittanut: 33.3%
-- Keskimääräiset maalit HJK: 1.0
-- Keskimääräiset maalit IF Gnistan: 1.0
+- HJK voittanut: 100.0%
+- Tasapelit: 0.0%
+- IF Gnistan voittanut: 0.0%
+- Keskimääräiset maalit HJK: 2.5
+- Keskimääräiset maalit IF Gnistan: 0.5
 
 **Edelliset kohtaamiset:**
-- HJK vs IF Gnistan: **0-1** (IF Gnistan voitti)
-- HJK vs IF Gnistan: **1-1** (Tasapeli)
+- HJK vs IF Gnistan: **3-0** (HJK voitti)
 - HJK vs IF Gnistan: **2-1** (HJK voitti)
+- IF Gnistan vs HJK: **0-1** (HJK voitti)
 
 #### Todennäköisyydet
 ```
-HJK voittaa: █████ 5.8%
-Tasapeli: ███████████████████████████████ 31.5%
+HJK voittaa: ███████████ 11.3%
+Tasapeli: ██████████████████████████ 26.0%
 IF Gnistan voittaa: ██████████████████████████████████████████████████████████████ 62.7%
-Yli 2.5 maalia: ████████████████ 16.0%
+Yli 2.5 maalia: █████████████████████████████ 29.9%
 ```
 
 #### Todennäköisimmät lopputulokset
 ```
-0-1: 29.5%
-0-0: 25.0%
-0-2: 18.4%
+0-1: 21.6%
+0-2: 16.0%
+0-0: 14.3%
 ```
 
 #### Analyysikeskuspuhe
-**Vierasjoukkue suosikki**: Yllättävä tilanne, sillä IF Gnistan on selkeä suosikki vieraskentällä. Vierasjoukkue on onnistunut tekemään keskimäärin 2.0 maalia vieraskentällä, mikä viittaa vahvaan hyökkäyskykyyn.
+**Vierasjoukkue suosikki**: IF Gnistan näyttää vahvalta vieraskentällä. Vierasjoukkue on onnistunut tekemään keskimäärin 2.0 maalia vieraskentällä.
 
-**Vähämaalinen ottelu**: Tämä ottelu saattaa päättyä melko vähämaalisena. Yli 2.5 maalin todennäköisyys on vain 16.0%.
+**Vähämaalinen ottelu**: Tämä ottelu saattaa päättyä melko vähämaalisena. Yli 2.5 maalin todennäköisyys on vain 29.9%.
 
 ---
 
