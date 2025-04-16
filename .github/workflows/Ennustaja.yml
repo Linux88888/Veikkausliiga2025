@@ -8,6 +8,8 @@ on:
 jobs:
   calculate_audience:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # This is important - add write permission
 
     steps:
     - name: Checkout repository
@@ -31,8 +33,8 @@ jobs:
 
     - name: Commit and push if changes
       run: |
-        git config --global user.email "you@example.com"
-        git config --global user.name "Your Name"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
         git add AnalysoidutOttelut.md
         git commit -m "Update analyzed matches" || echo "No changes to commit"
         git push
