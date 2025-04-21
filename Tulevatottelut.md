@@ -1,6 +1,7 @@
 18 - Ti 22.4.2025 - 19:00 - 22.4.2025
         
-        19:00 - HJK - IF Gnistan - Seuranta - - - -
+        19:00 - HJK - IF Gnistan - Ennakko
+Seuranta - - - -
 19 - Ke 23.4.2025 - 18:00 - 23.4.2025
         
         18:00 - KuPS - IFK Mariehamn - Seuranta - - - -
