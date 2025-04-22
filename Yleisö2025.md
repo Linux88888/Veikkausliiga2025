@@ -1,14 +1,14 @@
 # Veikkausliiga 2025 - Tilastot
 
-*Päivitetty: 20.04.2025 08:12*
+*Päivitetty: 22.04.2025 19:56*
 
 ## Liigatilastot
-- Pelatut ottelut: 17
-- Yhteensä maaleja: 49
-- Maaleja per ottelu: 2.9
-- Yli 2.5 maalin otteluita: 9 (52.9%)
-- Yleisöä yhteensä: 47,197 katsojaa
-- Keskimääräinen yleisömäärä: 2776
+- Pelatut ottelut: 18
+- Yhteensä maaleja: 50
+- Maaleja per ottelu: 2.8
+- Yli 2.5 maalin otteluita: 9 (50.0%)
+- Yleisöä yhteensä: 53,417 katsojaa
+- Keskimääräinen yleisömäärä: 2968
 - Suurin yleisömäärä: 7,651
 
 ## Joukkuekohtaiset tilastot
@@ -82,12 +82,12 @@
 
 ### HJK
 #### Kotipelit
-- Otteluita: 0
+- Otteluita: 1
 - Tehdyt maalit: 0
-- Päästetyt maalit: 0
+- Päästetyt maalit: 1
 - Yli 2.5 maalia: 0 (0.0%)
-- Keskiverto yleisö: 0
-- Yli 2000 katsojaa: 0
+- Keskiverto yleisö: 6220
+- Yli 2000 katsojaa: 1
 
 #### Vieraspelit
 - Otteluita: 2
@@ -107,12 +107,12 @@
 - Yli 2000 katsojaa: 0
 
 #### Vieraspelit
-- Otteluita: 2
-- Tehdyt maalit: 2
+- Otteluita: 3
+- Tehdyt maalit: 3
 - Päästetyt maalit: 6
-- Yli 2.5 maalia: 2 (100.0%)
-- Keskiverto yleisö: 2550
-- Yli 2000 katsojaa: 2
+- Yli 2.5 maalia: 2 (66.7%)
+- Keskiverto yleisö: 3774
+- Yli 2000 katsojaa: 3
 
 ### IFK Mariehamn
 #### Kotipelit
