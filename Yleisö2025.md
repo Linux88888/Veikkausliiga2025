@@ -1,6 +1,6 @@
 # Veikkausliiga 2025 - Tilastot
 
-*Päivitetty: 22.04.2025 19:56*
+*Päivitetty: 22.04.2025 20:11*
 
 ## Liigatilastot
 - Pelatut ottelut: 18
