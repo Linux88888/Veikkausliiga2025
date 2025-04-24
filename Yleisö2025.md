@@ -1,6 +1,6 @@
 # Veikkausliiga 2025 - Tilastot
 
-*Päivitetty: 24.04.2025 09:03*
+*Päivitetty: 24.04.2025 09:07*
 
 ## 📊 Liigatilastot
 ```mermaid
@@ -17,10 +17,8 @@ xychart-beta
     title "Koti vs Vieras -keskiyleisö (Top 5)"
     x-axis ["HJK", "Ilves", "IF Gnistan", "SJK", "AC Oulu"]
     y-axis "Katsojia"
-    bar "Koti"
-        [6220, 5776, 0, 3649, 0]
-    bar "Vieras"
-        [5849, 2715, 3773, 1627, 2469]
+    bar "Koti" [6220, 5776, 0, 3649, 0]
+    bar "Vieras" [5849, 2715, 3773, 1627, 2469]
 ```
 
 ## ⚽ Maalit
@@ -33,12 +31,12 @@ pie title Maalijakauma
 ## 🏆 Joukkuekohtaiset tilastot
 ### 🏟️ AC Oulu
 ```mermaid
-pie title AC Oulu - Yleisöjakauma
+pie title Yleisöjakauma
     "Kotipelit" : 0
     "Vieraspelit" : 9876
 ```
 ```mermaid
-pie title AC Oulu - Maalit
+pie title Maalit
     "Kotimaalit" : 0
     "Vierasmaalit" : 5
 ```
@@ -52,12 +50,12 @@ pie title AC Oulu - Maalit
 
 ### 🏟️ FC Haka
 ```mermaid
-pie title FC Haka - Yleisöjakauma
+pie title Yleisöjakauma
     "Kotipelit" : 7708
     "Vieraspelit" : 0
 ```
 ```mermaid
-pie title FC Haka - Maalit
+pie title Maalit
     "Kotimaalit" : 5
     "Vierasmaalit" : 0
 ```
@@ -71,12 +69,12 @@ pie title FC Haka - Maalit
 
 ### 🏟️ FC Inter
 ```mermaid
-pie title FC Inter - Yleisöjakauma
+pie title Yleisöjakauma
     "Kotipelit" : 6303
     "Vieraspelit" : 2481
 ```
 ```mermaid
-pie title FC Inter - Maalit
+pie title Maalit
     "Kotimaalit" : 4
     "Vierasmaalit" : 2
 ```
@@ -90,12 +88,12 @@ pie title FC Inter - Maalit
 
 ### 🏟️ FF Jaro
 ```mermaid
-pie title FF Jaro - Yleisöjakauma
+pie title Yleisöjakauma
     "Kotipelit" : 0
     "Vieraspelit" : 7250
 ```
 ```mermaid
-pie title FF Jaro - Maalit
+pie title Maalit
     "Kotimaalit" : 0
     "Vierasmaalit" : 3
 ```
@@ -109,12 +107,12 @@ pie title FF Jaro - Maalit
 
 ### 🏟️ HJK
 ```mermaid
-pie title HJK - Yleisöjakauma
+pie title Yleisöjakauma
     "Kotipelit" : 6220
     "Vieraspelit" : 11699
 ```
 ```mermaid
-pie title HJK - Maalit
+pie title Maalit
     "Kotimaalit" : 0
     "Vierasmaalit" : 2
 ```
@@ -128,12 +126,12 @@ pie title HJK - Maalit
 
 ### 🏟️ IF Gnistan
 ```mermaid
-pie title IF Gnistan - Yleisöjakauma
+pie title Yleisöjakauma
     "Kotipelit" : 0
     "Vieraspelit" : 11321
 ```
 ```mermaid
-pie title IF Gnistan - Maalit
+pie title Maalit
     "Kotimaalit" : 0
     "Vierasmaalit" : 3
 ```
@@ -147,12 +145,12 @@ pie title IF Gnistan - Maalit
 
 ### 🏟️ IFK Mariehamn
 ```mermaid
-pie title IFK Mariehamn - Yleisöjakauma
+pie title Yleisöjakauma
     "Kotipelit" : 2233
     "Vieraspelit" : 4233
 ```
 ```mermaid
-pie title IFK Mariehamn - Maalit
+pie title Maalit
     "Kotimaalit" : 1
     "Vierasmaalit" : 2
 ```
@@ -166,12 +164,12 @@ pie title IFK Mariehamn - Maalit
 
 ### 🏟️ Ilves
 ```mermaid
-pie title Ilves - Yleisöjakauma
+pie title Yleisöjakauma
     "Kotipelit" : 11553
     "Vieraspelit" : 2715
 ```
 ```mermaid
-pie title Ilves - Maalit
+pie title Maalit
     "Kotimaalit" : 5
     "Vierasmaalit" : 5
 ```
@@ -185,12 +183,12 @@ pie title Ilves - Maalit
 
 ### 🏟️ KTP
 ```mermaid
-pie title KTP - Yleisöjakauma
+pie title Yleisöjakauma
     "Kotipelit" : 6715
     "Vieraspelit" : 0
 ```
 ```mermaid
-pie title KTP - Maalit
+pie title Maalit
     "Kotimaalit" : 2
     "Vierasmaalit" : 0
 ```
@@ -204,12 +202,12 @@ pie title KTP - Maalit
 
 ### 🏟️ KuPS
 ```mermaid
-pie title KuPS - Yleisöjakauma
+pie title Yleisöjakauma
     "Kotipelit" : 5661
     "Vieraspelit" : 3837
 ```
 ```mermaid
-pie title KuPS - Maalit
+pie title Maalit
     "Kotimaalit" : 6
     "Vierasmaalit" : 1
 ```
@@ -223,12 +221,12 @@ pie title KuPS - Maalit
 
 ### 🏟️ SJK
 ```mermaid
-pie title SJK - Yleisöjakauma
+pie title Yleisöjakauma
     "Kotipelit" : 7299
     "Vieraspelit" : 3254
 ```
 ```mermaid
-pie title SJK - Maalit
+pie title Maalit
     "Kotimaalit" : 4
     "Vierasmaalit" : 3
 ```
@@ -242,12 +240,12 @@ pie title SJK - Maalit
 
 ### 🏟️ VPS
 ```mermaid
-pie title VPS - Yleisöjakauma
+pie title Yleisöjakauma
     "Kotipelit" : 4729
     "Vieraspelit" : 1755
 ```
 ```mermaid
-pie title VPS - Maalit
+pie title Maalit
     "Kotimaalit" : 4
     "Vierasmaalit" : 2
 ```
