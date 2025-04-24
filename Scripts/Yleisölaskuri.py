@@ -125,7 +125,7 @@ def save_md(teams, league_stats):
             str(int(safe_divide(
                 sum(teams[team]['home']['audience']),
                 len(teams[team]['home']['audience']) or 1
-            ))) for team in sorted_teams
+            )) for team in sorted_teams
         ))
         f.write("]\n")
         
@@ -136,7 +136,7 @@ def save_md(teams, league_stats):
             str(int(safe_divide(
                 sum(teams[team]['away']['audience']),
                 len(teams[team]['away']['audience']) or 1
-            ))) for team in sorted_teams
+            )) for team in sorted_teams
         ))
         f.write("]\n")
         f.write("```\n\n")
