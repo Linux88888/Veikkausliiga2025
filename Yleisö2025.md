@@ -1,259 +1,93 @@
-# Veikkausliiga 2025 - Tilastot
+# Veikkausliiga 2025 – Yleisötilastot
 
-*Päivitetty: 24.04.2025 09:07*
+*Päivitetty: 24.04.2025 09:18*
 
-## 📊 Liigatilastot
-```mermaid
-xychart-beta
-    title "Keskiyleisö joukkueittain (Top 5)"
-    x-axis ["HJK", "Ilves", "IF Gnistan", "SJK", "AC Oulu"]
-    y-axis "Katsojia"
-    bar [5973, 4756, 3773, 2638, 2469]
-```
+## 📋 Kotiyleisöt joukkueittain (suurimmasta pienimpään)
+| Joukkue | Otteluita | Keskiyleisö | Kokonaisyleisö |
+|---------|---------:|-----------:|---------------:|
+| HJK | 1 | 6220 | 6220 |
+| Ilves | 2 | 5776 | 11553 |
+| SJK | 2 | 3650 | 7299 |
+| FC Inter | 2 | 3152 | 6303 |
+| FC Haka | 3 | 2569 | 7708 |
+| VPS | 2 | 2364 | 4729 |
+| KTP | 3 | 2238 | 6715 |
+| KuPS | 3 | 1887 | 5661 |
+| IFK Mariehamn | 2 | 1116 | 2233 |
+| FF Jaro | 0 | 0 | 0 |
+| AC Oulu | 0 | 0 | 0 |
+| IF Gnistan | 0 | 0 | 0 |
 
-## 📈 Yleisömäärät
-```mermaid
-xychart-beta
-    title "Koti vs Vieras -keskiyleisö (Top 5)"
-    x-axis ["HJK", "Ilves", "IF Gnistan", "SJK", "AC Oulu"]
-    y-axis "Katsojia"
-    bar "Koti" [6220, 5776, 0, 3649, 0]
-    bar "Vieras" [5849, 2715, 3773, 1627, 2469]
-```
+## 📋 Vierasyleisöt joukkueittain (suurimmasta pienimpään)
+| Joukkue | Otteluita | Keskiyleisö | Kokonaisyleisö |
+|---------|---------:|-----------:|---------------:|
+| HJK | 2 | 5850 | 11699 |
+| KuPS | 1 | 3837 | 3837 |
+| IF Gnistan | 3 | 3774 | 11321 |
+| Ilves | 1 | 2715 | 2715 |
+| FC Inter | 1 | 2481 | 2481 |
+| AC Oulu | 4 | 2469 | 9876 |
+| FF Jaro | 3 | 2417 | 7250 |
+| IFK Mariehamn | 2 | 2116 | 4233 |
+| VPS | 1 | 1755 | 1755 |
+| SJK | 2 | 1627 | 3254 |
+| KTP | 0 | 0 | 0 |
+| FC Haka | 0 | 0 | 0 |
 
-## ⚽ Maalit
-```mermaid
-pie title Maalijakauma
-    "Kotimaalit" : 31
-    "Vierasmaalit" : 28
-```
+## 🏟️ Joukkueiden Top 5 kotiottelua
+### Ilves
+| Päivämäärä | Vastustaja | Yleisö |
+|-----------|-----------|--------:|
+| La 5.4.2025 | HJK | 7651 |
+| La 12.4.2025 | FF Jaro | 3902 |
 
-## 🏆 Joukkuekohtaiset tilastot
-### 🏟️ AC Oulu
-```mermaid
-pie title Yleisöjakauma
-    "Kotipelit" : 0
-    "Vieraspelit" : 9876
-```
-```mermaid
-pie title Maalit
-    "Kotimaalit" : 0
-    "Vierasmaalit" : 5
-```
-### 📊 Vertailu
-| Statistiikka | Koti | Vieras |
-|--------------|------|--------|
-| Otteluita | 0 | 4 |
-| Keskiyleisö | 0 | 2469 |
-| Maalit (tehty/päästetty) | 0-0 | 5-10 |
-| Yli 2.5 maalia | 0 (0.0%) | 3 (75.0%) |
+### HJK
+| Päivämäärä | Vastustaja | Yleisö |
+|-----------|-----------|--------:|
+| Ti 22.4.2025 | IF Gnistan | 6220 |
 
-### 🏟️ FC Haka
-```mermaid
-pie title Yleisöjakauma
-    "Kotipelit" : 7708
-    "Vieraspelit" : 0
-```
-```mermaid
-pie title Maalit
-    "Kotimaalit" : 5
-    "Vierasmaalit" : 0
-```
-### 📊 Vertailu
-| Statistiikka | Koti | Vieras |
-|--------------|------|--------|
-| Otteluita | 3 | 0 |
-| Keskiyleisö | 2569 | 0 |
-| Maalit (tehty/päästetty) | 5-4 | 0-0 |
-| Yli 2.5 maalia | 2 (66.7%) | 0 (0.0%) |
+### FC Inter
+| Päivämäärä | Vastustaja | Yleisö |
+|-----------|-----------|--------:|
+|  | KuPS | 3837 |
+|  | IF Gnistan | 2466 |
 
-### 🏟️ FC Inter
-```mermaid
-pie title Yleisöjakauma
-    "Kotipelit" : 6303
-    "Vieraspelit" : 2481
-```
-```mermaid
-pie title Maalit
-    "Kotimaalit" : 4
-    "Vierasmaalit" : 2
-```
-### 📊 Vertailu
-| Statistiikka | Koti | Vieras |
-|--------------|------|--------|
-| Otteluita | 2 | 1 |
-| Keskiyleisö | 3152 | 2481 |
-| Maalit (tehty/päästetty) | 4-1 | 2-0 |
-| Yli 2.5 maalia | 1 (50.0%) | 0 (0.0%) |
+### KuPS
+| Päivämäärä | Vastustaja | Yleisö |
+|-----------|-----------|--------:|
+|  | FF Jaro | 2124 |
+|  | AC Oulu | 1784 |
+| Ke 23.4.2025 | IFK Mariehamn | 1753 |
 
-### 🏟️ FF Jaro
-```mermaid
-pie title Yleisöjakauma
-    "Kotipelit" : 0
-    "Vieraspelit" : 7250
-```
-```mermaid
-pie title Maalit
-    "Kotimaalit" : 0
-    "Vierasmaalit" : 3
-```
-### 📊 Vertailu
-| Statistiikka | Koti | Vieras |
-|--------------|------|--------|
-| Otteluita | 0 | 3 |
-| Keskiyleisö | 0 | 2417 |
-| Maalit (tehty/päästetty) | 0-0 | 3-3 |
-| Yli 2.5 maalia | 0 (0.0%) | 1 (33.3%) |
+### IFK Mariehamn
+| Päivämäärä | Vastustaja | Yleisö |
+|-----------|-----------|--------:|
+|  | FF Jaro | 1224 |
+|  | SJK | 1009 |
 
-### 🏟️ HJK
-```mermaid
-pie title Yleisöjakauma
-    "Kotipelit" : 6220
-    "Vieraspelit" : 11699
-```
-```mermaid
-pie title Maalit
-    "Kotimaalit" : 0
-    "Vierasmaalit" : 2
-```
-### 📊 Vertailu
-| Statistiikka | Koti | Vieras |
-|--------------|------|--------|
-| Otteluita | 1 | 2 |
-| Keskiyleisö | 6220 | 5850 |
-| Maalit (tehty/päästetty) | 0-1 | 2-4 |
-| Yli 2.5 maalia | 0 (0.0%) | 1 (50.0%) |
+### KTP
+| Päivämäärä | Vastustaja | Yleisö |
+|-----------|-----------|--------:|
+|  | Ilves | 2715 |
+|  | SJK | 2245 |
+| Pe 11.4.2025 | VPS | 1755 |
 
-### 🏟️ IF Gnistan
-```mermaid
-pie title Yleisöjakauma
-    "Kotipelit" : 0
-    "Vieraspelit" : 11321
-```
-```mermaid
-pie title Maalit
-    "Kotimaalit" : 0
-    "Vierasmaalit" : 3
-```
-### 📊 Vertailu
-| Statistiikka | Koti | Vieras |
-|--------------|------|--------|
-| Otteluita | 0 | 3 |
-| Keskiyleisö | 0 | 3774 |
-| Maalit (tehty/päästetty) | 0-0 | 3-6 |
-| Yli 2.5 maalia | 0 (0.0%) | 2 (66.7%) |
+### SJK
+| Päivämäärä | Vastustaja | Yleisö |
+|-----------|-----------|--------:|
+|  | HJK | 4048 |
+|  | AC Oulu | 3251 |
 
-### 🏟️ IFK Mariehamn
-```mermaid
-pie title Yleisöjakauma
-    "Kotipelit" : 2233
-    "Vieraspelit" : 4233
-```
-```mermaid
-pie title Maalit
-    "Kotimaalit" : 1
-    "Vierasmaalit" : 2
-```
-### 📊 Vertailu
-| Statistiikka | Koti | Vieras |
-|--------------|------|--------|
-| Otteluita | 2 | 2 |
-| Keskiyleisö | 1116 | 2116 |
-| Maalit (tehty/päästetty) | 1-4 | 2-4 |
-| Yli 2.5 maalia | 1 (50.0%) | 1 (50.0%) |
+### VPS
+| Päivämäärä | Vastustaja | Yleisö |
+|-----------|-----------|--------:|
+| La 19.4.2025 | FC Inter | 2481 |
+|  | AC Oulu | 2248 |
 
-### 🏟️ Ilves
-```mermaid
-pie title Yleisöjakauma
-    "Kotipelit" : 11553
-    "Vieraspelit" : 2715
-```
-```mermaid
-pie title Maalit
-    "Kotimaalit" : 5
-    "Vierasmaalit" : 5
-```
-### 📊 Vertailu
-| Statistiikka | Koti | Vieras |
-|--------------|------|--------|
-| Otteluita | 2 | 1 |
-| Keskiyleisö | 5776 | 2715 |
-| Maalit (tehty/päästetty) | 5-3 | 5-0 |
-| Yli 2.5 maalia | 2 (100.0%) | 1 (100.0%) |
-
-### 🏟️ KTP
-```mermaid
-pie title Yleisöjakauma
-    "Kotipelit" : 6715
-    "Vieraspelit" : 0
-```
-```mermaid
-pie title Maalit
-    "Kotimaalit" : 2
-    "Vierasmaalit" : 0
-```
-### 📊 Vertailu
-| Statistiikka | Koti | Vieras |
-|--------------|------|--------|
-| Otteluita | 3 | 0 |
-| Keskiyleisö | 2238 | 0 |
-| Maalit (tehty/päästetty) | 2-8 | 0-0 |
-| Yli 2.5 maalia | 2 (66.7%) | 0 (0.0%) |
-
-### 🏟️ KuPS
-```mermaid
-pie title Yleisöjakauma
-    "Kotipelit" : 5661
-    "Vieraspelit" : 3837
-```
-```mermaid
-pie title Maalit
-    "Kotimaalit" : 6
-    "Vierasmaalit" : 1
-```
-### 📊 Vertailu
-| Statistiikka | Koti | Vieras |
-|--------------|------|--------|
-| Otteluita | 3 | 1 |
-| Keskiyleisö | 1887 | 3837 |
-| Maalit (tehty/päästetty) | 6-1 | 1-1 |
-| Yli 2.5 maalia | 1 (33.3%) | 0 (0.0%) |
-
-### 🏟️ SJK
-```mermaid
-pie title Yleisöjakauma
-    "Kotipelit" : 7299
-    "Vieraspelit" : 3254
-```
-```mermaid
-pie title Maalit
-    "Kotimaalit" : 4
-    "Vierasmaalit" : 3
-```
-### 📊 Vertailu
-| Statistiikka | Koti | Vieras |
-|--------------|------|--------|
-| Otteluita | 2 | 2 |
-| Keskiyleisö | 3650 | 1627 |
-| Maalit (tehty/päästetty) | 4-1 | 3-1 |
-| Yli 2.5 maalia | 1 (50.0%) | 1 (50.0%) |
-
-### 🏟️ VPS
-```mermaid
-pie title Yleisöjakauma
-    "Kotipelit" : 4729
-    "Vieraspelit" : 1755
-```
-```mermaid
-pie title Maalit
-    "Kotimaalit" : 4
-    "Vierasmaalit" : 2
-```
-### 📊 Vertailu
-| Statistiikka | Koti | Vieras |
-|--------------|------|--------|
-| Otteluita | 2 | 1 |
-| Keskiyleisö | 2364 | 1755 |
-| Maalit (tehty/päästetty) | 4-5 | 2-2 |
-| Yli 2.5 maalia | 1 (50.0%) | 1 (100.0%) |
+### FC Haka
+| Päivämäärä | Vastustaja | Yleisö |
+|-----------|-----------|--------:|
+|  | IF Gnistan | 2635 |
+|  | AC Oulu | 2593 |
+|  | IFK Mariehamn | 2480 |
 
