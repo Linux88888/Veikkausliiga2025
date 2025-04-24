@@ -99,12 +99,12 @@ def save_md(teams, league_stats):
         f.write("]\n")
         f.write("    y-axis \"Katsojia\"\n")
         f.write("    bar [")
-        f.write(", ".join(
+        f.write(", ".join([
             str(int(safe_divide(
                 sum(teams[team]['home']['audience'] + teams[team]['away']['audience']),
-                (len(teams[team]['home']['audience']) + len(teams[team]['away']['audience'])) or 1
-            )) for team in sorted_teams
-        ))
+                len(teams[team]['home']['audience']) + len(teams[team]['away']['audience']) or 1
+            ))) for team in sorted_teams
+        ]))
         f.write("]\n")
         f.write("```\n\n")
 
@@ -121,23 +121,23 @@ def save_md(teams, league_stats):
         # Kotiyleisöt
         f.write("    bar \"Koti\"\n")
         f.write("        [")
-        f.write(", ".join(
+        f.write(", ".join([
             str(int(safe_divide(
                 sum(teams[team]['home']['audience']),
                 len(teams[team]['home']['audience']) or 1
-            )) for team in sorted_teams
-        ))
+            ))) for team in sorted_teams
+        ]))
         f.write("]\n")
         
         # Vierasyleisöt
         f.write("    bar \"Vieras\"\n")
         f.write("        [")
-        f.write(", ".join(
+        f.write(", ".join([
             str(int(safe_divide(
                 sum(teams[team]['away']['audience']),
                 len(teams[team]['away']['audience']) or 1
-            )) for team in sorted_teams
-        ))
+            ))) for team in sorted_teams
+        ]))
         f.write("]\n")
         f.write("```\n\n")
 
@@ -145,8 +145,8 @@ def save_md(teams, league_stats):
         f.write("## ⚽ Maalit\n")
         f.write("```mermaid\n")
         f.write("pie title Maalijakauma\n")
-        home_goals = sum(sum(t['home']['goals_scored'] for t in teams.values()))
-        away_goals = sum(sum(t['away']['goals_scored'] for t in teams.values()))
+        home_goals = sum(t['home']['goals_scored'] for t in teams.values())
+        away_goals = sum(t['away']['goals_scored'] for t in teams.values())
         f.write(f'    "Kotimaalit" : {home_goals}\n')
         f.write(f'    "Vierasmaalit" : {away_goals}\n')
         f.write("```\n\n")
