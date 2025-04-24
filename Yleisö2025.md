@@ -1,14 +1,14 @@
 # Veikkausliiga 2025 - Tilastot
 
-*Päivitetty: 22.04.2025 20:11*
+*Päivitetty: 24.04.2025 08:12*
 
 ## Liigatilastot
-- Pelatut ottelut: 18
-- Yhteensä maaleja: 50
-- Maaleja per ottelu: 2.8
-- Yli 2.5 maalin otteluita: 9 (50.0%)
-- Yleisöä yhteensä: 53,417 katsojaa
-- Keskimääräinen yleisömäärä: 2968
+- Pelatut ottelut: 20
+- Yhteensä maaleja: 59
+- Maaleja per ottelu: 3.0
+- Yli 2.5 maalin otteluita: 11 (55.0%)
+- Yleisöä yhteensä: 58,421 katsojaa
+- Keskimääräinen yleisömäärä: 2921
 - Suurin yleisömäärä: 7,651
 
 ## Joukkuekohtaiset tilastot
@@ -22,12 +22,12 @@
 - Yli 2000 katsojaa: 0
 
 #### Vieraspelit
-- Otteluita: 3
-- Tehdyt maalit: 4
-- Päästetyt maalit: 7
-- Yli 2.5 maalia: 2 (66.7%)
-- Keskiverto yleisö: 2208
-- Yli 2000 katsojaa: 2
+- Otteluita: 4
+- Tehdyt maalit: 5
+- Päästetyt maalit: 10
+- Yli 2.5 maalia: 3 (75.0%)
+- Keskiverto yleisö: 2469
+- Yli 2000 katsojaa: 3
 
 ### FC Haka
 #### Kotipelit
@@ -124,11 +124,11 @@
 - Yli 2000 katsojaa: 0
 
 #### Vieraspelit
-- Otteluita: 1
-- Tehdyt maalit: 1
-- Päästetyt maalit: 0
-- Yli 2.5 maalia: 0 (0.0%)
-- Keskiverto yleisö: 2480
+- Otteluita: 2
+- Tehdyt maalit: 2
+- Päästetyt maalit: 4
+- Yli 2.5 maalia: 1 (50.0%)
+- Keskiverto yleisö: 2116
 - Yli 2000 katsojaa: 1
 
 ### Ilves
@@ -167,11 +167,11 @@
 
 ### KuPS
 #### Kotipelit
-- Otteluita: 2
-- Tehdyt maalit: 2
-- Päästetyt maalit: 0
-- Yli 2.5 maalia: 0 (0.0%)
-- Keskiverto yleisö: 1954
+- Otteluita: 3
+- Tehdyt maalit: 6
+- Päästetyt maalit: 1
+- Yli 2.5 maalia: 1 (33.3%)
+- Keskiverto yleisö: 1887
 - Yli 2000 katsojaa: 1
 
 #### Vieraspelit
@@ -184,12 +184,12 @@
 
 ### SJK
 #### Kotipelit
-- Otteluita: 1
-- Tehdyt maalit: 1
-- Päästetyt maalit: 0
-- Yli 2.5 maalia: 0 (0.0%)
-- Keskiverto yleisö: 4048
-- Yli 2000 katsojaa: 1
+- Otteluita: 2
+- Tehdyt maalit: 4
+- Päästetyt maalit: 1
+- Yli 2.5 maalia: 1 (50.0%)
+- Keskiverto yleisö: 3650
+- Yli 2000 katsojaa: 2
 
 #### Vieraspelit
 - Otteluita: 2
