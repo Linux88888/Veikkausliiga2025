@@ -1,6 +1,6 @@
 # Veikkausliiga 2025 – Yleisö- ja maalitilastot
 
-*Päivitetty: 24.04.2025 09:25*
+*Päivitetty: 26.04.2025 17:45*
 
 ## 📋 Kotiyleisöt joukkueittain (suurimmasta pienimpään)
 | Joukkue | Otteluita | Keski-yleisö | Kokonais-yleisö | Yli 2.5 maalia | % yli 2.5 |
@@ -13,9 +13,9 @@
 | VPS | 2 | 2364 | 4729 | 1 | 50.0% |
 | KTP | 3 | 2238 | 6715 | 2 | 66.7% |
 | KuPS | 3 | 1887 | 5661 | 1 | 33.3% |
+| AC Oulu | 1 | 1886 | 1886 | 1 | 100.0% |
+| FF Jaro | 1 | 1290 | 1290 | 1 | 100.0% |
 | IFK Mariehamn | 2 | 1116 | 2233 | 1 | 50.0% |
-| FF Jaro | 0 | 0 | 0 | 0 | 0.0% |
-| AC Oulu | 0 | 0 | 0 | 0 | 0.0% |
 | IF Gnistan | 0 | 0 | 0 | 0 | 0.0% |
 
 ## 📋 Vierasyleisöt joukkueittain (suurimmasta pienimpään)
@@ -25,13 +25,13 @@
 | KuPS | 1 | 3837 | 3837 | 0 | 0.0% |
 | IF Gnistan | 3 | 3774 | 11321 | 2 | 66.7% |
 | Ilves | 1 | 2715 | 2715 | 1 | 100.0% |
-| FC Inter | 1 | 2481 | 2481 | 0 | 0.0% |
 | AC Oulu | 4 | 2469 | 9876 | 3 | 75.0% |
 | FF Jaro | 3 | 2417 | 7250 | 1 | 33.3% |
+| FC Inter | 2 | 2184 | 4367 | 1 | 50.0% |
 | IFK Mariehamn | 2 | 2116 | 4233 | 1 | 50.0% |
 | VPS | 1 | 1755 | 1755 | 1 | 100.0% |
 | SJK | 2 | 1627 | 3254 | 1 | 50.0% |
-| KTP | 0 | 0 | 0 | 0 | 0.0% |
+| KTP | 1 | 1290 | 1290 | 1 | 100.0% |
 | FC Haka | 0 | 0 | 0 | 0 | 0.0% |
 
 ## 🏟️ Joukkueiden Top 5 kotiotteluja
@@ -65,6 +65,11 @@
 |  | FF Jaro | 1224 | 0-2 |
 |  | SJK | 1009 | 1-2 |
 
+### FF Jaro
+| Päivä | Vastustaja | Yleisö | Maalit |
+|------|-----------|--------:|-------:|
+|  | KTP | 1290 | 2-3 |
+
 ### KTP
 | Päivä | Vastustaja | Yleisö | Maalit |
 |------|-----------|--------:|-------:|
@@ -83,6 +88,11 @@
 |------|-----------|--------:|-------:|
 | La 19.4.2025 | FC Inter | 2481 | 0-2 |
 |  | AC Oulu | 2248 | 4-3 |
+
+### AC Oulu
+| Päivä | Vastustaja | Yleisö | Maalit |
+|------|-----------|--------:|-------:|
+| La 26.4.2025 | FC Inter | 1886 | 1-4 |
 
 ### FC Haka
 | Päivä | Vastustaja | Yleisö | Maalit |
