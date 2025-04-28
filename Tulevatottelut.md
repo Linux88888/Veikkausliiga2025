@@ -1,7 +1,3 @@
-26 - Ma 28.4.2025 - 19:00 - 28.4.2025
-        
-        19:00 - SJK - FC Haka - Ennakko
-Seuranta - - - -
 27 - Pe 2.5.2025 - 18:00 - 2.5.2025
         
         18:00 - FC Haka - FF Jaro - Seuranta - - - -
@@ -11,3 +7,4 @@ Seuranta - - - -
 31 - La 3.5.2025 - 15:00 - 3.5.2025
         
         15:00 - IF Gnistan - IFK Mariehamn - Seuranta - - - -
+32 -  - 17:00 - 17:00 - FC Inter - HJK - Seuranta - - - -
