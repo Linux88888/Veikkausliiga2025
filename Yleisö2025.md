@@ -1,38 +1,38 @@
 # Veikkausliiga 2025 – Yleisö- ja maalitilastot
 
-*Päivitetty: 26.04.2025 18:23*
+*Päivitetty: 29.04.2025 17:40*
 
 ## 📋 Kotiyleisöt joukkueittain (suurimmasta pienimpään)
 | Joukkue | Otteluita | Keski-yleisö | Kokonais-yleisö | Yli 2.5 maalia | % yli 2.5 |
 |---------|---------:|------------:|---------------:|--------------:|---------:|
 | Ilves | 2 | 5776 | 11553 | 2 | 100.0% |
 | HJK | 2 | 5170 | 10340 | 1 | 50.0% |
-| SJK | 2 | 3650 | 7299 | 1 | 50.0% |
+| SJK | 3 | 3234 | 9701 | 2 | 66.7% |
 | FC Inter | 2 | 3152 | 6303 | 1 | 50.0% |
 | FC Haka | 3 | 2569 | 7708 | 2 | 66.7% |
 | VPS | 2 | 2364 | 4729 | 1 | 50.0% |
+| IF Gnistan | 1 | 2253 | 2253 | 1 | 100.0% |
 | KTP | 3 | 2238 | 6715 | 2 | 66.7% |
 | KuPS | 3 | 1887 | 5661 | 1 | 33.3% |
 | AC Oulu | 1 | 1886 | 1886 | 1 | 100.0% |
 | FF Jaro | 1 | 1290 | 1290 | 1 | 100.0% |
-| IFK Mariehamn | 2 | 1116 | 2233 | 1 | 50.0% |
-| IF Gnistan | 0 | 0 | 0 | 0 | 0.0% |
+| IFK Mariehamn | 3 | 1042 | 3126 | 2 | 66.7% |
 
 ## 📋 Vierasyleisöt joukkueittain (suurimmasta pienimpään)
 | Joukkue | Otteluita | Keski-yleisö | Kokonais-yleisö | Yli 2.5 maalia | % yli 2.5 |
 |---------|---------:|------------:|---------------:|--------------:|---------:|
 | HJK | 2 | 5850 | 11699 | 1 | 50.0% |
-| KuPS | 1 | 3837 | 3837 | 0 | 0.0% |
 | IF Gnistan | 3 | 3774 | 11321 | 2 | 66.7% |
+| KuPS | 2 | 3045 | 6090 | 1 | 50.0% |
 | VPS | 2 | 2938 | 5875 | 2 | 100.0% |
-| Ilves | 1 | 2715 | 2715 | 1 | 100.0% |
 | AC Oulu | 4 | 2469 | 9876 | 3 | 75.0% |
 | FF Jaro | 3 | 2417 | 7250 | 1 | 33.3% |
+| FC Haka | 1 | 2402 | 2402 | 1 | 100.0% |
 | FC Inter | 2 | 2184 | 4367 | 1 | 50.0% |
 | IFK Mariehamn | 2 | 2116 | 4233 | 1 | 50.0% |
+| Ilves | 2 | 1804 | 3608 | 2 | 100.0% |
 | SJK | 2 | 1627 | 3254 | 1 | 50.0% |
 | KTP | 1 | 1290 | 1290 | 1 | 100.0% |
-| FC Haka | 0 | 0 | 0 | 0 | 0.0% |
 
 ## 🏟️ Joukkueiden Top 5 kotiotteluja
 ### Ilves
@@ -65,6 +65,7 @@
 |------|-----------|--------:|-------:|
 |  | FF Jaro | 1224 | 0-2 |
 |  | SJK | 1009 | 1-2 |
+|  | Ilves | 893 | 3-2 |
 
 ### FF Jaro
 | Päivä | Vastustaja | Yleisö | Maalit |
@@ -83,6 +84,7 @@
 |------|-----------|--------:|-------:|
 |  | HJK | 4048 | 1-0 |
 |  | AC Oulu | 3251 | 3-1 |
+| Ma 28.4.2025 | FC Haka | 2402 | 2-2 |
 
 ### VPS
 | Päivä | Vastustaja | Yleisö | Maalit |
@@ -101,4 +103,9 @@
 |  | IF Gnistan | 2635 | 3-2 |
 |  | AC Oulu | 2593 | 2-1 |
 |  | IFK Mariehamn | 2480 | 0-1 |
+
+### IF Gnistan
+| Päivä | Vastustaja | Yleisö | Maalit |
+|------|-----------|--------:|-------:|
+| Su 27.4.2025 | KuPS | 2253 | 1-2 |
 
