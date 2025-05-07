@@ -1,6 +1,6 @@
 # Veikkausliiga 2025 – Yleisö- ja maalitilastot
 
-*Päivitetty: 04.05.2025 08:20*
+*Päivitetty: 07.05.2025 09:00*
 
 ## 📋 Kotiyleisöt joukkueittain (suurimmasta pienimpään)
 | Joukkue | Otteluita | Keski-yleisö | Kokonais-yleisö | Yli 2.5 maalia | % yli 2.5 |
