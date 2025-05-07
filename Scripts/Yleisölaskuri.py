@@ -1,143 +1,141 @@
 import requests
-from bs4 import BeautifulSoup
+import re
+import os
 import datetime
+import math
+import numpy as np
+from collections import defaultdict
 
-def safe_divide(a, b):
-    return a / b if b != 0 else 0
+# Nykyinen päivämäärä ja aika
+CURRENT_DATE = "2025-05-07 09:40:04"
+CURRENT_USER = "Linux88888"
 
-def fetch_data():
-    url = "https://www.veikkausliiga.com/tilastot/2025/veikkausliiga/ottelut/"
-    response = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
-    response.raise_for_status()
-    return response.text
+# Print current working directory for debugging
+print(f"Current working directory: {os.getcwd()}")
+print(f"Directory contents: {os.listdir('.')}")
+print(f"Analyzing data as of {CURRENT_DATE} by {CURRENT_USER}")
 
-def parse_games(html):
-    soup = BeautifulSoup(html, "html.parser")
-    games = []
-    for row in soup.select("table#games tbody tr"):
-        cells = row.find_all("td")
-        if len(cells) < 8:
-            continue
-        try:
-            date       = cells[1].get_text(strip=True)
-            home_team, away_team = cells[4].get_text(strip=True).split(" - ")
-            result     = cells[6].get_text(strip=True).replace("—", "-")
-            if "-" not in result:
-                continue
-            home_goals, away_goals = map(int, result.split("-"))
-            aud_txt    = cells[7].get_text(strip=True)
-            audience   = int(aud_txt) if aud_txt.isdigit() else 0
-
-            games.append({
-                "date":       date,
-                "home_team":  home_team,
-                "away_team":  away_team,
-                "home_goals": home_goals,
-                "away_goals": away_goals,
-                "audience":   audience,
-                "total_goals": home_goals + away_goals
-            })
-        except Exception as e:
-            print(f"Virhe rivillä: {e}")
-    return games
-
-def generate_stats(games):
-    teams = {}
-    league_stats = {
-        "total_matches": len(games),
-        "total_goals": 0,
-        "total_audience": 0,
-        "over_2_5": 0,
-        "highest_attendance": 0
-    }
-    for g in games:
-        league_stats["total_goals"]     += g["total_goals"]
-        league_stats["total_audience"]  += g["audience"]
-        if g["total_goals"] > 2.5:
-            league_stats["over_2_5"]     += 1
-        league_stats["highest_attendance"] = max(league_stats["highest_attendance"], g["audience"])
-        for side in ("home", "away"):
-            team = g[f"{side}_team"]
-            if team not in teams:
-                teams[team] = {
-                    "home": {"games":0,"goals_scored":0,"goals_conceded":0,"audience":[],"over_2_5":0},
-                    "away": {"games":0,"goals_scored":0,"goals_conceded":0,"audience":[],"over_2_5":0}
-                }
-            stats = teams[team][side]
-            stats["games"]         += 1
-            stats["goals_scored"]  += g[f"{side}_goals"]
-            other = "away" if side=="home" else "home"
-            stats["goals_conceded"]+= g[f"{other}_goals"]
-            stats["audience"].append(g["audience"])
-            if g["total_goals"] > 2.5:
-                stats["over_2_5"]    += 1
-
-    league_stats["average_goals"]      = safe_divide(league_stats["total_goals"], league_stats["total_matches"])
-    league_stats["average_attendance"] = safe_divide(league_stats["total_audience"], league_stats["total_matches"])
-    return teams, league_stats
-
-def save_md(teams, league_stats, games):
-    with open("Yleisö2025.md", "w", encoding="utf-8") as f:
-        f.write(f"# Veikkausliiga 2025 – Yleisö- ja maalitilastot\n\n")
-        f.write(f"*Päivitetty: {datetime.datetime.now():%d.%m.%Y %H:%M}*\n\n")
-
-        # 1) Kotiyleisöt taulukko
-        f.write("## 📋 Kotiyleisöt joukkueittain (suurimmasta pienimpään)\n")
-        f.write("| Joukkue | Otteluita | Keski-yleisö | Kokonais-yleisö | Yli 2.5 maalia | % yli 2.5 |\n")
-        f.write("|---------|---------:|------------:|---------------:|--------------:|---------:|\n")
-        home_sorted = sorted(
-            teams.items(),
-            key=lambda kv: safe_divide(sum(kv[1]["home"]["audience"]), kv[1]["home"]["games"]),
-            reverse=True
-        )
-        for team, data in home_sorted:
-            games_h = data["home"]["games"]
-            total_h = sum(data["home"]["audience"])
-            avg_h   = safe_divide(total_h, games_h)
-            over_h  = data["home"]["over_2_5"]
-            pct_h   = safe_divide(over_h * 100, games_h)
-            f.write(f"| {team} | {games_h} | {avg_h:.0f} | {total_h} | {over_h} | {pct_h:.1f}% |\n")
-        f.write("\n")
-
-        # 2) Vierasyleisöt taulukko
-        f.write("## 📋 Vierasyleisöt joukkueittain (suurimmasta pienimpään)\n")
-        f.write("| Joukkue | Otteluita | Keski-yleisö | Kokonais-yleisö | Yli 2.5 maalia | % yli 2.5 |\n")
-        f.write("|---------|---------:|------------:|---------------:|--------------:|---------:|\n")
-        away_sorted = sorted(
-            teams.items(),
-            key=lambda kv: safe_divide(sum(kv[1]["away"]["audience"]), kv[1]["away"]["games"]),
-            reverse=True
-        )
-        for team, data in away_sorted:
-            games_a = data["away"]["games"]
-            total_a = sum(data["away"]["audience"])
-            avg_a   = safe_divide(total_a, games_a)
-            over_a  = data["away"]["over_2_5"]
-            pct_a   = safe_divide(over_a * 100, games_a)
-            f.write(f"| {team} | {games_a} | {avg_a:.0f} | {total_a} | {over_a} | {pct_a:.1f}% |\n")
-        f.write("\n")
-
-        # 3) Top 5 kotiottelut per joukkue (päivä, vastustaja, yleisö ja maalit)
-        f.write("## 🏟️ Joukkueiden Top 5 kotiotteluja\n")
-        for team, data in teams.items():
-            home_games = [g for g in games if g["home_team"] == team]
-            if not home_games:
-                continue
-            top5 = sorted(home_games, key=lambda g: g["audience"], reverse=True)[:5]
-            f.write(f"### {team}\n")
-            f.write("| Päivä | Vastustaja | Yleisö | Maalit |\n")
-            f.write("|------|-----------|--------:|-------:|\n")
-            for g in top5:
-                score = f"{g['home_goals']}-{g['away_goals']}"
-                f.write(f"| {g['date']} | {g['away_team']} | {g['audience']} | {score} |\n")
-            f.write("\n")
-
-if __name__ == "__main__":
+# Funktio, joka hakee ja parsii markdown-tiedoston GitHubista
+def fetch_and_parse_github_markdown(url):
+    print(f"Fetching data from URL: {url}")
     try:
-        html = fetch_data()
-        games = parse_games(html)
-        teams, league_stats = generate_stats(games)
-        save_md(teams, league_stats, games)
-        print("✅ Yleisö2025.md päivitetty onnistuneesti!")
+        response = requests.get(url)
+        response.raise_for_status()
+        return response.text
     except Exception as e:
-        print(f"❌ Virhe: {e}")
+        print(f"Error fetching data from {url}: {e}")
+        return ""
+
+# URL-osoitteet
+tulevat_ottelut_url = 'https://raw.githubusercontent.com/Linux88888/Veikkausliiga2025/main/Tulevatottelut.md'
+yleiso_url = 'https://raw.githubusercontent.com/Linux88888/Veikkausliiga2025/main/Yleis%C3%B62025.md'
+pelatut_ottelut_url = 'https://raw.githubusercontent.com/Linux88888/Veikkausliiga2025/main/PelatutOttelut.md'
+
+# Joukkueiden lista
+teams = ["HJK", "KuPS", "FC Inter", "SJK", "FF Jaro", "Ilves", "FC Haka", "VPS", "AC Oulu", 
+         "IF Gnistan", "IFK Mariehamn", "KTP"]
+
+# Joukkueiden aliakset (eri kirjoitusasut)
+team_aliases = {
+    "Gnistan": "IF Gnistan"
+}
+
+# Oletusarvot joukkueille datapuutteissa
+team_default_values = {
+    "HJK": {"expected_position": 1},
+    "KuPS": {"expected_position": 2},
+    "FC Inter": {"expected_position": 3},
+    "SJK": {"expected_position": 4},
+    "Ilves": {"expected_position": 5},
+    "FC Haka": {"expected_position": 6},
+    "VPS": {"expected_position": 7},
+    "FF Jaro": {"expected_position": 8},
+    "AC Oulu": {"expected_position": 9},
+    "IF Gnistan": {"expected_position": 10},
+    "IFK Mariehamn": {"expected_position": 11},
+    "KTP": {"expected_position": 12}
+}
+
+# Hakee datan
+print("Fetching data from GitHub...")
+tulevat_ottelut_data = fetch_and_parse_github_markdown(tulevat_ottelut_url)
+yleiso_data = fetch_and_parse_github_markdown(yleiso_url)
+pelatut_ottelut_data = fetch_and_parse_github_markdown(pelatut_ottelut_url)
+
+# Joukkuenimen normalisointifunktio
+def normalize_team_name(team_name):
+    """Normalisoi joukkueen nimen viralliseen muotoon"""
+    if team_name in team_aliases:
+        return team_aliases[team_name]
+    for team in teams:
+        if team.lower() == team_name.lower():
+            return team
+    for team in teams:
+        if team.lower() in team_name.lower() or team_name.lower() in team.lower():
+            return team
+    if "gnistan" in team_name.lower():
+        return "IF Gnistan"
+    return team_name
+
+# Funktio pelattujen otteluiden parsimiseen
+def parse_pelatut_ottelut(data, teams_data):
+    """Päivittää joukkueiden tilastot pelattujen otteluiden perusteella"""
+    lines = data.splitlines()
+    played_matches = []
+    for line in lines:
+        # Esimerkki: Riviformaatti "15.04.2025 HJK 2-1 KuPS"
+        match = re.search(r'(\d+\.\d+\.\d{4})\s+(\w+)\s+(\d+)-(\d+)\s+(\w+)', line)
+        if match:
+            date, home, home_goals, away_goals, away = match.groups()
+            home_goals, away_goals = int(home_goals), int(away_goals)
+            
+            # Päivitä joukkueiden tilastoja
+            if home in teams_data:
+                teams_data[home]['koti_maaleja'] = teams_data[home].get('koti_maaleja', 0) + home_goals
+                teams_data[home]['koti_paastetty'] = teams_data[home].get('koti_paastetty', 0) + away_goals
+                teams_data[home]['koti_ottelut'] = teams_data[home].get('koti_ottelut', 0) + 1
+            
+            if away in teams_data:
+                teams_data[away]['vieras_maaleja'] = teams_data[away].get('vieras_maaleja', 0) + away_goals
+                teams_data[away]['vieras_paastetty'] = teams_data[away].get('vieras_paastetty', 0) + home_goals
+                teams_data[away]['vieras_ottelut'] = teams_data[away].get('vieras_ottelut', 0) + 1
+
+            # Lisää pelattu ottelu listaan
+            played_matches.append(f"{date} {home} {home_goals}-{away_goals} {away}")
+    return teams_data, played_matches
+
+# Funktio pelattujen otteluiden tallentamiseen tiedostoon
+def save_played_matches_to_file(matches, filename="PelatutOttelut.md"):
+    """Tallentaa pelatut ottelut tiedostoon"""
+    filepath = os.path.join(os.getcwd(), filename)
+    print(f"Tallentaa pelatut ottelut tiedostoon: {filepath}")
+    with open(filepath, 'w', encoding='utf-8') as file:
+        file.write("# Pelatut Ottelut\n\n")
+        for match in matches:
+            file.write(f"{match}\n")
+
+# Parsitaan ja päivitetään tiedot pelatuista otteluista
+print("Parsing team statistics...")
+teams_data = parse_yleiso_data(yleiso_data)
+print("Parsing played matches...")
+teams_data, played_matches = parse_pelatut_ottelut(pelatut_ottelut_data, teams_data)
+
+# Tallennetaan pelatut ottelut tiedostoon
+save_played_matches_to_file(played_matches)
+
+# Debug-tulostus
+print("\n\nJOUKKUETIEDOT PÄIVITETTY:")
+for team, data in teams_data.items():
+    print(f"{team}: {data}")
+
+# Kehittynyt analysointifunktio, joka käyttää päivitettyjä tilastoja
+print("Parsing upcoming matches...")
+ottelut = parse_tulevat_ottelut(tulevat_ottelut_data)
+print("Analyzing matches...")
+analysoidut_tulokset = advanced_analyze_matches(ottelut, teams_data)
+
+# Tallennetaan tulokset tiedostoon
+print("Saving results...")
+save_advanced_results_to_markdown(ottelut, analysoidut_tulokset, teams_data, 'AnalysoidutOttelut.md')
+
+print("Analyysi valmis ja tulokset tallennettu tiedostoon 'AnalysoidutOttelut.md'.")
