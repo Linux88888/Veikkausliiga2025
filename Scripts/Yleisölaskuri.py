@@ -7,7 +7,7 @@ import numpy as np
 from collections import defaultdict
 
 # Nykyinen päivämäärä ja aika
-CURRENT_DATE = "2025-05-07 09:40:04"
+CURRENT_DATE = "2025-05-07 09:52:44"
 CURRENT_USER = "Linux88888"
 
 # Print current working directory for debugging
@@ -114,6 +114,20 @@ def save_played_matches_to_file(matches, filename="PelatutOttelut.md"):
         for match in matches:
             file.write(f"{match}\n")
 
+# Funktio yleisödatasta
+def parse_yleiso_data(data):
+    """Esimerkkinä funktio yleisötilastojen käsittelyyn"""
+    teams_data = {}
+    for team in teams:
+        teams_data[team] = {
+            "koti_maaleja": 0,
+            "vieras_maaleja": 0,
+            "koti_ottelut": 0,
+            "vieras_ottelut": 0,
+        }
+    # Lisää logiikka yleisödatan käsittelyyn
+    return teams_data
+
 # Parsitaan ja päivitetään tiedot pelatuista otteluista
 print("Parsing team statistics...")
 teams_data = parse_yleiso_data(yleiso_data)
@@ -127,15 +141,3 @@ save_played_matches_to_file(played_matches)
 print("\n\nJOUKKUETIEDOT PÄIVITETTY:")
 for team, data in teams_data.items():
     print(f"{team}: {data}")
-
-# Kehittynyt analysointifunktio, joka käyttää päivitettyjä tilastoja
-print("Parsing upcoming matches...")
-ottelut = parse_tulevat_ottelut(tulevat_ottelut_data)
-print("Analyzing matches...")
-analysoidut_tulokset = advanced_analyze_matches(ottelut, teams_data)
-
-# Tallennetaan tulokset tiedostoon
-print("Saving results...")
-save_advanced_results_to_markdown(ottelut, analysoidut_tulokset, teams_data, 'AnalysoidutOttelut.md')
-
-print("Analyysi valmis ja tulokset tallennettu tiedostoon 'AnalysoidutOttelut.md'.")
