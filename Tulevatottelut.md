@@ -1,6 +1,7 @@
 33 - Pe 9.5.2025 - 19:31 - 9.5.2025
         
-        19:31 - Ilves - FC Haka - Seuranta - - - -
+        19:31 - Ilves - FC Haka - Ennakko
+Seuranta - - - -
 34 - La 10.5.2025 - 15:00 - 10.5.2025
         
         15:00 - KuPS - KTP - Seuranta - - - -
