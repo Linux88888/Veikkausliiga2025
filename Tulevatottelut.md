@@ -1,10 +1,7 @@
-37 - Su 11.5.2025 - 16:00 - 11.5.2025
-        
-        16:00 - FF Jaro - HJK - Ennakko
-Seuranta - - - -
 38 - Ma 12.5.2025 - 19:00 - 12.5.2025
         
-        19:00 - SJK - VPS - Seuranta - - - -
+        19:00 - SJK - VPS - Ennakko
+Seuranta - - - -
 39 - Pe 16.5.2025 - 18:00 - 16.5.2025
         
         18:00 - IF Gnistan - SJK - Seuranta - - - -
@@ -13,3 +10,4 @@ Seuranta - - - -
         
         17:00 - AC Oulu - IFK Mariehamn - Seuranta - - - -
 42 -  - 17:00 - 17:00 - FC Inter - Ilves - Seuranta - - - -
+43 -  - 17:00 - 17:00 - HJK - KTP - Seuranta - - - -
