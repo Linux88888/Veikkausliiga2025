@@ -24,7 +24,7 @@ except ImportError:
     from Scripts.Yleisölaskuri import parse_yleiso_data, parse_pelatut_ottelut
 
 # Nykyinen päivämäärä ja aika
-CURRENT_DATE = "2025-05-13 09:49:05"
+CURRENT_DATE = "2025-05-13 12:31:31"
 CURRENT_USER = "Linux88888"
 
 # Print current working directory for debugging
@@ -105,8 +105,9 @@ def parse_tulevat_ottelut(data):
     upcoming_matches = []
     lines = data.splitlines()
     for line in lines:
-        # Lisää tähän logiikka tulevien otteluiden parsimiseen
-        upcoming_matches.append(line)
+        # Korjattu regex tunnistamaan myös monisanaiset joukkuenimet
+        if line and not line.startswith('#') and not line.startswith('Päivitetty:'):
+            upcoming_matches.append(line)
     return upcoming_matches
 
 # Kehittynyt analysointifunktio
@@ -116,10 +117,37 @@ def advanced_analyze_matches(teams_data, upcoming_matches):
     for team in teams:
         if team in teams_data:
             team_stats = teams_data[team]
-            # Lisää tähän analyysilogiikka
+            # Lasketaan maalikeskiarvo kotona ja vieraissa
+            koti_maalit = team_stats.get('koti_maaleja', 0)
+            koti_ottelut = team_stats.get('koti_ottelut', 0)
+            koti_keskiarvo = koti_maalit / koti_ottelut if koti_ottelut > 0 else 0
+            
+            vieras_maalit = team_stats.get('vieras_maaleja', 0)
+            vieras_ottelut = team_stats.get('vieras_ottelut', 0)
+            vieras_keskiarvo = vieras_maalit / vieras_ottelut if vieras_ottelut > 0 else 0
+            
+            # Lasketaan kokonaistilastot
+            total_goals = koti_maalit + vieras_maalit
+            total_matches = koti_ottelut + vieras_ottelut
+            total_conceded = team_stats.get('koti_paastetty', 0) + team_stats.get('vieras_paastetty', 0)
+            
+            if total_matches > 0:
+                analysis_text = f"{team} on tehnyt {total_goals} maalia {total_matches} ottelussa "
+                analysis_text += f"(keskiarvo {total_goals/total_matches:.2f} maalia per ottelu). "
+                analysis_text += f"Joukkue on päästänyt {total_conceded} maalia (keskiarvo {total_conceded/total_matches:.2f}). "
+                
+                if koti_keskiarvo > vieras_keskiarvo:
+                    analysis_text += f"Joukkue tekee enemmän maaleja kotona ({koti_keskiarvo:.2f} vs {vieras_keskiarvo:.2f})."
+                elif vieras_keskiarvo > koti_keskiarvo:
+                    analysis_text += f"Joukkue tekee enemmän maaleja vieraissa ({vieras_keskiarvo:.2f} vs {koti_keskiarvo:.2f})."
+                else:
+                    analysis_text += f"Joukkue tekee yhtä paljon maaleja kotona ja vieraissa ({koti_keskiarvo:.2f})."
+            else:
+                analysis_text = f"{team} ei ole vielä pelannut otteluita tässä sarjassa."
+                
             analysis_results[team] = {
                 "stats": team_stats,
-                "analysis": "Analyysi perustuu saatavilla oleviin tietoihin"
+                "analysis": analysis_text
             }
     return analysis_results
 
@@ -139,6 +167,8 @@ else:
             "vieras_ottelut": 0,
             "koti_paastetty": 0,
             "vieras_paastetty": 0,
+            "koti_yleiso": 0,
+            "vieras_yleiso": 0,
         }
 
 print("Parsing played matches...")
@@ -162,19 +192,37 @@ with open('AnalysoidutOttelut.md', 'w', encoding='utf-8') as f:
     f.write(f"Päivitetty: {CURRENT_DATE} käyttäjän {CURRENT_USER} toimesta\n\n")
     
     f.write("## Joukkuetilastot\n\n")
-    for team, data in teams_data.items():
-        f.write(f"### {team}\n")
-        for key, value in data.items():
-            f.write(f"- {key}: {value}\n")
-        f.write("\n")
     
-    f.write("## Analyysi\n\n")
+    # Luodaan taulukko joukkueiden tilastoista
+    f.write("| Joukkue | Kotiottelut | Kotimaalit | K.A. | Vierasottelut | Vierasmaalit | K.A. | Yhteensä |\n")
+    f.write("|---------|-------------|------------|------|---------------|--------------|------|----------|\n")
+    
+    for team in sorted(teams):
+        if team in teams_data:
+            data = teams_data[team]
+            koti_maalit = data.get('koti_maaleja', 0)
+            koti_ottelut = data.get('koti_ottelut', 0)
+            koti_ka = koti_maalit / koti_ottelut if koti_ottelut > 0 else 0
+            
+            vieras_maalit = data.get('vieras_maaleja', 0)
+            vieras_ottelut = data.get('vieras_ottelut', 0)
+            vieras_ka = vieras_maalit / vieras_ottelut if vieras_ottelut > 0 else 0
+            
+            total = koti_maalit + vieras_maalit
+            
+            f.write(f"| {team} | {koti_ottelut} | {koti_maalit} | {koti_ka:.2f} | {vieras_ottelut} | {vieras_maalit} | {vieras_ka:.2f} | {total} |\n")
+    
+    f.write("\n## Analyysi\n\n")
     for team, analysis in analysis_results.items():
         f.write(f"### {team}\n")
         f.write(f"{analysis['analysis']}\n\n")
     
     f.write("## Tulevat ottelut\n\n")
     for match in upcoming_matches:
+        f.write(f"- {match}\n")
+
+    f.write("\n## Pelatut ottelut\n\n")
+    for match in played_matches:
         f.write(f"- {match}\n")
 
 print("Analysis complete and saved to AnalysoidutOttelut.md")
