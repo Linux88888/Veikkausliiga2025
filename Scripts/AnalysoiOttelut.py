@@ -5,15 +5,32 @@ import datetime
 import math
 import numpy as np
 from collections import defaultdict
-from Scripts.Yleisölaskuri import parse_yleiso_data, parse_pelatut_ottelut  # Tuodaan molemmat funktiot
+import sys
+
+# Lisätään Scripts-kansio Python-polkuun, jos se ei ole jo siellä
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
+# Nyt importataan suhteellisesti
+try:
+    from Yleisölaskuri import parse_yleiso_data, parse_pelatut_ottelut
+except ImportError:
+    # Jos edelleen ei toimi, yritetään suoraa importtia
+    print("Trying direct import...")
+    from Scripts.Yleisölaskuri import parse_yleiso_data, parse_pelatut_ottelut
 
 # Nykyinen päivämäärä ja aika
-CURRENT_DATE = "2025-05-07 09:23:08"
+CURRENT_DATE = "2025-05-13 09:49:05"
 CURRENT_USER = "Linux88888"
 
 # Print current working directory for debugging
 print(f"Current working directory: {os.getcwd()}")
 print(f"Directory contents: {os.listdir('.')}")
+print(f"Python path: {sys.path}")
 print(f"Analyzing data as of {CURRENT_DATE} by {CURRENT_USER}")
 
 # Funktio, joka hakee ja parsii markdown-tiedoston GitHubista
@@ -113,6 +130,16 @@ if yleiso_data:
 else:
     print("Error: yleiso_data is empty or invalid.")
     teams_data = {}
+    # Initialize empty data for teams
+    for team in teams:
+        teams_data[team] = {
+            "koti_maaleja": 0,
+            "vieras_maaleja": 0,
+            "koti_ottelut": 0,
+            "vieras_ottelut": 0,
+            "koti_paastetty": 0,
+            "vieras_paastetty": 0,
+        }
 
 print("Parsing played matches...")
 # Käsitellään oikein Yleisölaskuri.py:n palauttama tuple
