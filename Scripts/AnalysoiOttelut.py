@@ -5,6 +5,7 @@ import datetime
 import math
 import numpy as np
 from collections import defaultdict
+from Scripts.Yleisölaskuri import parse_yleiso_data  # Tuodaan parse_yleiso_data oikeasta tiedostosta
 
 # Nykyinen päivämäärä ja aika
 CURRENT_DATE = "2025-05-07 09:23:08"
@@ -80,6 +81,10 @@ def normalize_team_name(team_name):
 # Uusi funktio pelattujen otteluiden parsimiseen
 def parse_pelatut_ottelut(data, teams_data):
     """Päivittää joukkueiden tilastot pelattujen otteluiden perusteella"""
+    if not data:
+        print("Error: pelatut_ottelut_data is empty or invalid.")
+        return teams_data
+
     lines = data.splitlines()
     for line in lines:
         # Esimerkki: Riviformaatti "15.04.2025 HJK 2-1 KuPS"
@@ -102,7 +107,12 @@ def parse_pelatut_ottelut(data, teams_data):
 
 # Parsitaan ja päivitetään tiedot pelatuista otteluista
 print("Parsing team statistics...")
-teams_data = parse_yleiso_data(yleiso_data)
+if yleiso_data:
+    teams_data = parse_yleiso_data(yleiso_data)
+else:
+    print("Error: yleiso_data is empty or invalid.")
+    teams_data = {}
+
 print("Parsing played matches...")
 teams_data = parse_pelatut_ottelut(pelatut_ottelut_data, teams_data)
 
@@ -111,14 +121,6 @@ print("\n\nJOUKKUETIEDOT PÄIVITETTY:")
 for team, data in teams_data.items():
     print(f"{team}: {data}")
 
-# Kehittynyt analysointifunktio, joka käyttää päivitettyjä tilastoja
+# Kehittynyt analysointifunktio
 print("Parsing upcoming matches...")
-ottelut = parse_tulevat_ottelut(tulevat_ottelut_data)
-print("Analyzing matches...")
-analysoidut_tulokset = advanced_analyze_matches(ottelut, teams_data)
-
-# Tallennetaan tulokset tiedostoon
-print("Saving results...")
-save_advanced_results_to_markdown(ottelut, analysoidut_tulokset, teams_data, 'AnalysoidutOttelut.md')
-
-print("Analyysi valmis ja tulokset tallennettu tiedostoon 'AnalysoidutOttelut.md'.")
+# Lisää funktioiden parse_tulevat_ottelut ja advanced_analyze_matches toteutukset tarvittaessa.
