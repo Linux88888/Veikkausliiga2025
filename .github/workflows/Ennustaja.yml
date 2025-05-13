@@ -25,24 +25,25 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install requests beautifulsoup4 numpy
+        pip install -r requirements.txt
 
     - name: Run AnalysoiOttelut.py Script
-      run: python Scripts/AnalysoiOttelut.py
+      run: |
+        cd Scripts
+        python AnalysoiOttelut.py
+        mv AnalysoidutOttelut.md ../ || echo "File was not created in the Scripts directory"
+        cd ..
+        [ -f "AnalysoidutOttelut.md" ] || echo "File not found in the root directory either"
 
     - name: Verify Script run
       run: |
-        if [ -f "AnalysoidutOttelut.md" ]; then
-          cat AnalysoidutOttelut.md
-        else
-          echo "AnalysoidutOttelut.md file not found, script may have failed."
-          exit 1
-        fi
+        find . -name "AnalysoidutOttelut.md" -type f -exec cat {} \;
+        [ -f "AnalysoidutOttelut.md" ] || exit 1
 
     - name: Commit and push changes
       run: |
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-        git add AnalysoidutOttelut.md PelatutOttelut.md
+        git add AnalysoidutOttelut.md PelatutOttelut.md || echo "Nothing to add"
         git diff --staged --quiet || git commit -m "Update analyzed matches [$(date)]"
         git push origin HEAD:main || git push origin HEAD:master
