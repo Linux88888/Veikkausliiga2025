@@ -31,12 +31,18 @@ jobs:
       run: python Scripts/AnalysoiOttelut.py
 
     - name: Verify Script run
-      run: cat AnalysoidutOttelut.md
+      run: |
+        if [ -f "AnalysoidutOttelut.md" ]; then
+          cat AnalysoidutOttelut.md
+        else
+          echo "AnalysoidutOttelut.md file not found, script may have failed."
+          exit 1
+        fi
 
     - name: Commit and push changes
       run: |
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-        git add AnalysoidutOttelut.md
+        git add AnalysoidutOttelut.md PelatutOttelut.md
         git diff --staged --quiet || git commit -m "Update analyzed matches [$(date)]"
         git push origin HEAD:main || git push origin HEAD:master
