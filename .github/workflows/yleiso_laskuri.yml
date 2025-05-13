@@ -1,6 +1,9 @@
 name: Korjaa nollalla jako
 
 on:
+ schedule:
+    # Asetetaan suoritusajankohta joka päivä klo 22:00 UTC
+    - cron: '0 22 * * *'
   workflow_dispatch:
 
 jobs:
