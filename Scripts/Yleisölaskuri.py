@@ -5,14 +5,16 @@ import datetime
 import math
 import numpy as np
 from collections import defaultdict
+import sys
 
 # Nykyinen päivämäärä ja aika
-CURRENT_DATE = "2025-05-07 09:52:44"
+CURRENT_DATE = "2025-05-13 09:49:05"
 CURRENT_USER = "Linux88888"
 
 # Print current working directory for debugging
 print(f"Current working directory: {os.getcwd()}")
 print(f"Directory contents: {os.listdir('.')}")
+print(f"Python path: {sys.path}")
 print(f"Analyzing data as of {CURRENT_DATE} by {CURRENT_USER}")
 
 # Funktio, joka hakee ja parsii markdown-tiedoston GitHubista
@@ -143,43 +145,45 @@ def parse_yleiso_data(data):
     # Tässä voisi olla esim. yleisömäärän laskentaa
     return teams_data
 
-# Parsitaan ja päivitetään tiedot pelatuista otteluista
-print("Parsing team statistics...")
-if yleiso_data:
-    teams_data = parse_yleiso_data(yleiso_data)
-else:
-    print("Warning: yleiso_data is empty, initializing with default values.")
-    teams_data = {}
-    for team in teams:
-        teams_data[team] = {
-            "koti_maaleja": 0,
-            "vieras_maaleja": 0,
-            "koti_ottelut": 0,
-            "vieras_ottelut": 0,
-            "koti_paastetty": 0,
-            "vieras_paastetty": 0,
-        }
-
-print("Parsing played matches...")
-teams_data, played_matches = parse_pelatut_ottelut(pelatut_ottelut_data, teams_data)
-
-# Tallennetaan pelatut ottelut tiedostoon
-save_played_matches_to_file(played_matches)
-
-# Lisätään nollalla jakamisen käsittely
-for team, stats in teams_data.items():
-    # Lasketaan keskiarvoja vain jos on otteluita
-    if stats['koti_ottelut'] > 0:
-        stats['koti_maalikeskiarvo'] = stats['koti_maaleja'] / stats['koti_ottelut']
+# Jos tiedostoa suoritetaan suoraan eikä tuoda moduulina
+if __name__ == "__main__":
+    # Parsitaan ja päivitetään tiedot pelatuista otteluista
+    print("Parsing team statistics...")
+    if yleiso_data:
+        teams_data = parse_yleiso_data(yleiso_data)
     else:
-        stats['koti_maalikeskiarvo'] = 0
-        
-    if stats['vieras_ottelut'] > 0:
-        stats['vieras_maalikeskiarvo'] = stats['vieras_maaleja'] / stats['vieras_ottelut']
-    else:
-        stats['vieras_maalikeskiarvo'] = 0
+        print("Warning: yleiso_data is empty, initializing with default values.")
+        teams_data = {}
+        for team in teams:
+            teams_data[team] = {
+                "koti_maaleja": 0,
+                "vieras_maaleja": 0,
+                "koti_ottelut": 0,
+                "vieras_ottelut": 0,
+                "koti_paastetty": 0,
+                "vieras_paastetty": 0,
+            }
 
-# Debug-tulostus
-print("\n\nJOUKKUETIEDOT PÄIVITETTY:")
-for team, data in teams_data.items():
-    print(f"{team}: {data}")
+    print("Parsing played matches...")
+    teams_data, played_matches = parse_pelatut_ottelut(pelatut_ottelut_data, teams_data)
+
+    # Tallennetaan pelatut ottelut tiedostoon
+    save_played_matches_to_file(played_matches)
+
+    # Lisätään nollalla jakamisen käsittely
+    for team, stats in teams_data.items():
+        # Lasketaan keskiarvoja vain jos on otteluita
+        if stats['koti_ottelut'] > 0:
+            stats['koti_maalikeskiarvo'] = stats['koti_maaleja'] / stats['koti_ottelut']
+        else:
+            stats['koti_maalikeskiarvo'] = 0
+            
+        if stats['vieras_ottelut'] > 0:
+            stats['vieras_maalikeskiarvo'] = stats['vieras_maaleja'] / stats['vieras_ottelut']
+        else:
+            stats['vieras_maalikeskiarvo'] = 0
+
+    # Debug-tulostus
+    print("\n\nJOUKKUETIEDOT PÄIVITETTY:")
+    for team, data in teams_data.items():
+        print(f"{team}: {data}")
