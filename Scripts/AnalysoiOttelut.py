@@ -5,7 +5,7 @@ import datetime
 import math
 import numpy as np
 from collections import defaultdict
-from Scripts.Yleisölaskuri import parse_yleiso_data  # Tuodaan parse_yleiso_data oikeasta tiedostosta
+from Scripts.Yleisölaskuri import parse_yleiso_data, parse_pelatut_ottelut  # Tuodaan molemmat funktiot
 
 # Nykyinen päivämäärä ja aika
 CURRENT_DATE = "2025-05-07 09:23:08"
@@ -78,34 +78,35 @@ def normalize_team_name(team_name):
         return "IF Gnistan"
     return team_name
 
-# Uusi funktio pelattujen otteluiden parsimiseen
-def parse_pelatut_ottelut(data, teams_data):
-    """Päivittää joukkueiden tilastot pelattujen otteluiden perusteella"""
+# Funktio tulevien otteluiden parsimiseen
+def parse_tulevat_ottelut(data):
+    """Parsii tulevat ottelut markdown-datasta"""
     if not data:
-        print("Error: pelatut_ottelut_data is empty or invalid.")
-        return teams_data
-
+        print("Error: tulevat_ottelut_data is empty or invalid.")
+        return []
+    
+    upcoming_matches = []
     lines = data.splitlines()
     for line in lines:
-        # Esimerkki: Riviformaatti "15.04.2025 HJK 2-1 KuPS"
-        match = re.search(r'(\d+\.\d+\.\d{4})\s+(\w+)\s+(\d+)-(\d+)\s+(\w+)', line)
-        if match:
-            date, home, home_goals, away_goals, away = match.groups()
-            home_goals, away_goals = int(home_goals), int(away_goals)
-            
-            # Päivitä joukkueiden tilastoja
-            if home in teams_data:
-                teams_data[home]['koti_maaleja'] = teams_data[home].get('koti_maaleja', 0) + home_goals
-                teams_data[home]['koti_paastetty'] = teams_data[home].get('koti_paastetty', 0) + away_goals
-                teams_data[home]['koti_ottelut'] = teams_data[home].get('koti_ottelut', 0) + 1
-            
-            if away in teams_data:
-                teams_data[away]['vieras_maaleja'] = teams_data[away].get('vieras_maaleja', 0) + away_goals
-                teams_data[away]['vieras_paastetty'] = teams_data[away].get('vieras_paastetty', 0) + home_goals
-                teams_data[away]['vieras_ottelut'] = teams_data[away].get('vieras_ottelut', 0) + 1
-    return teams_data
+        # Lisää tähän logiikka tulevien otteluiden parsimiseen
+        upcoming_matches.append(line)
+    return upcoming_matches
 
-# Parsitaan ja päivitetään tiedot pelatuista otteluista
+# Kehittynyt analysointifunktio
+def advanced_analyze_matches(teams_data, upcoming_matches):
+    """Analysoi joukkueiden tilastot ja tulevat ottelut"""
+    analysis_results = {}
+    for team in teams:
+        if team in teams_data:
+            team_stats = teams_data[team]
+            # Lisää tähän analyysilogiikka
+            analysis_results[team] = {
+                "stats": team_stats,
+                "analysis": "Analyysi perustuu saatavilla oleviin tietoihin"
+            }
+    return analysis_results
+
+# Parsitaan ja päivitetään tiedot
 print("Parsing team statistics...")
 if yleiso_data:
     teams_data = parse_yleiso_data(yleiso_data)
@@ -114,13 +115,39 @@ else:
     teams_data = {}
 
 print("Parsing played matches...")
-teams_data = parse_pelatut_ottelut(pelatut_ottelut_data, teams_data)
+# Käsitellään oikein Yleisölaskuri.py:n palauttama tuple
+teams_data, played_matches = parse_pelatut_ottelut(pelatut_ottelut_data, teams_data)
+
+print("Parsing upcoming matches...")
+upcoming_matches = parse_tulevat_ottelut(tulevat_ottelut_data)
+
+# Suoritetaan analyysit
+analysis_results = advanced_analyze_matches(teams_data, upcoming_matches)
 
 # Debug-tulostus
 print("\n\nJOUKKUETIEDOT PÄIVITETTY:")
 for team, data in teams_data.items():
     print(f"{team}: {data}")
 
-# Kehittynyt analysointifunktio
-print("Parsing upcoming matches...")
-# Lisää funktioiden parse_tulevat_ottelut ja advanced_analyze_matches toteutukset tarvittaessa.
+# Tallennetaan analysoidut ottelut tiedostoon
+with open('AnalysoidutOttelut.md', 'w', encoding='utf-8') as f:
+    f.write("# Analysoidut Ottelut\n\n")
+    f.write(f"Päivitetty: {CURRENT_DATE} käyttäjän {CURRENT_USER} toimesta\n\n")
+    
+    f.write("## Joukkuetilastot\n\n")
+    for team, data in teams_data.items():
+        f.write(f"### {team}\n")
+        for key, value in data.items():
+            f.write(f"- {key}: {value}\n")
+        f.write("\n")
+    
+    f.write("## Analyysi\n\n")
+    for team, analysis in analysis_results.items():
+        f.write(f"### {team}\n")
+        f.write(f"{analysis['analysis']}\n\n")
+    
+    f.write("## Tulevat ottelut\n\n")
+    for match in upcoming_matches:
+        f.write(f"- {match}\n")
+
+print("Analysis complete and saved to AnalysoidutOttelut.md")
