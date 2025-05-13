@@ -24,7 +24,7 @@ def fetch_and_parse_github_markdown(url):
         return response.text
     except Exception as e:
         print(f"Error fetching data from {url}: {e}")
-        return None  # Palautetaan None virheen sattuessa
+        return ""  # Palautetaan tyhjä merkkijono virheen sattuessa - korjattu None:sta
 
 # URL-osoitteet
 tulevat_ottelut_url = 'https://raw.githubusercontent.com/Linux88888/Veikkausliiga2025/main/Tulevatottelut.md'
@@ -87,10 +87,13 @@ def parse_pelatut_ottelut(data, teams_data):
     lines = data.splitlines()
     played_matches = []
     for line in lines:
-        # Esimerkki: Riviformaatti "15.04.2025 HJK 2-1 KuPS"
-        match = re.search(r'(\d+\.\d+\.\d{4})\s+(\w+)\s+(\d+)-(\d+)\s+(\w+)', line)
+        # Korjattu regex tunnistamaan myös monisanaiset joukkuenimet
+        match = re.search(r'(\d+\.\d+\.\d{4})\s+(.+?)\s+(\d+)-(\d+)\s+(.+)$', line)
         if match:
             date, home, home_goals, away_goals, away = match.groups()
+            # Normalisoi joukkueiden nimet
+            home = normalize_team_name(home.strip())
+            away = normalize_team_name(away.strip())
             home_goals, away_goals = int(home_goals), int(away_goals)
             
             # Päivitä joukkueiden tilastoja
@@ -115,6 +118,7 @@ def save_played_matches_to_file(matches, filename="PelatutOttelut.md"):
     print(f"Tallentaa pelatut ottelut tiedostoon: {filepath}")
     with open(filepath, 'w', encoding='utf-8') as file:
         file.write("# Pelatut Ottelut\n\n")
+        file.write(f"Päivitetty: {CURRENT_DATE}\n\n")
         for match in matches:
             file.write(f"{match}\n")
 
@@ -132,8 +136,11 @@ def parse_yleiso_data(data):
             "vieras_maaleja": 0,
             "koti_ottelut": 0,
             "vieras_ottelut": 0,
+            "koti_paastetty": 0,
+            "vieras_paastetty": 0,
         }
     # Lisää logiikka yleisödatan käsittelyyn
+    # Tässä voisi olla esim. yleisömäärän laskentaa
     return teams_data
 
 # Parsitaan ja päivitetään tiedot pelatuista otteluista
@@ -141,13 +148,36 @@ print("Parsing team statistics...")
 if yleiso_data:
     teams_data = parse_yleiso_data(yleiso_data)
 else:
+    print("Warning: yleiso_data is empty, initializing with default values.")
     teams_data = {}
+    for team in teams:
+        teams_data[team] = {
+            "koti_maaleja": 0,
+            "vieras_maaleja": 0,
+            "koti_ottelut": 0,
+            "vieras_ottelut": 0,
+            "koti_paastetty": 0,
+            "vieras_paastetty": 0,
+        }
 
 print("Parsing played matches...")
 teams_data, played_matches = parse_pelatut_ottelut(pelatut_ottelut_data, teams_data)
 
 # Tallennetaan pelatut ottelut tiedostoon
 save_played_matches_to_file(played_matches)
+
+# Lisätään nollalla jakamisen käsittely
+for team, stats in teams_data.items():
+    # Lasketaan keskiarvoja vain jos on otteluita
+    if stats['koti_ottelut'] > 0:
+        stats['koti_maalikeskiarvo'] = stats['koti_maaleja'] / stats['koti_ottelut']
+    else:
+        stats['koti_maalikeskiarvo'] = 0
+        
+    if stats['vieras_ottelut'] > 0:
+        stats['vieras_maalikeskiarvo'] = stats['vieras_maaleja'] / stats['vieras_ottelut']
+    else:
+        stats['vieras_maalikeskiarvo'] = 0
 
 # Debug-tulostus
 print("\n\nJOUKKUETIEDOT PÄIVITETTY:")
