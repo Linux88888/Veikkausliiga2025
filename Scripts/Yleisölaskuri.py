@@ -24,7 +24,7 @@ def fetch_and_parse_github_markdown(url):
         return response.text
     except Exception as e:
         print(f"Error fetching data from {url}: {e}")
-        return ""
+        return None  # Palautetaan None virheen sattuessa
 
 # URL-osoitteet
 tulevat_ottelut_url = 'https://raw.githubusercontent.com/Linux88888/Veikkausliiga2025/main/Tulevatottelut.md'
@@ -80,6 +80,10 @@ def normalize_team_name(team_name):
 # Funktio pelattujen otteluiden parsimiseen
 def parse_pelatut_ottelut(data, teams_data):
     """Päivittää joukkueiden tilastot pelattujen otteluiden perusteella"""
+    if not data:
+        print("Error: pelatut_ottelut_data is empty or invalid.")
+        return teams_data, []
+    
     lines = data.splitlines()
     played_matches = []
     for line in lines:
@@ -117,6 +121,10 @@ def save_played_matches_to_file(matches, filename="PelatutOttelut.md"):
 # Funktio yleisödatasta
 def parse_yleiso_data(data):
     """Esimerkkinä funktio yleisötilastojen käsittelyyn"""
+    if not data:
+        print("Error: yleiso_data is empty or invalid.")
+        return {}
+    
     teams_data = {}
     for team in teams:
         teams_data[team] = {
@@ -130,7 +138,11 @@ def parse_yleiso_data(data):
 
 # Parsitaan ja päivitetään tiedot pelatuista otteluista
 print("Parsing team statistics...")
-teams_data = parse_yleiso_data(yleiso_data)
+if yleiso_data:
+    teams_data = parse_yleiso_data(yleiso_data)
+else:
+    teams_data = {}
+
 print("Parsing played matches...")
 teams_data, played_matches = parse_pelatut_ottelut(pelatut_ottelut_data, teams_data)
 
