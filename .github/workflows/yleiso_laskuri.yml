@@ -13,12 +13,6 @@ jobs:
       # Checkout the repository
       - uses: actions/checkout@v3
       
-      # Fix division by zero in the script
-      - name: Fix division by zero
-        run: |
-          sed -i 's|total_home_audience / home_games|total_home_audience / home_games if home_games > 0 else 0|g' Scripts/Yleisölaskuri.py
-          sed -i 's|total_away_audience / away_games|total_away_audience / away_games if away_games > 0 else 0|g' Scripts/Yleisölaskuri.py
-
       # Set up Python environment
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -32,10 +26,10 @@ jobs:
           if [ -f requirements.txt ]; then
             pip install -r requirements.txt
           else
-            echo "requirements.txt not found, skipping dependency installation."
+            pip install requests beautifulsoup4 numpy
           fi
           
-      # Run the Python script
+      # Run the Python script directly with nollalla jako handling
       - name: Run script
         run: |
           if [ -f Scripts/Yleisölaskuri.py ]; then
@@ -49,6 +43,6 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add Scripts/Yleisölaskuri.py Yleisö*.md || echo "Nothing to add"
-          git commit -m "Korjattu nollalla jakaminen" || echo "No changes to commit"
+          git add Scripts/Yleisölaskuri.py PelatutOttelut.md Yleisö*.md || echo "Nothing to add"
+          git commit -m "Päivitetty yleisö- ja ottelutiedot" || echo "No changes to commit"
           git push || echo "Nothing to push"
