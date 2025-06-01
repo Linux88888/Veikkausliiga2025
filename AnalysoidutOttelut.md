@@ -59,12 +59,12 @@ KTP on tehnyt 0 maalia 2 ottelussa (keskiarvo 0.00 maalia per ottelu). Joukkue o
 
 ## Tulevat ottelut
 
-- - 53 - La 31.5.2025 - 15:00
-- - 54 -  - 17:00
-- - 55 -  - 17:00
-- - 56 -  - 19:00
 - - 57 - Su 1.6.2025 - 16:00
 - - 58 -  - 18:30
+- - 59 - La 14.6.2025 - 14:00
+- - 60 -  - 17:00
+- - 61 -  - 19:00
+- - 62 -  - 19:00
 
 ## Pelatut ottelut
 
